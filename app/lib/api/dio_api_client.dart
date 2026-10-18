@@ -35,11 +35,13 @@ class DioApiClient implements ApiClient {
   @override
   bool get isLive => true;
 
+  /// Probes `GET /health`. Not `/healthz`: on Cloud Run the *.run.app edge
+  /// answers `/healthz` itself with an HTML 404 that never reaches the backend.
   @override
   Future<bool> healthz() async {
     try {
       final res = await _dio.get<Map<String, dynamic>>(
-        '/healthz',
+        '/health',
         options: Options(
           receiveTimeout: const Duration(seconds: 6),
           sendTimeout: const Duration(seconds: 6),

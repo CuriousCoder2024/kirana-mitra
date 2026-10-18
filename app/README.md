@@ -11,7 +11,7 @@ flutter pub get
 flutter run -d chrome
 ```
 
-By default the app calls `http://localhost:8080`. If `GET /healthz` does not
+By default the app calls `http://localhost:8080`. If `GET /health` does not
 answer within 3 s at startup, the app switches to the built-in **mock client**
 and shows a small "Demo" chip in the chat app bar. The mock keeps stock, udhaar
 and undo history in memory, so the whole flow (voice, chat, chips, stock,

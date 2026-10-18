@@ -10,7 +10,7 @@ const bool kUseMock = bool.fromEnvironment('USE_MOCK');
 /// One mock instance for the whole session so its in-memory state persists.
 final mockClientProvider = Provider<MockApiClient>((ref) => MockApiClient());
 
-/// Resolves once at startup: the real backend if `/healthz` answers, else the
+/// Resolves once at startup: the real backend if `GET /health` answers, else the
 /// mock. `--dart-define USE_MOCK=true` forces the mock.
 final apiClientFutureProvider = FutureProvider<ApiClient>((ref) async {
   if (kUseMock) return ref.watch(mockClientProvider);
