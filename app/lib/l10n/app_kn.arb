@@ -1,0 +1,403 @@
+{
+  "@@locale": "kn",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "ಅಂಗಡಿಯ ಹೆಸರು",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "ನಿಮ್ಮ ಹೆಸರು",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "ಶುರು ಮಾಡಿ",
+  "requiredField": "ದಯವಿಟ್ಟು ಇದನ್ನು ಭರ್ತಿ ಮಾಡಿ",
+  "navChat": "ಮಾತು",
+  "navStock": "ಸ್ಟಾಕ್",
+  "navUdhaar": "ಉದ್ದರಿ",
+  "navForecast": "ಅಂದಾಜು",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "ಡೆಮೊ",
+  "changeShop": "ಅಂಗಡಿ ಬದಲಾಯಿಸಿ",
+  "welcomeMessage": "ನಮಸ್ಕಾರ {name}! ಏನು ಬಂತು, ಏನು ಮಾರಾಟವಾಯ್ತು ಅಥವಾ ಯಾರು ಉದ್ದರಿ ತಗೊಂಡ್ರು ಹೇಳಿ. ಮೈಕ್ ಒತ್ತಿ ಹಿಡಿದು ಮಾತನಾಡಿ.",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "ನಮಸ್ಕಾರ {name}! ಏನು ಬಂತು, ಏನು ಮಾರಾಟವಾಯ್ತು, ಯಾರಿಗೆ ಉದ್ದರಿ ಕೊಟ್ರಿ ಹೇಳಿ. ಮೈಕ್ ಒತ್ತಿ ಹಿಡಿದು ಮಾತನಾಡಿ.",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "ಬಿಟ್ಟುಬಿಡಿ, ಕ್ಯಾನ್ಸಲ್ ಆಯ್ತು",
+  "voiceTooShort": "ಸ್ವಲ್ಪ ಹೊತ್ತು ಒತ್ತಿ ಹಿಡಿದು ಮಾತನಾಡಿ",
+  "micPermissionDenied": "ವಾಯ್ಸ್ ನೋಟ್‌ಗಾಗಿ ಮೈಕ್ರೋಫೋನ್ ಅನುಮತಿ ಬೇಕು.",
+  "voiceNoteSent": "🎤 ವಾಯ್ಸ್ ನೋಟ್",
+  "photoSent": "📷 ಶೆಲ್ಫ್ ಫೋಟೋ",
+  "typeMessageHint": "ಇಲ್ಲಿ ಬರೆಯಿರಿ…",
+  "send": "ಕಳುಹಿಸಿ",
+  "thinking": "ಯೋಚಿಸುತ್ತಿದೆ…",
+  "networkError": "ಸರ್ವರ್ ಸಂಪರ್ಕ ಸಿಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "comingSoon": "ಬೇಗ ಬರ್ತಿದೆ! ಶೆಲ್ಫ್ ಸ್ಕ್ಯಾನ್ ಸದ್ಯದಲ್ಲೇ ಬರಲಿದೆ.",
+  "scanFailed": "ಫೋಟೋ ಅರ್ಥವಾಗಲಿಲ್ಲ, ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "imageTooLarge": "ಫೋಟೋ ತುಂಬಾ ದೊಡ್ಡದಿದೆ (8 MB ಗಿಂತ ಹೆಚ್ಚು). ಸಣ್ಣ ಫೋಟೋ ಬಳಸಿ.",
+  "stockTitle": "ಸ್ಟಾಕ್",
+  "lowStockBadge": "ಕಡಿಮೆ ಇದೆ",
+  "reorderAt": "{level} ತಲುಪಿದಾಗ ಆರ್ಡರ್ ಮಾಡಿ",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "ಇನ್ನೂ ಸ್ಟಾಕ್ ಇಲ್ಲ. ಏನು ಬಂತು ಅಂತ ಹೇಳಿ.",
+  "udhaarTitle": "ಉದ್ದರಿ",
+  "totalOutstanding": "ಒಟ್ಟು ಬಾಕಿ",
+  "emptyLedger": "ಯಾವುದೇ ಉದ್ದರಿ ಇಲ್ಲ. \"ಗುಪ್ತಾಜಿಗೆ 350 ಉದ್ದರಿ ಕೊಟ್ಟೆ\" ಅಂತ ಹೇಳಿ.",
+  "forecastTitle": "ಅಂದಾಜು",
+  "legendHistory": "ಕಳೆದ ವಾರ",
+  "legendForecast": "ಅಂದಾಜು",
+  "legendBand": "ವ್ಯಾಪ್ತಿ",
+  "orderReady": "ಆರ್ಡರ್ ರೆಡಿ",
+  "shareWhatsapp": "WhatsApp ನಲ್ಲಿ ಕಳಿಸಿ",
+  "copied": "ಕಾಪಿ ಆಯ್ತು",
+  "copy": "ಕಾಪಿ",
+  "retry": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+  "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ…",
+  "errorLoading": "ಲೋಡ್ ಆಗಲಿಲ್ಲ. ಕೆಳಗೆ ಎಳೆದು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+  "tagline": "ಹೇಳಿ ಸಾಕು, ಕೆಲಸ ಆಗುತ್ತೆ.",
+  "languageQuestion": "ಮಿತ್ರ ಯಾವ ಭಾಷೆಯಲ್ಲಿ ಮಾತನಾಡಲಿ?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "ಇದನ್ನು ಭರ್ತಿ ಮಾಡಿ",
+  "dockPhoto": "ಶೆಲ್ಫ್ ಫೋಟೋ",
+  "dockType": "ಬರೆಯಿರಿ",
+  "micLabel": "ಒತ್ತಿ ಮಾತನಾಡಿ",
+  "recordingLabel": "ಕೇಳ್ತಾ ಇದ್ದೀನಿ… ಬಿಟ್ರೆ ಕಳುಹಿಸುತ್ತೆ",
+  "recordingCancelHint": "ಕ್ಯಾನ್ಸಲ್ ಮಾಡಲು ಬೆರಳು ಹೊರಗೆ ಸರಿಸಿ",
+  "confirmHeader": "ಅರ್ಥವಾಯ್ತು · ಬರೆದಾಯ್ತು",
+  "confirmTotalUdhaar": "ಉದ್ದರಿ · ಈಗಿನ ಒಟ್ಟು",
+  "confirmTotalStock": "ಸ್ಟಾಕ್ · ಈಗಿನ ಒಟ್ಟು",
+  "confirmTotalSale": "ಮಾರಾಟ · ಇಂದಿನ ಒಟ್ಟು",
+  "askHeader": "ಖಚಿತವಿಲ್ಲ",
+  "askHeard": "ನೀವು “{text}” ಎಂದಿರಿ",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "ಸ್ಟಾಕ್‌ಗೆ ಸೇರಿಸಲೇ?",
+  "askUdhaar": "ಉದ್ದರಿಯಲ್ಲಿ ಬರೆಯಲೇ?",
+  "askSale": "ಮಾರಾಟದಲ್ಲಿ ಬರೆಯಲೇ?",
+  "askNo": "ಬೇಡ",
+  "askDeclined": "ಸರಿ, ಬರೆದಿಲ್ಲ.",
+  "scanHeader": "ಶೆಲ್ಫ್ ನೋಡಿದೆ · {count} ಐಟಂಗಳು ಸಿಕ್ಕವು",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "ಸ್ಟಾಕ್ ಹೀಗೇ ಸೆಟ್ ಮಾಡಲೇ?",
+  "scanConfirmed": "ಅರ್ಥವಾಯ್ತು · ಸ್ಟಾಕ್ ಅಪ್ಡೇಟ್ ಆಯ್ತು",
+  "stockSubtitle": "{count} ಐಟಂಗಳು · ಅಪ್ಡೇಟ್ {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 ಐಟಂ ಕಡಿಮೆ ಇದೆ} other{{count} ಐಟಂಗಳು ಕಡಿಮೆ ಇವೆ}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "ಎಲ್ಲ ಸರಿಯಾಗಿದೆ",
+  "orderButton": "ಆರ್ಡರ್ ಮಾಡಿ",
+  "orderButtonQty": "ಆರ್ಡರ್ ಮಾಡಿ · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} ಜನ · ಲೆಕ್ಕದ ಪುಸ್ತಕ",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "ಬಾಕಿ",
+  "todayGiven": "ಇಂದು ಕೊಟ್ಟಿದ್ದು +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "ಇಂದು ಬಂದಿದ್ದು −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "ಬಾಕಿ",
+  "settledBadge": "ಚುಕ್ತಾ",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} ಬಂತು",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "ಉದ್ದರಿ ಶುರು {date} · {count} ನಮೂದುಗಳು",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "ಕೊನೆಯದ್ದು: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "ನೆನಪಿಸಿ",
+  "paidButton": "ಹಣ ಬಂತು",
+  "paidPrompt": "ಎಷ್ಟು ಬಂತು? ಹೇಳಿ.",
+  "historyLabel": "ಹಿಂದಿನ ವಿವರ",
+  "entryGiven": "ಉದ್ದರಿ ಕೊಟ್ಟಿದ್ದು",
+  "entryPaid": "ಹಣ ಬಂತು",
+  "entrySourceVoice": "ಧ್ವನಿ",
+  "entrySourceCash": "ನಗದು",
+  "entrySourcePhoto": "ಫೋಟೋ",
+  "reminderText": "ನಮಸ್ಕಾರ {name} ಅವರೇ, {shop} ಕಡೆಯಿಂದ. ನಿಮ್ಮ ₹{balance} ಬಾಕಿ ಇದೆ. ಧನ್ಯವಾದಗಳು!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "ಮುಂದಿನ 4 ವಾರ · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "ಮುಂದಿನ 4 ವಾರ",
+  "perWeek": "{unit} / ವಾರ",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "ಮುಂದೆ · ಅಂದಾಜು",
+  "onHandReorder": "ಸ್ಟಾಕ್‌ನಲ್ಲಿ {onHand} ಇದೆ · {qty} {unit} ತರಿಸಿ",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} ಐಟಂಗಳು",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "ಹಂಚಿಕೊಳ್ಳಿ",
+  "hisaabTitle": "ಇಂದಿನ ಲೆಕ್ಕ",
+  "hisaabSubtitle": "{date} · {count} ನಮೂದುಗಳು",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "ಅಂಗಡಿ ಮುಚ್ಚಿದ್ದು · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "ಇಂದಿನ ಮಾರಾಟ",
+  "hisaabGiven": "ಉದ್ದರಿ ಕೊಟ್ಟಿದ್ದು",
+  "hisaabReceived": "ಉದ್ದರಿ ವಸೂಲಿ",
+  "hisaabOutstanding": "ಒಟ್ಟು ಬಾಕಿ",
+  "hisaabLow": "ಕಡಿಮೆ ಇದೆ",
+  "hisaabLowItems": "{items} ನಾಳೆ ತರಿಸಿ.",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} ಹಬ್ಬಕ್ಕೆ {weeks} ವಾರ ಬಾಕಿ ಇದೆ.",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "ನಾಳಿನ ಆರ್ಡರ್ ಮಾಡಿ",
+  "hisaabShareButton": "ಮನೆಗೆ WhatsApp ಮಾಡಿ",
+  "todayChip": "ಇಂದು · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "ನಿನ್ನೆ · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "ಸರ್ವರ್ ಸಿಗಲಿಲ್ಲ. ಡೆಮೊ ಮೋಡ್‌ನಲ್ಲಿ ಶುರುವಾಗುತ್ತಿದೆ.",
+  "languageSheetTitle": "ಮಿತ್ರ ಯಾವ ಭಾಷೆಯಲ್ಲಿ ಮಾತನಾಡಲಿ?",
+  "backLabel": "ಹಿಂದಕ್ಕೆ",
+  "voiceNoteLabel": "ವಾಯ್ಸ್ ನೋಟ್",
+  "undo": "ರದ್ದುಮಾಡಿ",
+  "feedbackButton": "ಅಭಿಪ್ರಾಯ",
+  "feedbackTitle": "Kirana Mitra ಹೇಗೆ ನಡೀತಿದೆ?",
+  "feedbackUp": "ಚೆನ್ನಾಗಿದೆ",
+  "feedbackDown": "ಸರಿಯಿಲ್ಲ",
+  "feedbackCommentHint": "ಇನ್ನೇನಾದರೂ ಹೇಳುವುದಿದ್ದರೆ ಬರೆಯಿರಿ…",
+  "feedbackVoiceHint": "ಅಥವಾ ಒತ್ತಿ ಮಾತನಾಡಿ",
+  "feedbackVoiceReady": "ಧ್ವನಿ ಸಿದ್ಧವಾಗಿದೆ · {seconds}ಸೆ",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "ಕಳುಹಿಸಿ",
+  "feedbackPickRating": "ಮೊದಲು ಚೆನ್ನಾಗಿದೆ ಅಥವಾ ಸರಿಯಿಲ್ಲ ಎಂದು ಆರಿಸಿ",
+  "feedbackThanks": "ಧನ್ಯವಾದಗಳು!",
+  "changeLanguage": "ಭಾಷೆ ಬದಲಾಯಿಸಿ",
+  "languageSearchHint": "ಭಾಷೆ ಹುಡುಕಿ…",
+  "languageNoMatch": "ಯಾವ ಭಾಷೆಯೂ ಸಿಗಲಿಲ್ಲ",
+  "topSellersTitle": "ಹೆಚ್ಚು ಮಾರಾಟವಾದವು",
+  "topSellersSubtitle": "ಕಳೆದ 2 ವಾರ · ಮುಂದಿನ 2 ವಾರದ ಅಂದಾಜು",
+  "autoBadge": "ಆಟೋ",
+  "coverDays": "{days} ದಿನದ ಸ್ಟಾಕ್",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 ವಾರ",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "ಟಾಪ್ ಸರಕುಗಳ ಆಟೋ-ರೀಸ್ಟಾಕ್",
+  "autoRestockSubtitle": "ಕಡಿಮೆ ಸ್ಟಾಕ್ ಇರುವ ಟಾಪ್ ಸರಕುಗಳ ಆರ್ಡರ್ ರಾತ್ರಿ ತಾನಾಗಿಯೇ ಹೋಗುತ್ತದೆ",
+  "distributorPhoneLabel": "ಡಿಸ್ಟ್ರಿಬ್ಯೂಟರ್ WhatsApp ನಂಬರ್",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "ಉಳಿಸಿ",
+  "settingsSaved": "ಉಳಿಸಲಾಗಿದೆ",
+  "ordersTitle": "ಆರ್ಡರ್‌ಗಳು",
+  "ordersEmpty": "ಯಾವುದೇ ಆರ್ಡರ್ ಇಲ್ಲ. ಅಂದಾಜಿನಿಂದ ಆರ್ಡರ್ ಮಾಡಿ.",
+  "orderAuto": "ಆಟೋ",
+  "orderManual": "ಮ್ಯಾನುವಲ್",
+  "orderPlaced": "ಕಳುಹಿಸಲಾಗಿದೆ",
+  "orderCancelled": "ಕ್ಯಾನ್ಸಲ್ ಆಗಿದೆ",
+  "viewOrders": "ಆರ್ಡರ್‌ಗಳನ್ನು ನೋಡಿ",
+  "newOrdersNotice": "ರಾತ್ರಿಯ ಆಟೋ ಆರ್ಡರ್ ಬಂದಿದೆ"
+}

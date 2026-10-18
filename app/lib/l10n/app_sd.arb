@@ -1,0 +1,403 @@
+{
+  "@@locale": "sd",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "دڪان جو نالو",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "توهان جو نالو",
+  "ownerNameHint": "رميش گپتا",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "شروع ڪريو",
+  "requiredField": "مهرباني ڪري هي ڀريو",
+  "navChat": "ڳالهه ٻولهه",
+  "navStock": "اسٽاڪ",
+  "navUdhaar": "اڌار",
+  "navForecast": "اندازو",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "ڊيمو",
+  "changeShop": "دڪان بدلايو",
+  "welcomeMessage": "نمستي {name}! ٻڌايو ڇا آيو، ڇا وڪامي ويو، يا ڪنهن اڌار کنيو. مائيڪ دٻائي ڳالهايو.",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "نمستي {name}! ٻڌايو: ڇا آيو، ڇا وڪيو، ڪنهن کي اڌار ڏنو. مائيڪ دٻائي ڳالهايو.",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "ڇڏي ڏيو، رد ٿي ويو",
+  "voiceTooShort": "تھورو گھڻو دٻائي رکو ۽ ڳالهايو",
+  "micPermissionDenied": "وائيس نوٽ لاءِ مائيڪرو فون جي اجازت گهربل آهي.",
+  "voiceNoteSent": "🎤 آواز جو نوٽ",
+  "photoSent": "📷 شيلف جو فوٽو",
+  "typeMessageHint": "هتي لکو…",
+  "send": "موڪليو",
+  "thinking": "سوچيان پيو…",
+  "networkError": "سرور سان رابطو نه ٿي سگهيو. وري ڪوشش ڪريو.",
+  "comingSoon": "جلد اچي رهيو آهي! شيلف اسڪين جلد ايندو.",
+  "scanFailed": "فوٽو سمجھ ۾ نه آيو، وري ڪوشش ڪريو.",
+  "imageTooLarge": "فوٽو تمام وڏو آهي (8 MB کان وڌيڪ). ننڍو فوٽو موڪليو.",
+  "stockTitle": "اسٽاڪ",
+  "lowStockBadge": "گھٽ آهي",
+  "reorderAt": "{level} تي وري گھرايو",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "في الحال اسٽاڪ ناهي. ٻڌايو ڇا آيو.",
+  "udhaarTitle": "اڌار",
+  "totalOutstanding": "ڪل باقي",
+  "emptyLedger": "في الحال ڪو اڌار ناهي. چئو ”گپتا جي کي 350 جو اڌار ڏنو“.",
+  "forecastTitle": "اندازو",
+  "legendHistory": "گذريل هفتي",
+  "legendForecast": "اندازو",
+  "legendBand": "حد",
+  "orderReady": "آرڊر تيار",
+  "shareWhatsapp": "WhatsApp تي موڪليو",
+  "copied": "ڪاپي ٿي ويو",
+  "copy": "ڪاپي",
+  "retry": "وري ڪوشش ڪريو",
+  "loading": "لوڊ پيو ٿئي…",
+  "errorLoading": "لوڊ نه ٿي سگهيو. ٻيهر ڪرڻ لاءِ هيٺ ڇڪيو.",
+  "tagline": "ڳالهايو، ٿي ويندو.",
+  "languageQuestion": "Mitra ڪهڙي ٻوليءَ ۾ ڳالهائي؟",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "هي ڀريو",
+  "dockPhoto": "شيلف جو فوٽو",
+  "dockType": "لکو",
+  "micLabel": "دٻائي ڳالهايو",
+  "recordingLabel": "ٻڌان پيو… ڇڏيندئو ته هليو ويندو",
+  "recordingCancelHint": "رد ڪرڻ لاءِ آڱر ٻاهر ڪڍو",
+  "confirmHeader": "سمجھي ويس · لکي ڇڏيو",
+  "confirmTotalUdhaar": "اڌار · هاڻي ڪل",
+  "confirmTotalStock": "اسٽاڪ · هاڻي ڪل",
+  "confirmTotalSale": "وڪرو · اڄ جو ڪل",
+  "askHeader": "پڪ ناهي",
+  "askHeard": "توهان چيو ”{text}“",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "اسٽاڪ ۾ وڌايان؟",
+  "askUdhaar": "اڌار ۾ لکان؟",
+  "askSale": "وڪري ۾ لکان؟",
+  "askNo": "نه",
+  "askDeclined": "ٺيڪ آهي، نه لکيو.",
+  "scanHeader": "شيلف ڏٺو · {count} شيون مليون",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "اسٽاڪ هي ئي سيٽ ڪري ڇڏيان؟",
+  "scanConfirmed": "سمجھي ويس · اسٽاڪ اپڊيٽ ٿي ويو",
+  "stockSubtitle": "{count} شيون · اپڊيٽ {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 شيءِ گھٽ آهي} other{{count} شيون گھٽ آهن}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "سڀ ٺيڪ آهي",
+  "orderButton": "آرڊر ٺاهيو",
+  "orderButtonQty": "آرڊر ٺاهيو · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} ڄڻا · و وهي کاتو",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "باقي",
+  "todayGiven": "اڄ ڏنو +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "اڄ آيو −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "باقي",
+  "settledBadge": "چڪتو",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} آيو",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "اڌار شروع {date} · {count} اندراج",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "آخري: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "ياد ڏياريو",
+  "paidButton": "پئسا آيا",
+  "paidPrompt": "ڪيترا آيا؟ ٻڌايو.",
+  "historyLabel": "تاريخ",
+  "entryGiven": "اڌار ورتو",
+  "entryPaid": "پئسا آيا",
+  "entrySourceVoice": "آواز",
+  "entrySourceCash": "روڪ",
+  "entrySourcePhoto": "فوٽو",
+  "reminderText": "نمستي {name} جي، {shop} مان. توهان جا ₹{balance} باقي آهن. مهرباني!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "ايندڙ 4 هفتا · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "ايندڙ 4 هفتا",
+  "perWeek": "{unit} / هفتو",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "اڳتي · اندازو",
+  "onHandReorder": "اسٽاڪ ۾ {onHand} · گھرايو {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} شيون",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "شيئر",
+  "hisaabTitle": "اڄ جو حساب",
+  "hisaabSubtitle": "{date} · {count} اندراج",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "دڪان بند · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "اڄ جو وڪرو",
+  "hisaabGiven": "اڌار ڏنو",
+  "hisaabReceived": "اڌار مان آيو",
+  "hisaabOutstanding": "ڪل باقي",
+  "hisaabLow": "گھٽ آهي",
+  "hisaabLowItems": "{items} سڀاڻي گھرايو.",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} {weeks} هفتا پري آهي.",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "سڀاڻي جو آرڊر ٺاهيو",
+  "hisaabShareButton": "گھر تي WhatsApp ڪريو",
+  "todayChip": "اڄ · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "ڪالهه · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "سرور نه مليو. ڊيمو موڊ ۾ شروع ڪري رهيو آهيان.",
+  "languageSheetTitle": "Mitra ڪهڙي ٻوليءَ ۾ ڳالهائي؟",
+  "backLabel": "واپس",
+  "voiceNoteLabel": "وائيس نوٽ",
+  "undo": "واپس آڻيو",
+  "feedbackButton": "راءِ",
+  "feedbackTitle": "Kirana Mitra ڪيئن هلي رهيو آهي؟",
+  "feedbackUp": "سٺو",
+  "feedbackDown": "ٺيڪ ناهي",
+  "feedbackCommentHint": "ڪجهه ٻيو ٻڌائڻو هجي ته لکو…",
+  "feedbackVoiceHint": "يا دٻائي ڳالهايو",
+  "feedbackVoiceReady": "آواز تيار · {seconds} سيڪنڊ",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "موڪليو",
+  "feedbackPickRating": "پهرين سٺو يا ٺيڪ ناهي چونڊيو",
+  "feedbackThanks": "مهرباني!",
+  "changeLanguage": "ٻولي بدلايو",
+  "languageSearchHint": "ٻولي ڳوليو…",
+  "languageNoMatch": "ڪابه ٻولي نه ملي",
+  "topSellersTitle": "گهڻو وڪامندڙ",
+  "topSellersSubtitle": "گذريل 2 هفتا · ايندڙ 2 هفتن جو اندازو",
+  "autoBadge": "پاڻمرادو",
+  "coverDays": "{days} ڏينهن جو اسٽاڪ",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 هفتا",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "ٽاپ وڪرو پاڻمرادو ڀريو",
+  "autoRestockSubtitle": "گهٽ اسٽاڪ واري ٽاپ وڪري جو آرڊر رات جو پاڻ ئي هليو ويندو",
+  "distributorPhoneLabel": "ڊسٽريبيوٽر جو WhatsApp نمبر",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "محفوظ ڪريو",
+  "settingsSaved": "محفوظ ٿي ويو",
+  "ordersTitle": "آرڊر",
+  "ordersEmpty": "في الحال ڪو آرڊر ناهي. اندازي مان آرڊر ٺاهيو.",
+  "orderAuto": "پاڻمرادو",
+  "orderManual": "پاڻ ٺاهيل",
+  "orderPlaced": "موڪليو ويو",
+  "orderCancelled": "رد ٿي ويو",
+  "viewOrders": "آرڊر ڏسو",
+  "newOrdersNotice": "رات جو پاڻمرادو آرڊر آيو"
+}

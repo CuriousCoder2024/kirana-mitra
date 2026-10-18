@@ -1,0 +1,403 @@
+{
+  "@@locale": "or",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "ଦୋକାନ ନାଁ",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "ଆପଣଙ୍କ ନାଁ",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "ଆରମ୍ଭ କରନ୍ତୁ",
+  "requiredField": "ଏହା ଲେଖନ୍ତୁ",
+  "navChat": "କଥା",
+  "navStock": "ଷ୍ଟକ୍",
+  "navUdhaar": "ବାକି",
+  "navForecast": "ଆକଳନ",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "ଡେମୋ",
+  "changeShop": "ଦୋକାନ ବଦଳାନ୍ତୁ",
+  "welcomeMessage": "ନମସ୍କାର {name}! କ’ଣ ଆସିଲା, କ’ଣ ବିକ୍ରି ହେଲା କିମ୍ବା କିଏ ବାକି ନେଲା କୁହନ୍ତୁ। ମାଇକ୍ ଚାପି ଧରି କୁହନ୍ତୁ।",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "ନମସ୍କାର {name}! କୁହନ୍ତୁ: କ’ଣ ଆସିଲା, କ’ଣ ବିକ୍ରି ହେଲା, କାହାକୁ ବାକି ଦେଲେ। ମାଇକ୍ ଚାପି ରଖି କୁହନ୍ତୁ।",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "ଛାଡ଼ିଦିଅନ୍ତୁ, ବାତିଲ ହୋଇଗଲା",
+  "voiceTooShort": "ଆଉ ଟିକେ ଚାପି ଧରି କୁହନ୍ତୁ",
+  "micPermissionDenied": "ଭଏସ୍ ନୋଟ୍ ପାଇଁ ମାଇକ୍ରୋଫୋନ୍ ଅନୁମତି ଦରକାର।",
+  "voiceNoteSent": "🎤 ଭଏସ୍ ନୋଟ୍",
+  "photoSent": "📷 ସେଲ୍ଫ୍ ଫଟୋ",
+  "typeMessageHint": "ଏଠାରେ ଲେଖନ୍ତୁ…",
+  "send": "ପଠାନ୍ତୁ",
+  "thinking": "ଭାବୁଛି…",
+  "networkError": "ସର୍ଭର ସହ ଯୋଡ଼ି ହୋଇପାରିଲା ନାହିଁ। ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।",
+  "comingSoon": "ଶୀଘ୍ର ଆସୁଛି! ସେଲ୍ଫ୍ ସ୍କାନ୍ ଖୁବ୍ ଶୀଘ୍ର ଆସିବ।",
+  "scanFailed": "ଫଟୋ ବୁଝାପଡ଼ିଲା ନାହିଁ, ପୁଣି ଥରେ ଚେଷ୍ଟା କରନ୍ତୁ।",
+  "imageTooLarge": "ଫଟୋ ବହୁତ ବଡ଼ ଅଛି (8 MB ରୁ ଅଧିକ)। ଛୋଟ ଫଟୋ ବ୍ୟବହାର କରନ୍ତୁ।",
+  "stockTitle": "ଷ୍ଟକ୍",
+  "lowStockBadge": "କମ ଅଛି",
+  "reorderAt": "{level} ରେ ପୁଣି ମଗାନ୍ତୁ",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "ଏବେ ଷ୍ଟକ୍ ନାହିଁ। କୁହନ୍ତୁ କ’ଣ ଆସିଲା।",
+  "udhaarTitle": "ବାକି",
+  "totalOutstanding": "ମୋଟ ବାକି",
+  "emptyLedger": "ଏବେ କିଛି ବାକି ନାହିଁ। କୁହନ୍ତୁ \"ଗୁପ୍ତାଜୀଙ୍କୁ 350 ବାକି ଦେଲି\"।",
+  "forecastTitle": "ଆକଳନ",
+  "legendHistory": "ଗତ ସପ୍ତାହ",
+  "legendForecast": "ଅନୁମାନ",
+  "legendBand": "ରେଞ୍ଜ୍",
+  "orderReady": "ଅର୍ଡର ପ୍ରସ୍ତୁତ",
+  "shareWhatsapp": "WhatsApp ରେ ପଠାନ୍ତୁ",
+  "copied": "କପି ହୋଇଗଲା",
+  "copy": "କପି",
+  "retry": "ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ",
+  "loading": "ଲୋଡ୍ ହେଉଛି…",
+  "errorLoading": "ଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ। ତଳକୁ ଟାଣି ଚେଷ୍ଟା କରନ୍ତୁ।",
+  "tagline": "କୁହନ୍ତୁ, ହୋଇଯିବ।",
+  "languageQuestion": "Mitra କେଉଁ ଭାଷାରେ କହିବେ?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "ଏହା ଲେଖନ୍ତୁ",
+  "dockPhoto": "ସେଲ୍ଫ୍ ଫଟୋ",
+  "dockType": "ଲେଖନ୍ତୁ",
+  "micLabel": "ଚାପି ଧରି କୁହନ୍ତୁ",
+  "recordingLabel": "ଶୁଣୁଛି… ଛାଡ଼ିଲେ ପଠାଯିବ",
+  "recordingCancelHint": "ବାତିଲ କରିବାକୁ ଆଙ୍ଗୁଠି ବାହାରକୁ ନିଅନ୍ତୁ",
+  "confirmHeader": "ବୁଝିଗଲି · ଲେଖିଦେଲି",
+  "confirmTotalUdhaar": "ବାକି · ଏବେ ମୋଟ",
+  "confirmTotalStock": "ଷ୍ଟକ୍ · ଏବେ ମୋଟ",
+  "confirmTotalSale": "ବିକ୍ରି · ଆଜିର ମୋଟ",
+  "askHeader": "ନିଶ୍ଚିତ ନୁହେଁ",
+  "askHeard": "ଆପଣ କହିଲେ “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "ଷ୍ଟକ୍‌ରେ ଯୋଡ଼ିବି?",
+  "askUdhaar": "ବାକିରେ ଲେଖିବି?",
+  "askSale": "ବିକ୍ରିରେ ଲେଖିବି?",
+  "askNo": "ନା",
+  "askDeclined": "ଠିକ୍ ଅଛି, ଲେଖିଲି ନାହିଁ।",
+  "scanHeader": "ସେଲ୍ଫ୍ ଦେଖିଲି · {count}ଟି ଜିନିଷ ମିଳିଲା",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "ଷ୍ଟକ୍ ଏତିକି ସେଟ୍ କରିବି?",
+  "scanConfirmed": "ବୁଝିଗଲି · ଷ୍ଟକ୍ ଅପଡେଟ୍ ହୋଇଗଲା",
+  "stockSubtitle": "{count}ଟି ଜିନିଷ · ଅପଡେଟ୍ {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1ଟି ଜିନିଷ କମ ଅଛି} other{{count}ଟି ଜିନିଷ କମ ଅଛି}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "ସବୁ ଠିକ୍ ଅଛି",
+  "orderButton": "ଅର୍ଡର କରନ୍ତୁ",
+  "orderButtonQty": "ଅର୍ଡର କରନ୍ତୁ · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} ଜଣ · ଖାତା",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "ବାକି",
+  "todayGiven": "ଆଜି ଦେଲେ +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "ଆଜି ଆସିଲା −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "ବାକି",
+  "settledBadge": "ଚୁକତା",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} ଆସିଲା",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "ବାକି ଆରମ୍ଭ {date} · {count}ଟି ହିସାବ",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "ଶେଷ: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "ମନେ ପକାନ୍ତୁ",
+  "paidButton": "ଟଙ୍କା ଆସିଲା",
+  "paidPrompt": "କେତେ ଆସିଲା? କୁହନ୍ତୁ।",
+  "historyLabel": "ପୂର୍ବ ରେକର୍ଡ",
+  "entryGiven": "ବାକି ନେଲେ",
+  "entryPaid": "ଟଙ୍କା ଆସିଲା",
+  "entrySourceVoice": "voice",
+  "entrySourceCash": "cash",
+  "entrySourcePhoto": "photo",
+  "reminderText": "ନମସ୍କାର {name} ଜୀ, {shop} ତରଫରୁ। ଆପଣଙ୍କର ₹{balance} ବାକି ଅଛି। ଧନ୍ୟବାଦ!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "ଆଗାମୀ 4 ସପ୍ତାହ · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "ଆଗାମୀ 4 ସପ୍ତାହ",
+  "perWeek": "{unit} / ସପ୍ତାହ",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "ଆଗକୁ · ଆକଳନ",
+  "onHandReorder": "ଷ୍ଟକ୍‌ରେ {onHand} · ମଗାନ୍ତୁ {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count}ଟି ଜିନିଷ",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "ସେୟାର",
+  "hisaabTitle": "ଆଜିର ହିସାବ",
+  "hisaabSubtitle": "{date} · {count}ଟି ଏଣ୍ଟ୍ରି",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "ଦୋକାନ ବନ୍ଦ · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "ଆଜିର ବିକ୍ରି",
+  "hisaabGiven": "ବାକି ଦେଲେ",
+  "hisaabReceived": "ବାକି ଆସିଲା",
+  "hisaabOutstanding": "ମୋଟ ବାକି",
+  "hisaabLow": "କମ ଅଛି",
+  "hisaabLowItems": "{items} କାଲି ମଗାନ୍ତୁ।",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} {weeks} ସପ୍ତାହ ବାକି ଅଛି।",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "କାଲି ପାଇଁ ଅର୍ଡର କରନ୍ତୁ",
+  "hisaabShareButton": "ଘରକୁ WhatsApp କରନ୍ତୁ",
+  "todayChip": "ଆଜି · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "ଗତକାଲି · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "ସର୍ଭର ମିଳିଲା ନାହିଁ। ଡେମୋ ମୋଡ୍‌ରେ ଚାଲୁ କରୁଛି।",
+  "languageSheetTitle": "Mitra କେଉଁ ଭାଷାରେ କହିବେ?",
+  "backLabel": "ପଛକୁ",
+  "voiceNoteLabel": "ଭଏସ୍ ନୋଟ୍",
+  "undo": "ପୂର୍ବବତ୍",
+  "feedbackButton": "ମତାମତ",
+  "feedbackTitle": "Kirana Mitra କେମିତି ଚାଲିଛି?",
+  "feedbackUp": "ଭଲ",
+  "feedbackDown": "ଠିକ୍ ନୁହେଁ",
+  "feedbackCommentHint": "ଆଉ କିଛି କହିବାକୁ ଚାହାନ୍ତି ତ ଲେଖନ୍ତୁ…",
+  "feedbackVoiceHint": "କିମ୍ବା ଚାପି ଧରି କୁହନ୍ତୁ",
+  "feedbackVoiceReady": "ଭଏସ୍ ପ୍ରସ୍ତୁତ · {seconds}s",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "ପଠାନ୍ତୁ",
+  "feedbackPickRating": "ପ୍ରଥମେ ଭଲ କିମ୍ବା ଠିକ୍ ନୁହେଁ ବାଛନ୍ତୁ",
+  "feedbackThanks": "ଧନ୍ୟବାଦ!",
+  "changeLanguage": "ଭାଷା ବଦଳାନ୍ତୁ",
+  "languageSearchHint": "ଭାଷା ଖୋଜନ୍ତୁ…",
+  "languageNoMatch": "କୌଣସି ଭାଷା ମିଳିଲା ନାହିଁ",
+  "topSellersTitle": "ସବୁଠୁ ଅଧିକ ବିକ୍ରି",
+  "topSellersSubtitle": "ଗତ 2 ସପ୍ତାହ · ଆଗାମୀ 2 ସପ୍ତାହର ଅନୁମାନ",
+  "autoBadge": "ଅଟୋ",
+  "coverDays": "{days} ଦିନର ଷ୍ଟକ୍",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 ସପ୍ତାହ",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "ଟପ୍ ସେଲର୍ସ ଅଟୋ-ରିଷ୍ଟକ୍",
+  "autoRestockSubtitle": "କମ ଷ୍ଟକ୍ ଥିବା ଜିନିଷର ଅର୍ଡର ରାତିରେ ନିଜେ ନିଜେ ଚାଲିଯିବ",
+  "distributorPhoneLabel": "Distributor ଙ୍କ WhatsApp ନମ୍ବର",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "ସେଭ୍ କରନ୍ତୁ",
+  "settingsSaved": "ସେଭ୍ ହୋଇଗଲା",
+  "ordersTitle": "ଅର୍ଡର",
+  "ordersEmpty": "ଏବେ କୌଣସି ଅର୍ଡର ନାହିଁ। ଆକଳନରୁ ଅର୍ଡର କରନ୍ତୁ।",
+  "orderAuto": "ଅଟୋ",
+  "orderManual": "ମାନୁଆଲ୍",
+  "orderPlaced": "ପଠାଗଲା",
+  "orderCancelled": "ବାତିଲ ହେଲା",
+  "viewOrders": "ଅର୍ଡର ଦେଖନ୍ତୁ",
+  "newOrdersNotice": "ରାତିର ଅଟୋ ଅର୍ଡର ଆସିଲା"
+}

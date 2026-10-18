@@ -1,0 +1,403 @@
+{
+  "@@locale": "doi",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "दुकान दा नां",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "तुंदा नां",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "शुरू करो",
+  "requiredField": "एह् भरो",
+  "navChat": "गल्लबात",
+  "navStock": "स्टॉक",
+  "navUdhaar": "उधार",
+  "navForecast": "अनुमान",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "डेमो",
+  "changeShop": "दुकान बदलो",
+  "welcomeMessage": "नमस्ते {name}! दस्सो: केह् आया, केह् बिकेआ, किसे गी उधार दित्ता। माइक नप्पी रखियै बोलो।",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "नमस्ते {name}! बोलो: केह् आया, केह् बिकेआ, किसे गी उधार दित्ता। माइक नप्पी रखियै बोलो।",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "छोड़ी दित्ता, कैंसिल होई गेआ",
+  "voiceTooShort": "थोह्‌ड़ा होर नप्पी रखियै बोलो",
+  "micPermissionDenied": "आवाज़ लेई माइक दी मंज़ूरी चाहिदी ऐ।",
+  "voiceNoteSent": "🎤 वॉयस नोट",
+  "photoSent": "📷 शैल्फ दी फोटो",
+  "typeMessageHint": "इत्थै लिखो…",
+  "send": "भेजो",
+  "thinking": "सोचदा ऐ…",
+  "networkError": "सर्वर कन्नै संपर्क नी होई सकेआ। परतियै कोशिश करो।",
+  "comingSoon": "झटपट औग! शैल्फ स्कैन जल्द औने आला ऐ।",
+  "scanFailed": "फोटो समझ नी आई, परतियै कोशिश करो।",
+  "imageTooLarge": "फोटो मती बड्डी ऐ (8 MB कोला मती)। निक्की फोटो चुनो।",
+  "stockTitle": "स्टॉक",
+  "lowStockBadge": "घट्ट ऐ",
+  "reorderAt": "{level} उप्पर परतियै मंगाओ",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "अज्जै स्टॉक नी ऐ। बोलो केह् आया।",
+  "udhaarTitle": "उधार",
+  "totalOutstanding": "कुल बाकी",
+  "emptyLedger": "अज्जै कोई उधार नी। बोलो \"Gupta ji गी 350 दा उधार दित्ता\"।",
+  "forecastTitle": "अनुमान",
+  "legendHistory": "पिछ्ले हफ्फे",
+  "legendForecast": "अनुमान",
+  "legendBand": "दायरा",
+  "orderReady": "ऑर्डर त्यार",
+  "shareWhatsapp": "WhatsApp पर भेजो",
+  "copied": "कॉपी होई गेआ",
+  "copy": "कॉपी",
+  "retry": "परतियै कोशिश करो",
+  "loading": "लोड होंदा ऐ…",
+  "errorLoading": "लोड नी होई सकेआ। थल्ले खिच्चियै परतियै कोशिश करो।",
+  "tagline": "बोलो, होई जाग।",
+  "languageQuestion": "Mitra केह्ड़ी बोली च बोले?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "एह् भरो",
+  "dockPhoto": "शैल्फ फोटो",
+  "dockType": "लिखो",
+  "micLabel": "नप्पी तै बोलो",
+  "recordingLabel": "सुन्दा ऐ… छोड़ोगे तां भेजग",
+  "recordingCancelHint": "रद्द करने लेई उंगली बाहर लै जाओ",
+  "confirmHeader": "समझी गेआ · लिखी दित्ता",
+  "confirmTotalUdhaar": "उधार · हुन कुल",
+  "confirmTotalStock": "स्टॉक · हुन कुल",
+  "confirmTotalSale": "बिक्री · अज्ज कुल",
+  "askHeader": "पक्का नेईं",
+  "askHeard": "तुस आखेआ “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "स्टॉक च पावां?",
+  "askUdhaar": "उधार च लिक्खां?",
+  "askSale": "बिक्री च लिक्खां?",
+  "askNo": "नेईं",
+  "askDeclined": "ठीक ऐ, नी लिखेआ।",
+  "scanHeader": "शैल्फ दिक्खेआ · {count} चीज़ां लब्भियां",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "स्टॉक एह्‌गे सैट करी देआं?",
+  "scanConfirmed": "समझी गेआ · स्टॉक अपडेट होई गेआ",
+  "stockSubtitle": "{count} चीज़ां · अपडेट {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 चीज़ घट्ट ऐ} other{{count} चीज़ां घट्ट न}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "सब ठीक ऐ",
+  "orderButton": "ऑर्डर बनाओ",
+  "orderButtonQty": "ऑर्डर बनाओ · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} लोक · बही-खाता",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "बाकी",
+  "todayGiven": "अज्ज दित्ता +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "अज्ज आया −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "बाकी",
+  "settledBadge": "चुक्ता",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} आया",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "उधार शुरू {date} · {count} प्रविष्टियां",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "आखरी: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "चेते कराओ",
+  "paidButton": "पैसे आए",
+  "paidPrompt": "केतने आए? बोलो।",
+  "historyLabel": "इतिहास",
+  "entryGiven": "उधार लैता",
+  "entryPaid": "पैसे आए",
+  "entrySourceVoice": "voice",
+  "entrySourceCash": "cash",
+  "entrySourcePhoto": "photo",
+  "reminderText": "नमस्ते {name} जी, {shop} थमां। तुंदा ₹{balance} बाकी ऐ। धनबाद!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "अगले 4 हफ्फे · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "अगले 4 हफ्फे",
+  "perWeek": "{unit} / हफ्ता",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "अग्गें · अनुमान",
+  "onHandReorder": "स्टॉक च {onHand} · मंगाओ {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} चीज़ां",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "शेयर करो",
+  "hisaabTitle": "अज्ज दा हसाब",
+  "hisaabSubtitle": "{date} · {count} प्रविष्टियां",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "दुकान बंद · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "अज्ज दी बिक्री",
+  "hisaabGiven": "उधार दित्ता",
+  "hisaabReceived": "उधार आया",
+  "hisaabOutstanding": "कुल बाकी",
+  "hisaabLow": "घट्ट ऐ",
+  "hisaabLowItems": "{items} कल्ल मंगाओ।",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} {weeks} हफ्फे दूर ऐ।",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "कल्ल दा ऑर्डर बनाओ",
+  "hisaabShareButton": "घरे WhatsApp करो",
+  "todayChip": "अज्ज · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "कल्ल · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "सर्वर नी लब्भेआ। डेमो मोड च शुरू करदा ऐ।",
+  "languageSheetTitle": "Mitra केह्ड़ी बोली च बोले?",
+  "backLabel": "पिच्छें",
+  "voiceNoteLabel": "वॉयस नोट",
+  "undo": "परतो",
+  "feedbackButton": "फीडबैक",
+  "feedbackTitle": "Kirana Mitra कैह्‌सा चलदा ऐ?",
+  "feedbackUp": "बढ़िया",
+  "feedbackDown": "ठीक नेईं",
+  "feedbackCommentHint": "किश होर दस्सना होऐ तां लिखो…",
+  "feedbackVoiceHint": "यां नप्पी तै बोलो",
+  "feedbackVoiceReady": "आवाज़ त्यार · {seconds}s",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "भेजो",
+  "feedbackPickRating": "पैह्‌ले बढ़िया या ठीक नेईं चुनो",
+  "feedbackThanks": "धनबाद!",
+  "changeLanguage": "बोली बदलो",
+  "languageSearchHint": "बोली टोह्‌लो…",
+  "languageNoMatch": "कोई बोली नी लब्भी",
+  "topSellersTitle": "टॉप सेलर",
+  "topSellersSubtitle": "पिछ्ले 2 हफ्फे · अगले 2 हफ्फें दा अनुमान",
+  "autoBadge": "ऑटो",
+  "coverDays": "{days} दिनें दा स्टॉक",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 हफ्फे",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "टॉप सेलर गी आपू रिस्टॉक करो",
+  "autoRestockSubtitle": "घट्ट स्टॉक आले टॉप सेलरें दा ऑर्डर राती आपू चली जग",
+  "distributorPhoneLabel": "डिस्ट्रीब्यूटर दा WhatsApp नंबर",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "सेव करो",
+  "settingsSaved": "सेव होई गेआ",
+  "ordersTitle": "ऑर्डर",
+  "ordersEmpty": "अज्जै कोई ऑर्डर नेईं। अनुमान थमां ऑर्डर बनाओ।",
+  "orderAuto": "ऑटो",
+  "orderManual": "मैनुअल",
+  "orderPlaced": "भेजेआ",
+  "orderCancelled": "कैंसिल होई गेआ",
+  "viewOrders": "ऑर्डर दिक्खो",
+  "newOrdersNotice": "राती दा ऑटो ऑर्डर आया"
+}

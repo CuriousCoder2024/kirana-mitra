@@ -1,0 +1,403 @@
+{
+  "@@locale": "brx",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "दखान्नि मुं",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "नोंथांनि मुं",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "जागायदो",
+  "requiredField": "बेखौ सुंआबदो",
+  "navChat": "रायज्लाय",
+  "navStock": "स्टक",
+  "navUdhaar": "उधार",
+  "navForecast": "सानथौ",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "डेमो",
+  "changeShop": "दखान सोलाय",
+  "welcomeMessage": "खुलुमबाय {name}! मा माल फैखो, मा फानखो, सोर उधार लागो बुंदो। माइक थुनानै बुं।",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "खुलुमबाय {name}! बुंदो: मा फैखो, मा फानखो, सोरनो उधार होखो। माइक दबायनानै बुं।",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "गारदो, क्यान्सेल जाबाय",
+  "voiceTooShort": "एसे गोबाव थुनानै बुंदो",
+  "micPermissionDenied": "राव रेकर्ड खालामनो माइक्र'फ'ननि पारमिसन नांगौ।",
+  "voiceNoteSent": "🎤 राव नोट",
+  "photoSent": "📷 थाखानि फोटो",
+  "typeMessageHint": "बेयाव लिर…",
+  "send": "हरदो",
+  "thinking": "सानबाय थादों…",
+  "networkError": "सार्भार मोनासै। फिन नाजादो।",
+  "comingSoon": "थाबैनो फैगासिनो! थाखा स्केन खालामनाया थाबैनो फैगोन।",
+  "scanFailed": "फोटोआ मोजां रोखा जायाखै, फिन नाजाफिन।",
+  "imageTooLarge": "फोटोआ जोबोद देरबाय (8 MB नि बांसिन)। फिसा हरदो।",
+  "stockTitle": "स्टक",
+  "lowStockBadge": "खम दं",
+  "reorderAt": "{level} आव फिन थिन",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "दानिया स्टक गैया। मा फैदों बुंदो।",
+  "udhaarTitle": "उधार",
+  "totalOutstanding": "गासै बाखि",
+  "emptyLedger": "दानिया जेबो उधार गैया। \"Gupta ji नो 350 नि उधार हरबाय\" होनना बुं।",
+  "forecastTitle": "सानथौ",
+  "legendHistory": "थांनाय सबथा",
+  "legendForecast": "सानथौ",
+  "legendBand": "सिमा",
+  "orderReady": "अर्डर जाबाय",
+  "shareWhatsapp": "WhatsApp आव हर",
+  "copied": "कपि जाबाय",
+  "copy": "कपि",
+  "retry": "फिन नाजा",
+  "loading": "ल'द जाबाय थादों…",
+  "errorLoading": "ल'द जायाखै। फिन नाजानो गाहायफारि बोदो।",
+  "tagline": "बुंदो, जाथारगोन।",
+  "languageQuestion": "मित्रा मा रावजों बुंगोन?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "बेखौ आवबायदो",
+  "dockPhoto": "थाखानि फोटो",
+  "dockType": "लिर",
+  "micLabel": "थुनानै बुं",
+  "recordingLabel": "खनागासिनो दं… गारबानो थांगोन",
+  "recordingCancelHint": "क्यान्सेल खालामनो आसिखौ गोजानाव लां",
+  "confirmHeader": "बुजिबाय · लिरबाय",
+  "confirmTotalUdhaar": "उधार · दा गासै",
+  "confirmTotalStock": "स्टक · दा गासै",
+  "confirmTotalSale": "फाननाय · दिनैनि गासै",
+  "askHeader": "थार नङा",
+  "askHeard": "नोंथाङा बुंबाय “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "स्टकआव दाजाबगोन?",
+  "askUdhaar": "उधारआव लिरगोन?",
+  "askSale": "फाननायाव लिरगोन?",
+  "askNo": "नङा",
+  "askDeclined": "थिग दं, लिरासै।",
+  "scanHeader": "थाखा नायबाय · {count} ता बेसाद मोनबाय",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "स्टक बेखौनो दोनगोन?",
+  "scanConfirmed": "बुजिबाय · स्टक आपडेट जाबाय",
+  "stockSubtitle": "{count} ता मुवा · आपडेट {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 ता मुवा खम जाबाय} other{{count} ता मुवा खम जाबाय}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "गासैबो मोजां दं",
+  "orderButton": "अर्डर खालाम",
+  "orderButtonQty": "अर्डर खालाम · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} सुबुं · बाहि-खाता",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "बाखि",
+  "todayGiven": "दिनै हरबाय +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "दिनै मोनबाय −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "बाखि",
+  "settledBadge": "फुजबाय",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} मोनबाय",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "उधार जागायनाय {date} · {count} ता भुंथि",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "जोबथा: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "गोसोखांखांहो",
+  "paidButton": "रां मोनबाय",
+  "paidPrompt": "बेसेबां मोनखो? बुंदो।",
+  "historyLabel": "जारिमिन",
+  "entryGiven": "उधार हरबाय",
+  "entryPaid": "रां मोनबाय",
+  "entrySourceVoice": "राव",
+  "entrySourceCash": "रांखाय",
+  "entrySourcePhoto": "फोटो",
+  "reminderText": "खुलुमबाय {name} जी, {shop} निफ्राय। नोंथांनि ₹{balance} बाखि दं। रोजा-रोजा साबायख'र!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "फैगौ 4 सबथा · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "फैगौ 4 सबथा",
+  "perWeek": "{unit} / सबथा",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "सिगांफारि · सानथौ",
+  "onHandReorder": "स्टकआव {onHand} · {qty} {unit} थिनहर",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} ता मुवा",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "शेयार",
+  "hisaabTitle": "दिनैनि हिसाब",
+  "hisaabSubtitle": "{date} · {count} ता भुंथि",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "दखान बन्द · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "दिनैनि फाननाय",
+  "hisaabGiven": "उधार हरबाय",
+  "hisaabReceived": "उधार मोनबाय",
+  "hisaabOutstanding": "गासै बाखि",
+  "hisaabLow": "खम दं",
+  "hisaabLowItems": "{items} गाबोन थिनहर।",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} आव {weeks} सबथा दावगाना दं।",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "गाबोनि अर्डर बानाय",
+  "hisaabShareButton": "न'आव WhatsApp खालाम",
+  "todayChip": "दिनै · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "मैया · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "सार्भार मोनासै। डेमो म'डआव जागायबाय।",
+  "languageSheetTitle": "मित्रा मा रावजों बुंगोन?",
+  "backLabel": "उनाव",
+  "voiceNoteLabel": "राव नोट",
+  "undo": "फिन लाबो",
+  "feedbackButton": "फिदबेक",
+  "feedbackTitle": "Kirana Mitra माबोरै सोलिदों?",
+  "feedbackUp": "मोजां",
+  "feedbackDown": "मोजां जायाखै",
+  "feedbackCommentHint": "आर' माबाफोर बुंनो दंबा लिर…",
+  "feedbackVoiceHint": "एबा थुनानै बुंदो",
+  "feedbackVoiceReady": "राव थियारि · {seconds} से",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "हरदो",
+  "feedbackPickRating": "सिगां मोजां एबा मोजां जायाखै सायख'",
+  "feedbackThanks": "साबायख'र!",
+  "changeLanguage": "राव सोलाय",
+  "languageSearchHint": "राव नागिर…",
+  "languageNoMatch": "जेबो राव मोनासै",
+  "topSellersTitle": "बांसिन फाननाय",
+  "topSellersSubtitle": "थांनाय 2 सबथा · फैगौ 2 सबथानि सानथौ",
+  "autoBadge": "अटो",
+  "coverDays": "{days} साननि स्टक",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 सबथा",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "बांसिन फाननायफोरखौ गावनो आपडेट",
+  "autoRestockSubtitle": "खम स्टक थानाय मुवाफोरनि अर्डारा हरआव गावनो थांगोन",
+  "distributorPhoneLabel": "डिस्ट्रिब्युटरनि WhatsApp नम्बर",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "दोनथुम",
+  "settingsSaved": "दोनथुमबाय",
+  "ordersTitle": "अर्डरफोर",
+  "ordersEmpty": "दानिया जेबो अर्डर गैया। सानथौनिफ्राय अर्डर बानायदो।",
+  "orderAuto": "अटो",
+  "orderManual": "मेनुयेल",
+  "orderPlaced": "हरबाय",
+  "orderCancelled": "क्यान्सेल जाबाय",
+  "viewOrders": "अर्डरफोरखौ नाय",
+  "newOrdersNotice": "हरनि अटो अर्डर फैबाय"
+}

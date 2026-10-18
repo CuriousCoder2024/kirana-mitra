@@ -1,0 +1,403 @@
+{
+  "@@locale": "ur",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "دکان کا نام",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "آپ کا نام",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "شروع کریں",
+  "requiredField": "براہ کرم یہ لکھیں",
+  "navChat": "بات",
+  "navStock": "اسٹاک",
+  "navUdhaar": "ادھار",
+  "navForecast": "اندازہ",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "ڈیمو",
+  "changeShop": "دکان بدلیں",
+  "welcomeMessage": "سلام {name}! بتائیں کیا آیا، کیا بکا، یا کس کو ادھار دیا۔ مائیک دبا کر بولیں۔",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "سلام {name}! بولیں: کیا آیا، کیا بکا، کس کو ادھار دیا۔ مائیک دبا کر بولیں۔",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "چھوڑ دیا، کینسل ہو گیا",
+  "voiceTooShort": "تھوڑی دیر دبا کر بولیں",
+  "micPermissionDenied": "وائس نوٹ کے لیے مائیکروفون کی اجازت چاہیے۔",
+  "voiceNoteSent": "🎤 وائس نوٹ",
+  "photoSent": "📷 شیلف کی تصویر",
+  "typeMessageHint": "یہاں لکھیں…",
+  "send": "بھیجیں",
+  "thinking": "سوچ رہا ہوں…",
+  "networkError": "سرور سے رابطہ نہ ہو سکا۔ دوبارہ کوشش کریں۔",
+  "comingSoon": "جلد آ رہا ہے! شیلف اسکین جلد دستیاب ہوگا۔",
+  "scanFailed": "تصویر سمجھ نہیں آئی، دوبارہ کوشش کریں۔",
+  "imageTooLarge": "تصویر بہت بڑی ہے (8 MB سے زیادہ)۔ چھوٹی تصویر لیں۔",
+  "stockTitle": "اسٹاک",
+  "lowStockBadge": "کم ہے",
+  "reorderAt": "{level} پر منگوائیں",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "ابھی اسٹاک نہیں ہے۔ بتائیں کیا آیا۔",
+  "udhaarTitle": "ادھار",
+  "totalOutstanding": "کل باقی",
+  "emptyLedger": "ابھی کوئی ادھار نہیں۔ بولیں \"گپتا جی کو 350 کا ادھار دیا\"۔",
+  "forecastTitle": "اندازہ",
+  "legendHistory": "پچھلے ہفتے",
+  "legendForecast": "اندازہ",
+  "legendBand": "رینج",
+  "orderReady": "آرڈر تیار ہے",
+  "shareWhatsapp": "WhatsApp پر بھیجیں",
+  "copied": "کاپی ہو گیا",
+  "copy": "کاپی",
+  "retry": "دوبارہ کوشش کریں",
+  "loading": "لوڈ ہو رہا ہے…",
+  "errorLoading": "لوڈ نہیں ہو سکا۔ نیچے کھینچ کر دوبارہ کوشش کریں۔",
+  "tagline": "بولیں، ہو جائے گا۔",
+  "languageQuestion": "Mitra کس زبان میں بولے؟",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "یہ بھریں",
+  "dockPhoto": "شیلف کی تصویر",
+  "dockType": "لکھیں",
+  "micLabel": "دبا کر بولیں",
+  "recordingLabel": "سن رہا ہوں… چھوڑیں گے تو جائے گا",
+  "recordingCancelHint": "کینسل کے لیے انگلی باہر سرکائیں",
+  "confirmHeader": "سمجھ گیا · لکھ دیا",
+  "confirmTotalUdhaar": "ادھار · اب کل",
+  "confirmTotalStock": "اسٹاک · اب کل",
+  "confirmTotalSale": "بکری · آج کل",
+  "askHeader": "پکا نہیں",
+  "askHeard": "آپ نے کہا “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "اسٹاک میں جوڑوں؟",
+  "askUdhaar": "ادھار میں لکھوں؟",
+  "askSale": "بکری میں لکھوں؟",
+  "askNo": "نہیں",
+  "askDeclined": "ٹھیک ہے، نہیں لکھا۔",
+  "scanHeader": "شیلف دیکھا · {count} چیزیں ملیں",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "اسٹاک یہی سیٹ کر دوں؟",
+  "scanConfirmed": "سمجھ گیا · اسٹاک اپ ڈیٹ ہو گیا",
+  "stockSubtitle": "{count} چیزیں · اپ ڈیٹ {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 چیز کم ہے} other{{count} چیزیں کم ہیں}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "سب ٹھیک ہے",
+  "orderButton": "آرڈر بنائیں",
+  "orderButtonQty": "آرڈر بنائیں · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} لوگ · کھاتہ",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "باقی",
+  "todayGiven": "آج دیا +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "آج آیا −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "باقی",
+  "settledBadge": "چکتا",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} آیا",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "ادھار شروع {date} · {count} اندراجات",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "آخری: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "یاد دلائیں",
+  "paidButton": "پیسہ آیا",
+  "paidPrompt": "کتنا آیا؟ بولیں۔",
+  "historyLabel": "ہسٹری",
+  "entryGiven": "ادھار لیا",
+  "entryPaid": "پیسہ آیا",
+  "entrySourceVoice": "آواز",
+  "entrySourceCash": "نقد",
+  "entrySourcePhoto": "تصویر",
+  "reminderText": "سلام {name} جی، {shop} سے۔ آپ کا ₹{balance} باقی ہے۔ شکریہ!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "اگلے 4 ہفتے · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "اگلے 4 ہفتے",
+  "perWeek": "{unit} / ہفتہ",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "آگے · اندازہ",
+  "onHandReorder": "اسٹاک میں {onHand} · منگوائیں {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} چیزیں",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "شیئر کریں",
+  "hisaabTitle": "آج کا حساب",
+  "hisaabSubtitle": "{date} · {count} اندراجات",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "دکان بند · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "آج کی بکری",
+  "hisaabGiven": "ادھار دیا",
+  "hisaabReceived": "ادھار آیا",
+  "hisaabOutstanding": "کل باقی",
+  "hisaabLow": "کم ہے",
+  "hisaabLowItems": "{items} کل منگوائیں۔",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} میں {weeks} ہفتے باقی ہیں۔",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "کل کا آرڈر بنائیں",
+  "hisaabShareButton": "گھر پر WhatsApp کریں",
+  "todayChip": "آج · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "کل · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "سرور نہیں ملا۔ ڈیمو موڈ میں شروع کر رہا ہوں۔",
+  "languageSheetTitle": "Mitra کس زبان میں بولے؟",
+  "backLabel": "پیچھے",
+  "voiceNoteLabel": "وائس نوٹ",
+  "undo": "واپس لیں",
+  "feedbackButton": "رائے",
+  "feedbackTitle": "Kirana Mitra کیسا چل رہا ہے؟",
+  "feedbackUp": "اچھا",
+  "feedbackDown": "ٹھیک نہیں",
+  "feedbackCommentHint": "کچھ اور بتانا ہو تو لکھیں…",
+  "feedbackVoiceHint": "یا دبا کر بولیں",
+  "feedbackVoiceReady": "آواز تیار ہے · {seconds}s",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "بھیجیں",
+  "feedbackPickRating": "پہلے اچھا یا ٹھیک نہیں منتخب کریں",
+  "feedbackThanks": "شکریہ!",
+  "changeLanguage": "زبان بدلیں",
+  "languageSearchHint": "زبان تلاش کریں…",
+  "languageNoMatch": "کوئی زبان نہیں ملی",
+  "topSellersTitle": "ٹاپ سیلرز",
+  "topSellersSubtitle": "پچھلے 2 ہفتے · اگلے 2 ہفتے کا اندازہ",
+  "autoBadge": "آٹو",
+  "coverDays": "{days} دن کا اسٹاک",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 ہفتے",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "ٹاپ سیلرز آٹو ری اسٹاک",
+  "autoRestockSubtitle": "کم اسٹاک والے ٹاپ سیلرز کا آرڈر رات کو خود بخود جائے گا",
+  "distributorPhoneLabel": "ڈسٹری بیوٹر کا WhatsApp نمبر",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "محفوظ کریں",
+  "settingsSaved": "محفوظ ہو گیا",
+  "ordersTitle": "آرڈرز",
+  "ordersEmpty": "ابھی کوئی آرڈر نہیں۔ اندازہ سے آرڈر بنائیں۔",
+  "orderAuto": "آٹو",
+  "orderManual": "مینول",
+  "orderPlaced": "بھیج دیا",
+  "orderCancelled": "کینسل ہو گیا",
+  "viewOrders": "آرڈرز دیکھیں",
+  "newOrdersNotice": "رات کا آٹو آرڈر آیا"
+}

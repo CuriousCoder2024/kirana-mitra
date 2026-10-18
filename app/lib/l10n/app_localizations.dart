@@ -5,8 +5,29 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_as.dart';
+import 'app_localizations_bn.dart';
+import 'app_localizations_brx.dart';
+import 'app_localizations_doi.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_gu.dart';
 import 'app_localizations_hi.dart';
+import 'app_localizations_kn.dart';
+import 'app_localizations_kok.dart';
+import 'app_localizations_ks.dart';
+import 'app_localizations_mai.dart';
+import 'app_localizations_ml.dart';
+import 'app_localizations_mni.dart';
+import 'app_localizations_mr.dart';
+import 'app_localizations_ne.dart';
+import 'app_localizations_or.dart';
+import 'app_localizations_pa.dart';
+import 'app_localizations_sa.dart';
+import 'app_localizations_sat.dart';
+import 'app_localizations_sd.dart';
+import 'app_localizations_ta.dart';
+import 'app_localizations_te.dart';
+import 'app_localizations_ur.dart';
 
 // ignore_for_file: type=lint
 
@@ -94,8 +115,30 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('as'),
+    Locale('bn'),
+    Locale('brx'),
+    Locale('doi'),
     Locale('en'),
+    Locale('gu'),
     Locale('hi'),
+    Locale.fromSubtags(languageCode: 'hi', scriptCode: 'Latn'),
+    Locale('kn'),
+    Locale('kok'),
+    Locale('ks'),
+    Locale('mai'),
+    Locale('ml'),
+    Locale('mni'),
+    Locale('mr'),
+    Locale('ne'),
+    Locale('or'),
+    Locale('pa'),
+    Locale('sa'),
+    Locale('sat'),
+    Locale('sd'),
+    Locale('ta'),
+    Locale('te'),
+    Locale('ur'),
   ];
 
   /// No description provided for @appTitle.
@@ -847,6 +890,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Undo'**
   String get undo;
+
+  /// No description provided for @feedbackButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get feedbackButton;
+
+  /// No description provided for @feedbackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Kirana Mitra kaisa chal raha hai?'**
+  String get feedbackTitle;
+
+  /// No description provided for @feedbackUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Achha'**
+  String get feedbackUp;
+
+  /// No description provided for @feedbackDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Theek nahi'**
+  String get feedbackDown;
+
+  /// No description provided for @feedbackCommentHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Kuch aur batana ho toh likho…'**
+  String get feedbackCommentHint;
+
+  /// No description provided for @feedbackVoiceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Ya dabake bolo'**
+  String get feedbackVoiceHint;
+
+  /// No description provided for @feedbackVoiceReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Aawaz taiyaar · {seconds}s'**
+  String feedbackVoiceReady(String seconds);
+
+  /// No description provided for @feedbackSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Bhejo'**
+  String get feedbackSend;
+
+  /// No description provided for @feedbackPickRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Pehle achha ya theek nahi chuno'**
+  String get feedbackPickRating;
+
+  /// No description provided for @feedbackThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Shukriya!'**
+  String get feedbackThanks;
+
+  /// No description provided for @changeLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Bhasha badlo'**
+  String get changeLanguage;
+
+  /// No description provided for @languageSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Bhasha dhoondo…'**
+  String get languageSearchHint;
+
+  /// No description provided for @languageNoMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Koi bhasha nahi mili'**
+  String get languageNoMatch;
+
+  /// No description provided for @topSellersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Top sellers'**
+  String get topSellersTitle;
+
+  /// No description provided for @topSellersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pichhle 2 hafte · agle 2 hafte ka anumaan'**
+  String get topSellersSubtitle;
+
+  /// No description provided for @autoBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get autoBadge;
+
+  /// No description provided for @coverDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} din'**
+  String coverDays(String days);
+
+  /// No description provided for @unitsPerFortnight.
+  ///
+  /// In en, this message translates to:
+  /// **'{units} {unit}'**
+  String unitsPerFortnight(String units, String unit);
+
+  /// No description provided for @autoRestockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-restock top sellers'**
+  String get autoRestockTitle;
+
+  /// No description provided for @autoRestockSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Kam stock wale top sellers ka order raat ko apne aap jayega'**
+  String get autoRestockSubtitle;
+
+  /// No description provided for @distributorPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Distributor ka WhatsApp number'**
+  String get distributorPhoneLabel;
+
+  /// No description provided for @distributorPhoneHint.
+  ///
+  /// In en, this message translates to:
+  /// **'+91 98765 43210'**
+  String get distributorPhoneHint;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save karo'**
+  String get save;
+
+  /// No description provided for @settingsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Save ho gaya'**
+  String get settingsSaved;
+
+  /// No description provided for @ordersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get ordersTitle;
+
+  /// No description provided for @ordersEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Abhi koi order nahi. Forecast se Order banao.'**
+  String get ordersEmpty;
+
+  /// No description provided for @orderAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto'**
+  String get orderAuto;
+
+  /// No description provided for @orderManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get orderManual;
+
+  /// No description provided for @orderPlaced.
+  ///
+  /// In en, this message translates to:
+  /// **'Bheja'**
+  String get orderPlaced;
+
+  /// No description provided for @orderCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel ho gaya'**
+  String get orderCancelled;
+
+  /// No description provided for @viewOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders dekho'**
+  String get viewOrders;
+
+  /// No description provided for @newOrdersNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Raat ka auto order aaya'**
+  String get newOrdersNotice;
 }
 
 class _AppLocalizationsDelegate
@@ -859,20 +1094,97 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'hi'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'as',
+    'bn',
+    'brx',
+    'doi',
+    'en',
+    'gu',
+    'hi',
+    'kn',
+    'kok',
+    'ks',
+    'mai',
+    'ml',
+    'mni',
+    'mr',
+    'ne',
+    'or',
+    'pa',
+    'sa',
+    'sat',
+    'sd',
+    'ta',
+    'te',
+    'ur',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when language+script codes are specified.
+  switch (locale.languageCode) {
+    case 'hi':
+      {
+        switch (locale.scriptCode) {
+          case 'Latn':
+            return AppLocalizationsHiLatn();
+        }
+        break;
+      }
+  }
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'as':
+      return AppLocalizationsAs();
+    case 'bn':
+      return AppLocalizationsBn();
+    case 'brx':
+      return AppLocalizationsBrx();
+    case 'doi':
+      return AppLocalizationsDoi();
     case 'en':
       return AppLocalizationsEn();
+    case 'gu':
+      return AppLocalizationsGu();
     case 'hi':
       return AppLocalizationsHi();
+    case 'kn':
+      return AppLocalizationsKn();
+    case 'kok':
+      return AppLocalizationsKok();
+    case 'ks':
+      return AppLocalizationsKs();
+    case 'mai':
+      return AppLocalizationsMai();
+    case 'ml':
+      return AppLocalizationsMl();
+    case 'mni':
+      return AppLocalizationsMni();
+    case 'mr':
+      return AppLocalizationsMr();
+    case 'ne':
+      return AppLocalizationsNe();
+    case 'or':
+      return AppLocalizationsOr();
+    case 'pa':
+      return AppLocalizationsPa();
+    case 'sa':
+      return AppLocalizationsSa();
+    case 'sat':
+      return AppLocalizationsSat();
+    case 'sd':
+      return AppLocalizationsSd();
+    case 'ta':
+      return AppLocalizationsTa();
+    case 'te':
+      return AppLocalizationsTe();
+    case 'ur':
+      return AppLocalizationsUr();
   }
 
   throw FlutterError(

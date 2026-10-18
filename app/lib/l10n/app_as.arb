@@ -1,0 +1,403 @@
+{
+  "@@locale": "as",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "দোকানৰ নাম",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "আপোনাৰ নাম",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "আৰম্ভ কৰক",
+  "requiredField": "অনুগ্ৰহ কৰি এইটো পূৰণ কৰক",
+  "navChat": "কথা",
+  "navStock": "ষ্টক",
+  "navUdhaar": "বাকী",
+  "navForecast": "পূৰ্বাভাস",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "ডেমো",
+  "changeShop": "দোকান সলনি কৰক",
+  "welcomeMessage": "নমস্কাৰ {name}! কি সামগ্ৰী আহিল, কি বিক্ৰী হ'ল বা কোনে বাকী ল'লে কওক। মাইক টিপি ধৰি কওক।",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "নমস্কাৰ {name}! কওক: কি আহিল, কি বিক্ৰী হ'ল, কাক বাকী দিলে। মাইক টিপি ধৰি কওক।",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "এৰি দিয়ক, বাতিল কৰা হ'ল",
+  "voiceTooShort": "অলপ বেছি সময় টিপি ধৰি কওক",
+  "micPermissionDenied": "ভয়েচ টোকাৰ বাবে মাইক্ৰ'ফোনৰ অনুমতি লাগিব।",
+  "voiceNoteSent": "🎤 ভয়েচ টোকা",
+  "photoSent": "📷 শ্বেল্ফৰ ফটো",
+  "typeMessageHint": "ইয়াত লিখক…",
+  "send": "পঠিয়াওক",
+  "thinking": "ভাবি থকা হৈছে…",
+  "networkError": "চাৰ্ভাৰ পোৱা নগ'ল। পুনৰ চেষ্টা কৰক।",
+  "comingSoon": "শীঘ্ৰেই আহি আছে! শ্বেল্ফ স্কেন সোনকালেই আহিব।",
+  "scanFailed": "ফটোখন বুজিব পৰা নগ'ল, পুনৰ চেষ্টা কৰক।",
+  "imageTooLarge": "ফটোখন বহুত ডাঙৰ (8 MB-তকৈ বেছি)। সৰু ফটো দিয়ক।",
+  "stockTitle": "ষ্টক",
+  "lowStockBadge": "কম আছে",
+  "reorderAt": "{level}-ত পুনৰ অৰ্ডাৰ কৰক",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "এতিয়া ষ্টক নাই। কি সামগ্ৰী আহিল কওক।",
+  "udhaarTitle": "বাকী",
+  "totalOutstanding": "মুঠ বাকী",
+  "emptyLedger": "এতিয়া কোনো বাকী নাই। কওক \"Gupta ji-ক 350 টকাৰ বাকী দিলোঁ\"।",
+  "forecastTitle": "পূৰ্বাভাস",
+  "legendHistory": "যোৱা সপ্তাহ",
+  "legendForecast": "অনুমান",
+  "legendBand": "ৰেঞ্জ",
+  "orderReady": "অৰ্ডাৰ সাজু",
+  "shareWhatsapp": "WhatsApp-ত পঠিয়াওক",
+  "copied": "কপি হ'ল",
+  "copy": "কপি কৰক",
+  "retry": "পুনৰ চেষ্টা কৰক",
+  "loading": "লোড হৈ আছে…",
+  "errorLoading": "লোড নহ'ল। তললৈ টানি পুনৰ চেষ্টা কৰক।",
+  "tagline": "কওক, হৈ যাব।",
+  "languageQuestion": "Mitra-ই কোন ভাষাত কওক?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "এইটো পূৰণ কৰক",
+  "dockPhoto": "শ্বেল্ফৰ ফটো",
+  "dockType": "লিখক",
+  "micLabel": "টিপি ধৰি কওক",
+  "recordingLabel": "শুনি আছোঁ… এৰি দিলে পঠিয়াব",
+  "recordingCancelHint": "বাতিল কৰিবলৈ আঙুলি বাহিৰলৈ নিয়ক",
+  "confirmHeader": "বুজিলোঁ · লিখি ল'লোঁ",
+  "confirmTotalUdhaar": "বাকী · এতিয়া মুঠ",
+  "confirmTotalStock": "ষ্টক · এতিয়া মুঠ",
+  "confirmTotalSale": "বিক্ৰী · আজি মুঠ",
+  "askHeader": "নিশ্চিত নহয়",
+  "askHeard": "আপুনি ক'লে “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "ষ্টকত যোগ কৰিম নেকি?",
+  "askUdhaar": "বাকীত লিখিম নেকি?",
+  "askSale": "বিক্ৰীত লিখিম নেকি?",
+  "askNo": "নহয়",
+  "askDeclined": "ঠিক আছে, লিখা নহ'ল।",
+  "scanHeader": "শ্বেল্ফ চালোঁ · {count} বিধ বস্তু পালোঁ",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "ষ্টক ইয়াতেই ছেট কৰিম নেকি?",
+  "scanConfirmed": "বুজিলোঁ · ষ্টক আপডেট হ'ল",
+  "stockSubtitle": "{count} বিধ বস্তু · আপডেট {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 বিধ বস্তু কম আছে} other{{count} বিধ বস্তু কম আছে}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "সকলো ঠিক আছে",
+  "orderButton": "অৰ্ডাৰ বনাওক",
+  "orderButtonQty": "অৰ্ডাৰ বনাওক · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} জন ব্যক্তি · খাতা",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "বাকী",
+  "todayGiven": "আজি দিয়া হ'ল +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "আজি পোৱা গ'ল −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "বাকী",
+  "settledBadge": "পৰিশোধিত",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} আহিল",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "বাকী আৰম্ভ {date} · {count} টা এন্ট্ৰি",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "শেষবাৰ: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "মনত পেলাই দিয়ক",
+  "paidButton": "পইচা পালে",
+  "paidPrompt": "কিমান পালে? কওক।",
+  "historyLabel": "ইতিহাস",
+  "entryGiven": "বাকী নিলে",
+  "entryPaid": "পইচা আহিল",
+  "entrySourceVoice": "voice",
+  "entrySourceCash": "cash",
+  "entrySourcePhoto": "photo",
+  "reminderText": "নমস্কাৰ {name} ডাঙৰীয়া, {shop}ৰ পৰা। আপোনাৰ ₹{balance} বাকী আছে। ধন্যবাদ!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "অহা 4 সপ্তাহ · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "অহা 4 সপ্তাহ",
+  "perWeek": "{unit} / সপ্তাহ",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "ভৱিষ্যত · পূৰ্বাভাস",
+  "onHandReorder": "ষ্টকত {onHand} · অৰ্ডাৰ কৰক {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} বিধ বস্তু",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "শ্বেয়াৰ",
+  "hisaabTitle": "আজিৰ হিচাপ",
+  "hisaabSubtitle": "{date} · {count} টা এন্ট্ৰি",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "দোকান বন্ধ · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "আজিৰ বিক্ৰী",
+  "hisaabGiven": "বাকী দিয়া হ'ল",
+  "hisaabReceived": "বাকী আদায় হ'ল",
+  "hisaabOutstanding": "মুঠ বাকী",
+  "hisaabLow": "কম আছে",
+  "hisaabLowItems": "{items} কাইলৈ আনক।",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival}লৈ {weeks} সপ্তাহ বাকী।",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "কাইলৈৰ অৰ্ডাৰ বনাওক",
+  "hisaabShareButton": "ঘৰলৈ WhatsApp কৰক",
+  "todayChip": "আজি · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "কালি · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "চাৰ্ভাৰ পোৱা নগ'ল। ডেমো ম'ডত আৰম্ভ কৰা হৈছে।",
+  "languageSheetTitle": "Mitra-ই কোন ভাষাত কওক?",
+  "backLabel": "উভতি যাওক",
+  "voiceNoteLabel": "ভয়েচ টোকা",
+  "undo": "পূৰ্বৰ অৱস্থালৈ",
+  "feedbackButton": "মতামত",
+  "feedbackTitle": "Kirana Mitra কেনে চলিছে?",
+  "feedbackUp": "ভাল",
+  "feedbackDown": "ভাল নহয়",
+  "feedbackCommentHint": "আৰু কিবা ক'বলগীয়া থাকিলে লিখক…",
+  "feedbackVoiceHint": "বা টিপি ধৰি কওক",
+  "feedbackVoiceReady": "শব্দ সাজু · {seconds}s",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "পঠিয়াওক",
+  "feedbackPickRating": "প্ৰথমে ভাল বা ভাল নহয় বাচক",
+  "feedbackThanks": "ধন্যবাদ!",
+  "changeLanguage": "ভাষা সলনি কৰক",
+  "languageSearchHint": "ভাষা বিচাৰক…",
+  "languageNoMatch": "কোনো ভাষা পোৱা নগ'ল",
+  "topSellersTitle": "Top sellers",
+  "topSellersSubtitle": "যোৱা 2 সপ্তাহ · অহা 2 সপ্তাহৰ অনুমান",
+  "autoBadge": "অটো",
+  "coverDays": "{days} দিনৰ ষ্টক",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 সপ্তাহ",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "Top sellers-ৰ অটো-ৰিষ্টক",
+  "autoRestockSubtitle": "কম ষ্টক থকা top sellers-ৰ অৰ্ডাৰ ৰাতি নিজে নিজে যাব",
+  "distributorPhoneLabel": "ডিষ্ট্ৰিবিউটৰৰ WhatsApp নম্বৰ",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "ছেভ কৰক",
+  "settingsSaved": "ছেভ হ'ল",
+  "ordersTitle": "অৰ্ডাৰসমূহ",
+  "ordersEmpty": "এতিয়া কোনো অৰ্ডাৰ নাই। পূৰ্বাভাসৰ পৰা অৰ্ডাৰ বনাওক।",
+  "orderAuto": "অটো",
+  "orderManual": "মেনুৱেল",
+  "orderPlaced": "পঠিওৱা হ'ল",
+  "orderCancelled": "বাতিল হ'ল",
+  "viewOrders": "অৰ্ডাৰ চাওক",
+  "newOrdersNotice": "ৰাতিৰ অটো অৰ্ডাৰ আহিল"
+}

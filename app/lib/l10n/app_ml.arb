@@ -1,0 +1,403 @@
+{
+  "@@locale": "ml",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "കടയുടെ പേര്",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "നിങ്ങളുടെ പേര്",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "തുടങ്ങാം",
+  "requiredField": "ഇത് പൂരിപ്പിക്കൂ",
+  "navChat": "സംസാരം",
+  "navStock": "സ്റ്റോക്ക്",
+  "navUdhaar": "കടം",
+  "navForecast": "കണക്കുകൂട്ടൽ",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "ഡെമോ",
+  "changeShop": "കട മാറ്റുക",
+  "welcomeMessage": "നമസ്കാരം {name}! സാധനങ്ങൾ വന്നതോ, വിറ്റതോ, കടം കൊടുത്തതോ പറയൂ. മൈക്ക് അമർത്തിപ്പിടിച്ച് സംസാരിക്കൂ.",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "നമസ്കാരം {name}! സാധനങ്ങൾ വന്നതോ, വിറ്റതോ, ആർക്കൊക്കെ കടം കൊടുത്തതോ പറയൂ. മൈക്ക് അമർത്തിപ്പിടിച്ച് സംസാരിക്കൂ.",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "വേണ്ട, ക്യാൻസൽ ചെയ്തു",
+  "voiceTooShort": "കുറച്ചുകൂടി നേരം അമർത്തിപ്പിടിച്ച് പറയൂ",
+  "micPermissionDenied": "വോയ്‌സ് റെക്കോർഡ് ചെയ്യാൻ മൈക്രോഫോൺ അനുമതി വേണം.",
+  "voiceNoteSent": "🎤 വോയ്‌സ് നോട്ട്",
+  "photoSent": "📷 ഷെൽഫ് ഫോട്ടോ",
+  "typeMessageHint": "ഇവിടെ എഴുതുക…",
+  "send": "അയക്കുക",
+  "thinking": "ആലോചിക്കുന്നു…",
+  "networkError": "കണക്റ്റ് ചെയ്യാനായില്ല. വീണ്ടും ശ്രമിക്കൂ.",
+  "comingSoon": "ഉടൻ വരുന്നു! ഷെൽഫ് സ്കാൻ ഉടൻ ലഭ്യമാകും.",
+  "scanFailed": "ഫോട്ടോ വ്യക്തമല്ല, വീണ്ടും ശ്രമിക്കൂ.",
+  "imageTooLarge": "ഫോട്ടോ വളരെ വലുതാണ് (8 MB-യിൽ കൂടുതൽ). ചെറിയ ഫോട്ടോ ഉപയോഗിക്കൂ.",
+  "stockTitle": "സ്റ്റോക്ക്",
+  "lowStockBadge": "കുറവാണ്",
+  "reorderAt": "{level} ആകുമ്പോൾ ഓർഡർ ചെയ്യുക",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "സ്റ്റോക്കിൽ ഒന്നുമില്ല. വന്ന സാധനങ്ങൾ പറയൂ.",
+  "udhaarTitle": "കടം",
+  "totalOutstanding": "ആകെ ബാക്കി",
+  "emptyLedger": "കടം ഒന്നും ബാക്കിയില്ല. \"Gupta ji-ക്ക് 350 രൂപ കടം കൊടുത്തു\" എന്ന് പറയൂ.",
+  "forecastTitle": "കണക്കുകൂട്ടൽ",
+  "legendHistory": "കഴിഞ്ഞ ആഴ്ച",
+  "legendForecast": "കണക്കുകൂട്ടൽ",
+  "legendBand": "പരിധി",
+  "orderReady": "ഓർഡർ തയ്യാർ",
+  "shareWhatsapp": "WhatsApp-ൽ അയക്കുക",
+  "copied": "കോപ്പി ചെയ്തു",
+  "copy": "കോപ്പി",
+  "retry": "വീണ്ടും ശ്രമിക്കൂ",
+  "loading": "ലോഡ് ചെയ്യുന്നു…",
+  "errorLoading": "ലോഡ് ചെയ്യാനായില്ല. വീണ്ടും ശ്രമിക്കാൻ താഴേക്ക് വലിക്കൂ.",
+  "tagline": "പറഞ്ഞാൽ മതി, കാര്യം നടക്കും.",
+  "languageQuestion": "Mitra ഏത് ഭാഷയിൽ സംസാരിക്കണം?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "ഇത് പൂരിപ്പിക്കണം",
+  "dockPhoto": "ഷെൽഫ് ഫോട്ടോ",
+  "dockType": "എഴുതുക",
+  "micLabel": "അമർത്തിപ്പിടിച്ച് പറയൂ",
+  "recordingLabel": "കേൾക്കുന്നുണ്ട്… വിരൽ മാറ്റിയാൽ അയക്കും",
+  "recordingCancelHint": "ക്യാൻസൽ ചെയ്യാൻ വിരൽ പുറത്തേക്ക് മാറ്റുക",
+  "confirmHeader": "മനസ്സിലായി · രേഖപ്പെടുത്തി",
+  "confirmTotalUdhaar": "കടം · ഇപ്പോഴത്തെ തുക",
+  "confirmTotalStock": "സ്റ്റോക്ക് · ഇപ്പോഴത്തെ എണ്ണം",
+  "confirmTotalSale": "വിൽപ്പന · ഇന്നത്തെ ആകെ",
+  "askHeader": "ഉറപ്പില്ല",
+  "askHeard": "നിങ്ങൾ പറഞ്ഞത് “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "സ്റ്റോക്കിലേക്ക് ചേർക്കണോ?",
+  "askUdhaar": "കടത്തിൽ എഴുതണോ?",
+  "askSale": "വിൽപ്പനയിൽ എഴുതണോ?",
+  "askNo": "വേണ്ട",
+  "askDeclined": "ശരി, എഴുതിയിട്ടില്ല.",
+  "scanHeader": "ഷെൽഫ് നോക്കി · {count} സാധനങ്ങൾ കണ്ടെത്തി",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "സ്റ്റോക്ക് ഇങ്ങനെ മാറ്റണോ?",
+  "scanConfirmed": "മനസ്സിലായി · സ്റ്റോക്ക് അപ്ഡേറ്റ് ചെയ്തു",
+  "stockSubtitle": "{count} സാധനങ്ങൾ · അപ്ഡേറ്റ് {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 സാധനം കുറവാണ്} other{{count} സാധനങ്ങൾ കുറവാണ്}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "എല്ലാം കൃത്യമാണ്",
+  "orderButton": "ഓർഡർ തയ്യാറാക്കുക",
+  "orderButtonQty": "ഓർഡർ തയ്യാറാക്കുക · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} പേർ · കടം പുസ്തകം",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "ബാക്കി",
+  "todayGiven": "ഇന്ന് കൊടുത്തത് +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "ഇന്ന് കിട്ടിയത് −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "ബാക്കി",
+  "settledBadge": "തീർത്തു",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} കിട്ടി",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "കടം തുടങ്ങിയത് {date} · {count} തവണ",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "അവസാനം: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "ഓർമ്മിപ്പിക്കുക",
+  "paidButton": "പണം കിട്ടി",
+  "paidPrompt": "എത്ര കിട്ടി? പറയൂ.",
+  "historyLabel": "വിവരങ്ങൾ",
+  "entryGiven": "കടം കൊടുത്തു",
+  "entryPaid": "പണം കിട്ടി",
+  "entrySourceVoice": "വോയ്‌സ്",
+  "entrySourceCash": "പണം",
+  "entrySourcePhoto": "ഫോട്ടോ",
+  "reminderText": "നമസ്കാരം {name} ji, {shop}-ൽ നിന്ന്. നിങ്ങളുടെ ₹{balance} ബാക്കിയുണ്ട്. നന്ദി!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "അടുത്ത 4 ആഴ്ച · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "അടുത്ത 4 ആഴ്ച",
+  "perWeek": "{unit} / ആഴ്ച",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "വരും നാളുകൾ · കണക്കുകൂട്ടൽ",
+  "onHandReorder": "സ്റ്റോക്കിൽ {onHand} · വാങ്ങേണ്ടത് {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} സാധനങ്ങൾ",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "ഷെയർ",
+  "hisaabTitle": "ഇന്നത്തെ കണക്ക്",
+  "hisaabSubtitle": "{date} · {count} വിവരങ്ങൾ",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "കട അടച്ചത് · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "ഇന്നത്തെ വിൽപ്പന",
+  "hisaabGiven": "കടം കൊടുത്തത്",
+  "hisaabReceived": "കടം കിട്ടിയത്",
+  "hisaabOutstanding": "ആകെ ബാക്കി",
+  "hisaabLow": "കുറവാണ്",
+  "hisaabLowItems": "{items} നാളെ വാങ്ങണം.",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival}-ന് ഇനി {weeks} ആഴ്ച കൂടി.",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "നാളത്തേക്ക് ഓർഡർ തയ്യാറാക്കുക",
+  "hisaabShareButton": "WhatsApp-ൽ അയക്കുക",
+  "todayChip": "ഇന്ന് · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "ഇന്നലെ · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "സെർവർ കിട്ടിയില്ല. ഡെമോ മോഡിൽ തുടങ്ങുന്നു.",
+  "languageSheetTitle": "Mitra ഏത് ഭാഷയിൽ സംസാരിക്കണം?",
+  "backLabel": "പുറകോട്ട്",
+  "voiceNoteLabel": "വോയ്‌സ് നോട്ട്",
+  "undo": "തിരുത്തുക",
+  "feedbackButton": "അഭിപ്രായം",
+  "feedbackTitle": "Kirana Mitra എങ്ങനെയുണ്ട്?",
+  "feedbackUp": "കൊള്ളാം",
+  "feedbackDown": "പോരാ",
+  "feedbackCommentHint": "മറ്റെന്തെങ്കിലും പറയാനുണ്ടെങ്കിൽ എഴുതൂ…",
+  "feedbackVoiceHint": "അല്ലെങ്കിൽ അമർത്തിപ്പിടിച്ച് പറയൂ",
+  "feedbackVoiceReady": "ശബ്ദം തയ്യാർ · {seconds}s",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "അയക്കുക",
+  "feedbackPickRating": "ആദ്യം കൊള്ളാമോ പോരയോ എന്ന് തിരഞ്ഞെടുക്കൂ",
+  "feedbackThanks": "നന്ദി!",
+  "changeLanguage": "ഭാഷ മാറ്റുക",
+  "languageSearchHint": "ഭാഷ തിരയുക…",
+  "languageNoMatch": "ഭാഷ കണ്ടെത്താനായില്ല",
+  "topSellersTitle": "കൂടുതൽ വിൽക്കുന്നവ",
+  "topSellersSubtitle": "കഴിഞ്ഞ 2 ആഴ്ച · അടുത്ത 2 ആഴ്ചയിലെ കണക്കുകൂട്ടൽ",
+  "autoBadge": "ഓട്ടോ",
+  "coverDays": "{days} ദിവസത്തെ സ്റ്റോക്ക്",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 ആഴ്ച",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "കൂടുതൽ വിൽക്കുന്നവ ഓട്ടോ-റീസ്റ്റോക്ക് ചെയ്യുക",
+  "autoRestockSubtitle": "സ്റ്റോക്ക് കുറഞ്ഞവ രാത്രി തനിയെ ഓർഡർ ചെയ്യപ്പെടും",
+  "distributorPhoneLabel": "സപ്ലയറുടെ WhatsApp നമ്പർ",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "സേവ് ചെയ്യുക",
+  "settingsSaved": "സേവ് ചെയ്തു",
+  "ordersTitle": "ഓർഡറുകൾ",
+  "ordersEmpty": "ഓർഡറുകൾ ഒന്നുമില്ല. ഫോർകാസ്റ്റിൽ നിന്ന് ഓർഡർ തയ്യാറാക്കൂ.",
+  "orderAuto": "ഓട്ടോ",
+  "orderManual": "മാനുവൽ",
+  "orderPlaced": "അയച്ചു",
+  "orderCancelled": "ക്യാൻസൽ ചെയ്തു",
+  "viewOrders": "ഓർഡറുകൾ കാണുക",
+  "newOrdersNotice": "രാത്രിയിലെ ഓട്ടോ ഓർഡർ വന്നു"
+}

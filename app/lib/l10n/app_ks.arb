@@ -1,0 +1,403 @@
+{
+  "@@locale": "ks",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "دُکانُک ناو",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "تُہُند ناو",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "شۆروٗع کٔرِو",
+  "requiredField": "مہربٲنی کٔرِتھ یہِ بٔرِو",
+  "navChat": "کَتھ باتھ",
+  "navStock": "سٹاک",
+  "navUdhaar": "اۆدھار",
+  "navForecast": "اندازٕ",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "ڈیمو",
+  "changeShop": "دُکان بَدلاوِو",
+  "welcomeMessage": "نمستے {name}! ونِو کیاہ آو، کیاہ کٕنٛیو، یا کٔمس دِیو اۆدھار۔ مائیک رَٹِو تہٕ بَنِو۔",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "نمستے {name}! ونِو کیاہ آو، کیاہ کٕنٛیو، یا کٔمس دِیو اۆدھار۔ مائیک رَٹِو تہٕ بَنِو۔",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "تراوِو، منسوخ گوٚو",
+  "voiceTooShort": "تھوڑا زیادٕ وقت رَٹِو تہٕ بولِو",
+  "micPermissionDenied": "آواز ریکارڈ کرنہٕ باپتھ چھِ مائیکرو فونٕچ اِجازت ضۆروٗری۔",
+  "voiceNoteSent": "🎤 وائس نوٹ",
+  "photoSent": "📷 رؠکٕچ فوٹو",
+  "typeMessageHint": "یَتھ کَنہِ لؠکھِو…",
+  "send": "سوزِو",
+  "thinking": "سوچان…",
+  "networkError": "سرورَس سٟتؠ رابطہٕ سپُد نہٕ۔ دۆبارٕ کوشِش کٔرِو۔",
+  "comingSoon": "جلدی چھُ یِوان! رؠک سکین چھُ جلدی یِوان۔",
+  "scanFailed": "فوٹو سمجِھ آو نہٕ، دۆبارٕ کٔرِو کوشِش۔",
+  "imageTooLarge": "فوٹو چھُ سؠٹھاہ بۆڈ (8 MB کھۄتہٕ زیادٕ)۔ لۄکُٹ فوٹو تُلِو۔",
+  "stockTitle": "سٹاک",
+  "lowStockBadge": "کَم چھُ",
+  "reorderAt": "{level} پؠٹھ دۆبارٕ منگاوِو",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "سٹاکس منٛز چھُ نہٕ کیہن۔ ونِو کیاہ آو۔",
+  "udhaarTitle": "اۆدھار",
+  "totalOutstanding": "کُل باقی",
+  "emptyLedger": "کانٛہہ اۆدھار چھُ نہٕ۔ ونِو \"گپتا جِیَس دِیُو 350 رۄپیہِ اۆدھار\"۔",
+  "forecastTitle": "اندازٕ",
+  "legendHistory": "پٔتھمِس ہفتس",
+  "legendForecast": "اندازٕ",
+  "legendBand": "حد",
+  "orderReady": "آرڈر تیار",
+  "shareWhatsapp": "WhatsApp پؠٹھ سوزِو",
+  "copied": "کاپی گوٚو",
+  "copy": "کاپی",
+  "retry": "دۆبارٕ کٔرِو",
+  "loading": "لوڈ گژھان…",
+  "errorLoading": "لوڈ گوٚو نہٕ۔ دۆبارٕ کوشِش باپتھ بۄن کِھچِو۔",
+  "tagline": "بولِو، کٲم گژھِ۔",
+  "languageQuestion": "مِترا کٔمؠ زبانہِ منٛز کَتھ کرِ؟",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "یہِ بٔرِو",
+  "dockPhoto": "رؠکٕچ فوٹو",
+  "dockType": "لؠکھِو",
+  "micLabel": "رَٹِو تہٕ بولِو",
+  "recordingLabel": "بوزان چھُس… ترٛٲوِو تہٕ سوزِ",
+  "recordingCancelHint": "منسوخ کرنہٕ باپتھ اۆنٛگُج نؠبر نیرِو",
+  "confirmHeader": "بُزُم · لؠکھِم",
+  "confirmTotalUdhaar": "اۆدھار · وۄنؠ کُل",
+  "confirmTotalStock": "سٹاک · وۄنؠ کُل",
+  "confirmTotalSale": "کٕنَن · از کُل",
+  "askHeader": "پکا چھُ نہٕ",
+  "askHeard": "تۆہؠ وۆنٛو “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "سٹاکس منٛز تھاوا؟",
+  "askUdhaar": "اۆدھارَس منٛز لؠکھا؟",
+  "askSale": "کٕننس منٛز لؠکھا؟",
+  "askNo": "نہٕ",
+  "askDeclined": "ٹھیک چھُ، لؠکھِم نہٕ۔",
+  "scanHeader": "رؠک وُچھُم · {count} چیز لبیم",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "سٹاک یِتھے سیٹ کَرا؟",
+  "scanConfirmed": "بُزُم · سٹاک گوٚو اَپڈیٹ",
+  "stockSubtitle": "{count} چیز · اَپڈیٹ {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 چیز چھُ کَم} other{{count} چیز چھِ کَم}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "ساری کینٛہہ چھُ ٹھیک",
+  "orderButton": "آرڈر بناوِو",
+  "orderButtonQty": "آرڈر بناوِو · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} لۆکھ · کھاتہٕ",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "باقی",
+  "todayGiven": "از دِیُت +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "از آو −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "باقی",
+  "settledBadge": "چُکتہٕ",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} آو",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "اۆدھار شۆروٗع {date} · {count} اندراج",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "آخری: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "یاد دِلاوِو",
+  "paidButton": "پونٛسہٕ آیہِ",
+  "paidPrompt": "کوٗت آو؟ بولِو۔",
+  "historyLabel": "تٲریخ",
+  "entryGiven": "اۆدھار نِو",
+  "entryPaid": "پونٛسہٕ آیہِ",
+  "entrySourceVoice": "آواز",
+  "entrySourceCash": "نَقد",
+  "entrySourcePhoto": "فوٹو",
+  "reminderText": "نمستے {name} جِی، {shop} پؠٹھٕ۔ تُہُند ₹{balance} باقی چھُ۔ شُکریہ!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "برونٛہمؠ 4 ہفتہٕ · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "برونٛہمؠ 4 ہفتہٕ",
+  "perWeek": "{unit} / ہفتہٕ",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "برونٛہہ · اندازٕ",
+  "onHandReorder": "سٹاکس منٛز {onHand} · منگاوِو {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} چیز",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "شیئر کٔرِو",
+  "hisaabTitle": "ازُک حِساب",
+  "hisaabSubtitle": "{date} · {count} اندراج",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "دُکان بَند · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "ازٕچ کٕنٕنؠ",
+  "hisaabGiven": "اۆدھار دِیُت",
+  "hisaabReceived": "اۆدھار آو",
+  "hisaabOutstanding": "کُل باقی",
+  "hisaabLow": "کَم چھُ",
+  "hisaabLowItems": "{items} پگاہ منگاوِو۔",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} چھُ {weeks} ہفتہٕ دوٗر۔",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "پگاہُک آرڈر بناوِو",
+  "hisaabShareButton": "گھرٕ WhatsApp کٔرِو",
+  "todayChip": "از · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "راتھ · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "سرور میوٗل نہٕ۔ ڈیمو موڈس منٛز شۆروٗع گژھان۔",
+  "languageSheetTitle": "مِترا کٔمؠ زبانہِ منٛز کَتھ کرِ؟",
+  "backLabel": "پَتھ کُن",
+  "voiceNoteLabel": "وائس نوٹ",
+  "undo": "واپس",
+  "feedbackButton": "رائے",
+  "feedbackTitle": "Kirana Mitra کِتھکَن چھُ چلان؟",
+  "feedbackUp": "جان",
+  "feedbackDown": "ٹھیک نہٕ",
+  "feedbackCommentHint": "بیٚیہِ کیہن ونُن آسہِ تیٚلہِ لؠکھِو…",
+  "feedbackVoiceHint": "یا رَٹِو تہٕ بولِو",
+  "feedbackVoiceReady": "آواز تیار · {seconds} سیکنڈ",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "سوزِو",
+  "feedbackPickRating": "گوڈٕ جان یا ٹھیک نہٕ ژارِو",
+  "feedbackThanks": "شُکریہ!",
+  "changeLanguage": "زبان بَدلاوِو",
+  "languageSearchHint": "زبان ژھانٛڈِو…",
+  "languageNoMatch": "کانٛہہ زبان لَبنہٕ آیہِ نہٕ",
+  "topSellersTitle": "ٹاپ سیلرز",
+  "topSellersSubtitle": "پٔتھمؠ 2 ہفتہٕ · برونٛہمن 2 ہفتن ہُند اندازٕ",
+  "autoBadge": "آٹو",
+  "coverDays": "{days} دوہَن ہُند سٹاک",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 ہفتہٕ",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "ٹاپ سیلرز آٹو ری سٹاک",
+  "autoRestockSubtitle": "کَم سٹاک والؠن ٹاپ سیلرن ہُند آرڈر گژھِ راژ دٔہان پانَے",
+  "distributorPhoneLabel": "ڈِسٹری بیوٗٹرس سُند WhatsApp نمبر",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "محفوٗظ کٔرِو",
+  "settingsSaved": "محفوٗظ گوٚو",
+  "ordersTitle": "آرڈر",
+  "ordersEmpty": "کانٛہہ آرڈر چھُ نہٕ۔ اندازٕ پؠٹھٕ آرڈر بناوِو۔",
+  "orderAuto": "آٹو",
+  "orderManual": "مینوئل",
+  "orderPlaced": "سوزِتھ",
+  "orderCancelled": "منسوخ گوٚو",
+  "viewOrders": "آرڈر وُچھِو",
+  "newOrdersNotice": "راتُک آٹو آرڈر آو"
+}

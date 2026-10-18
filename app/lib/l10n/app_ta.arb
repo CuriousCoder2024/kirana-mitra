@@ -1,0 +1,403 @@
+{
+  "@@locale": "ta",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "கடை பெயர்",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "உங்கள் பெயர்",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "தொடங்குங்க",
+  "requiredField": "இதை நிரப்பவும்",
+  "navChat": "பேச",
+  "navStock": "ஸ்டாக்",
+  "navUdhaar": "கடன்",
+  "navForecast": "மதிப்பீடு",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "டெமோ",
+  "changeShop": "கடையை மாற்று",
+  "welcomeMessage": "வணக்கம் {name}! என்ன வந்தது, என்ன விற்றது, யார் கடன் வாங்கினாங்கனு சொல்லுங்க. மைக் அழுத்திப் பேசுங்க.",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "வணக்கம் {name}! என்ன வந்தது, என்ன விற்றது, யார் கடன் வாங்கினாங்கனு சொல்லுங்க. மைக் அழுத்திப் பேசுங்க.",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "ரத்து செய்யப்பட்டது",
+  "voiceTooShort": "கொஞ்சம் நேரம் அழுத்திப் பேசுங்க",
+  "micPermissionDenied": "வாய்ஸ் மெசேஜுக்கு மைக் அனுமதி தேவை.",
+  "voiceNoteSent": "🎤 வாய்ஸ் மெசேஜ்",
+  "photoSent": "📷 அலமாரி படம்",
+  "typeMessageHint": "இங்கே எழுதுங்க…",
+  "send": "அனுப்பு",
+  "thinking": "யோசிக்கிறேன்…",
+  "networkError": "இணைக்க முடியவில்லை. மீண்டும் முயற்சி செய்யவும்.",
+  "comingSoon": "விரைவில் வருது! அலமாரி ஸ்கேன் விரைவில் வரும்.",
+  "scanFailed": "படம் புரியல, திரும்ப முயற்சி செய்யுங்க.",
+  "imageTooLarge": "படம் ரொம்ப பெருசு (8 MB மேல்). சிறிய படத்தை அனுப்பவும்.",
+  "stockTitle": "ஸ்டாக்",
+  "lowStockBadge": "குறைவா இருக்கு",
+  "reorderAt": "{level} வந்ததும் ஆர்டர் செய்",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "இப்போதைக்கு ஸ்டாக் இல்லை. என்ன வந்ததுன்னு சொல்லுங்க.",
+  "udhaarTitle": "கடன்",
+  "totalOutstanding": "மொத்த பாக்கி",
+  "emptyLedger": "கடன் ஏதும் இல்லை. \"குப்தா அண்ணனுக்கு 350 ரூபாய் கடன்\"னு சொல்லுங்க.",
+  "forecastTitle": "மதிப்பீடு",
+  "legendHistory": "கடந்த வாரம்",
+  "legendForecast": "மதிப்பீடு",
+  "legendBand": "வரம்பு",
+  "orderReady": "ஆர்டர் தயார்",
+  "shareWhatsapp": "WhatsApp-ல் அனுப்பு",
+  "copied": "காப்பி செய்யப்பட்டது",
+  "copy": "காப்பி",
+  "retry": "மீண்டும் முயற்சி",
+  "loading": "ஏற்றுகிறது…",
+  "errorLoading": "ஏற்ற முடியவில்லை. கீழே இழுத்து மீண்டும் முயற்சிக்கவும்.",
+  "tagline": "சொல்லுங்க, முடிச்சிடலாம்.",
+  "languageQuestion": "மித்ரா எந்த மொழியில் பேசட்டும்?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "இதை நிரப்புங்க",
+  "dockPhoto": "அலமாரி படம்",
+  "dockType": "டைப் செய்",
+  "micLabel": "அழுத்திப் பேசுங்க",
+  "recordingLabel": "கேட்கிறேன்… விரலை எடுத்தால் அனுப்பப்படும்",
+  "recordingCancelHint": "ரத்து செய்ய விரலை வெளியே நகர்த்தவும்",
+  "confirmHeader": "புரிந்தது · குறித்துவிட்டேன்",
+  "confirmTotalUdhaar": "கடன் · இப்போதைய மொத்தம்",
+  "confirmTotalStock": "ஸ்டாக் · இப்போதைய மொத்தம்",
+  "confirmTotalSale": "விற்பனை · இன்றைய மொத்தம்",
+  "askHeader": "சரியாக தெரியவில்லை",
+  "askHeard": "நீங்கள் சொன்னது “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "ஸ்டாக்கில் சேர்க்கவா?",
+  "askUdhaar": "கடனில் எழுதவா?",
+  "askSale": "விற்பனையில் எழுதவா?",
+  "askNo": "இல்லை",
+  "askDeclined": "சரி, எழுதவில்லை.",
+  "scanHeader": "அலமாரி பார்த்தாச்சு · {count} பொருட்கள் உள்ளன",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "ஸ்டாக்கை இப்படி வைக்கவா?",
+  "scanConfirmed": "புரிந்தது · ஸ்டாக் புதுப்பிக்கப்பட்டது",
+  "stockSubtitle": "{count} பொருட்கள் · அப்டேட் {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 பொருள் குறைவா இருக்கு} other{{count} பொருட்கள் குறைவா இருக்கு}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "எல்லாம் சரியா இருக்கு",
+  "orderButton": "ஆர்டர் போடுங்க",
+  "orderButtonQty": "ஆர்டர் போடுங்க · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} நபர்கள் · கணக்கு புத்தகம்",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "பாக்கி",
+  "todayGiven": "இன்று கொடுத்தது +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "இன்று வந்தது −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "பாக்கி",
+  "settledBadge": "செட்டில் ஆனது",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} வந்தது",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "கடன் தொடக்கம் {date} · {count} பதிவுகள்",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "கடைசியாக: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "நினைவூட்டு",
+  "paidButton": "பணம் வந்தது",
+  "paidPrompt": "எவ்வளவு வந்தது? சொல்லுங்க.",
+  "historyLabel": "வரலாறு",
+  "entryGiven": "கடன் கொடுக்கப்பட்டது",
+  "entryPaid": "பணம் வந்தது",
+  "entrySourceVoice": "வாய்ஸ்",
+  "entrySourceCash": "பணம்",
+  "entrySourcePhoto": "படம்",
+  "reminderText": "வணக்கம் {name} அவர்களே, {shop}-லிருந்து. தங்களின் ₹{balance} பாக்கி உள்ளது. நன்றி!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "அடுத்த 4 வாரங்கள் · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "அடுத்த 4 வாரங்கள்",
+  "perWeek": "{unit} / வாரம்",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "அடுத்து · மதிப்பீடு",
+  "onHandReorder": "இருப்பில் {onHand} · ஆர்டர் {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} பொருட்கள்",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "பகிர்",
+  "hisaabTitle": "இன்றைய கணக்கு",
+  "hisaabSubtitle": "{date} · {count} பதிவுகள்",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "கடை மூடல் · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "இன்றைய விற்பனை",
+  "hisaabGiven": "கடன் கொடுத்தது",
+  "hisaabReceived": "கடன் வசூல்",
+  "hisaabOutstanding": "மொத்த பாக்கி",
+  "hisaabLow": "குறைவா இருக்கு",
+  "hisaabLowItems": "{items} நாளைக்கு ஆர்டர் பண்ணுங்க.",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} வர இன்னும் {weeks} வாரங்கள் உள்ளன.",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "நாளைக்கான ஆர்டர் போடுங்க",
+  "hisaabShareButton": "வீட்டுக்கு WhatsApp பண்ணுங்க",
+  "todayChip": "இன்று · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "நேற்று · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "சர்வர் கிடைக்கவில்லை. டெமோ முறையில் துவங்குகிறது.",
+  "languageSheetTitle": "மித்ரா எந்த மொழியில் பேசட்டும்?",
+  "backLabel": "பின்னால்",
+  "voiceNoteLabel": "வாய்ஸ் மெசேஜ்",
+  "undo": "Undo",
+  "feedbackButton": "கருத்து",
+  "feedbackTitle": "Kirana Mitra எப்படி இருக்கு?",
+  "feedbackUp": "நன்றாக உள்ளது",
+  "feedbackDown": "சரி இல்லை",
+  "feedbackCommentHint": "வேறு ஏதேனும் சொல்ல விரும்பினால் எழுதுங்க…",
+  "feedbackVoiceHint": "அல்லது அழுத்திப் பேசுங்க",
+  "feedbackVoiceReady": "குரல் தயார் · {seconds}வி",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "அனுப்பு",
+  "feedbackPickRating": "முதலில் பிடித்ததா இல்லையா என்பதை தேர்ந்தெடுக்கவும்",
+  "feedbackThanks": "நன்றி!",
+  "changeLanguage": "மொழி மாற்று",
+  "languageSearchHint": "மொழியைத் தேடுங்க…",
+  "languageNoMatch": "மொழி எதுவும் கிடைக்கவில்லை",
+  "topSellersTitle": "அதிகம் விற்பவை",
+  "topSellersSubtitle": "கடந்த 2 வாரங்கள் · அடுத்த 2 வார கணிப்பு",
+  "autoBadge": "ஆட்டோ",
+  "coverDays": "{days} நாட்களுக்கு ஸ்டாக்",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 வாரம்",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "அதிகம் விற்பவைக்கு ஆட்டோ ஆர்டர்",
+  "autoRestockSubtitle": "குறைந்த ஸ்டாக் உள்ள அதிகம் விற்பவைக்கு இரவில் தானாக ஆர்டர் போகும்",
+  "distributorPhoneLabel": "டிஸ்ட்ரிபியூட்டர் WhatsApp எண்",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "சேமி",
+  "settingsSaved": "சேமிக்கப்பட்டது",
+  "ordersTitle": "ஆர்டர்கள்",
+  "ordersEmpty": "இப்போதைக்கு ஆர்டர் இல்லை. கணிப்பிலிருந்து ஆர்டர் போடுங்க.",
+  "orderAuto": "ஆட்டோ",
+  "orderManual": "மேனுவல்",
+  "orderPlaced": "அனுப்பப்பட்டது",
+  "orderCancelled": "ரத்து செய்யப்பட்டது",
+  "viewOrders": "ஆர்டர்களைப் பார்க்க",
+  "newOrdersNotice": "இரவின் ஆட்டோ ஆர்டர் வந்தது"
+}

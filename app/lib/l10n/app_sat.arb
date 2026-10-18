@@ -1,0 +1,403 @@
+{
+  "@@locale": "sat",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "ᱫᱳᱠᱟᱱ ᱧᱩᱛᱩᱢ",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "ᱟᱢᱟᱜ ᱧᱩᱛᱩᱢ",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "ᱮᱦᱚᱵᱽ ᱢᱮ",
+  "requiredField": "ᱫᱟᱭᱟ ᱠᱟᱛᱮ ᱱᱚᱣᱟ ᱯᱮᱨᱮᱡᱽ ᱢᱮ",
+  "navChat": "ᱨᱚᱯᱚᱲ",
+  "navStock": "ᱥᱴᱚᱠ",
+  "navUdhaar": "ᱩᱫᱷᱟᱹᱨ",
+  "navForecast": "ᱟᱱᱫᱟᱡᱽ",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "ᱰᱮᱢᱳ",
+  "changeShop": "ᱫᱳᱠᱟᱱ ᱵᱚᱫᱚᱞ ᱢᱮ",
+  "welcomeMessage": "ᱡᱚᱦᱟᱨ {name}! ᱪᱮᱫ ᱦᱮᱡ ᱮᱱᱟ, ᱪᱮᱫ ᱟᱹᱠᱷᱨᱤᱧ ᱮᱱᱟ, ᱥᱮ ᱚᱠᱚᱭ ᱩᱫᱷᱟᱹᱨ ᱤᱫᱤ ᱠᱮᱫᱟ ᱞᱟᱹᱭ ᱢᱮ᱾ ᱢᱟᱭᱤᱠ ᱚᱛᱟ ᱠᱟᱛᱮ ᱨᱚᱲ ᱢᱮ᱾",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "ᱡᱚᱦᱟᱨ {name}! ᱞᱟᱹᱭ ᱢᱮ: ᱪᱮᱫ ᱦᱮᱡ ᱮᱱᱟ, ᱪᱮᱫ ᱟᱹᱠᱷᱨᱤᱧ ᱮᱱᱟ, ᱚᱠᱚᱭ ᱩᱫᱷᱟᱹᱨ ᱮᱢ ᱮᱢᱟᱫᱮᱭᱟ᱾ ᱢᱟᱭᱤᱠ ᱚᱛᱟ ᱠᱟᱛᱮ ᱨᱚᱲ ᱢᱮ᱾",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "ᱵᱟᱹᱜᱤ ᱢᱮ, ᱵᱟᱹᱛᱤᱞ ᱮᱱᱟ",
+  "voiceTooShort": "ᱟᱨ ᱱᱟᱥᱮ ᱚᱛᱟ ᱫᱚᱦᱚ ᱠᱟᱛᱮ ᱨᱚᱲ ᱢᱮ",
+  "micPermissionDenied": "ᱨᱚᱲ ᱱᱳᱴ ᱞᱟᱹᱜᱤᱫ ᱢᱟᱭᱤᱠᱨᱳᱯᱷᱳᱱ ᱪᱷᱟᱹᱲ ᱞᱟᱹᱠᱛᱤᱭᱟ᱾",
+  "voiceNoteSent": "🎤 ᱨᱚᱲ ᱱᱳᱴ",
+  "photoSent": "📷 ᱛᱷᱟᱠ ᱪᱤᱛᱟᱹᱨ",
+  "typeMessageHint": "ᱱᱚᱸᱰᱮ ᱚᱞ ᱢᱮ…",
+  "send": "ᱵᱷᱮᱡᱟᱭ ᱢᱮ",
+  "thinking": "ᱩᱭᱦᱟᱹᱨ ᱮᱫᱟᱭ…",
+  "networkError": "ᱥᱟᱨᱵᱷᱟᱨ ᱵᱟᱝ ᱡᱚᱲᱟᱣ ᱞᱮᱱᱟ᱾ ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾",
+  "comingSoon": "ᱞᱚᱜᱚᱱ ᱜᱮ ᱦᱤᱡᱩᱜ ᱠᱟᱱᱟ! ᱛᱷᱟᱠ ᱥᱠᱮᱱ ᱞᱚᱜᱚᱱ ᱜᱮ ᱦᱤᱡᱩᱜ ᱠᱟᱱᱟ᱾",
+  "scanFailed": "ᱪᱤᱛᱟᱹᱨ ᱵᱟᱝ ᱵᱩᱡᱷᱟᱹᱣ ᱞᱮᱱᱟ, ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ᱾",
+  "imageTooLarge": "ᱪᱤᱛᱟᱹᱨ ᱟᱹᱰᱤ ᱢᱟᱨᱟᱝ ᱜᱮᱭᱟ (8 MB ᱠᱷᱚᱱ ᱡᱟᱹᱥᱛᱤ)᱾ ᱦᱩᱰᱤᱧ ᱪᱤᱛᱟᱹᱨ ᱞᱟᱜᱟᱣ ᱢᱮ᱾",
+  "stockTitle": "ᱥᱴᱚᱠ",
+  "lowStockBadge": "ᱠᱚᱢ ᱜᱮᱭᱟ",
+  "reorderAt": "{level} ᱨᱮ ᱟᱨᱦᱚᱸ ᱚᱰᱟᱨ ᱢᱮ",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "ᱱᱤᱛᱚᱜ ᱥᱴᱚᱠ ᱵᱟᱹᱱᱩᱜᱼᱟ᱾ ᱞᱟᱹᱭ ᱢᱮ ᱪᱮᱫ ᱦᱮᱡ ᱮᱱᱟ᱾",
+  "udhaarTitle": "ᱩᱫᱷᱟᱹᱨ",
+  "totalOutstanding": "ᱡᱚᱛᱚ ᱵᱟᱹᱠᱤ",
+  "emptyLedger": "ᱱᱤᱛᱚᱜ ᱪᱮᱫ ᱦᱚᱸ ᱩᱫᱷᱟᱹᱨ ᱵᱟᱹᱱᱩᱜᱼᱟ᱾ ᱨᱚᱲ ᱢᱮ \"Gupta ji ᱫᱚ 350 ᱨᱮᱭᱟᱜ ᱩᱫᱷᱟᱹᱨ ᱮᱢ ᱦᱩᱭ ᱮᱱᱟ\"᱾",
+  "forecastTitle": "ᱟᱱᱫᱟᱡᱽ",
+  "legendHistory": "ᱯᱟᱨᱚᱢᱮᱱ ᱦᱟᱯᱛᱟ",
+  "legendForecast": "ᱟᱱᱫᱟᱡᱽ",
+  "legendBand": "ᱥᱤᱢᱟᱹ",
+  "orderReady": "ᱚᱰᱟᱨ ᱥᱟᱯᱲᱟᱣ ᱮᱱᱟ",
+  "shareWhatsapp": "WhatsApp ᱛᱮ ᱵᱷᱮᱡᱟᱭ ᱢᱮ",
+  "copied": "ᱠᱚᱯᱤ ᱮᱱᱟ",
+  "copy": "ᱠᱚᱯᱤ",
+  "retry": "ᱟᱨᱦᱚᱸ ᱪᱮᱥᱴᱟᱭ ᱢᱮ",
+  "loading": "ᱞᱳᱰᱚᱜ ᱠᱟᱱᱟ…",
+  "errorLoading": "ᱵᱟᱝ ᱞᱳᱰ ᱞᱮᱱᱟ᱾ ᱫᱚᱦᱲᱟ ᱪᱮᱥᱴᱟ ᱞᱟᱹᱜᱤᱫ ᱞᱟᱛᱟᱨ ᱚᱨ ᱢᱮ᱾",
+  "tagline": "ᱞᱟᱹᱭ ᱢᱮ, ᱦᱩᱭᱩᱜᱼᱟ᱾",
+  "languageQuestion": "Mitra ᱫᱚ ᱚᱠᱟ ᱯᱟᱹᱨᱥᱤ ᱛᱮ ᱨᱚᱲᱟ?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "ᱱᱚᱣᱟ ᱯᱮᱨᱮᱡᱽ ᱢᱮ",
+  "dockPhoto": "ᱛᱷᱟᱠ ᱪᱤᱛᱟᱹᱨ",
+  "dockType": "ᱚᱞ ᱢᱮ",
+  "micLabel": "ᱚᱛᱟ ᱠᱟᱛᱮ ᱨᱚᱲ ᱢᱮ",
+  "recordingLabel": "ᱟᱸᱡᱚᱢᱮᱫᱟᱹᱧ… ᱟᱲᱟᱜ ᱞᱮᱠᱷᱟᱱ ᱵᱷᱮᱡᱟᱜᱼᱟ",
+  "recordingCancelHint": "ᱵᱟᱹᱛᱤᱞ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱹᱴᱩᱵ ᱵᱟᱦᱨᱮ ᱤᱫᱤᱭ ᱢᱮ",
+  "confirmHeader": "ᱵᱩᱡᱷᱟᱹᱣ ᱮᱱᱟ · ᱚᱞ ᱮᱱᱟ",
+  "confirmTotalUdhaar": "ᱩᱫᱷᱟᱹᱨ · ᱱᱤᱛᱚᱜ ᱡᱚᱛᱚ",
+  "confirmTotalStock": "ᱥᱴᱚᱠ · ᱱᱤᱛᱚᱜ ᱡᱚᱛᱚ",
+  "confirmTotalSale": "ᱟᱹᱠᱷᱨᱤᱧ · ᱛᱮᱦᱮᱧ ᱡᱚᱛᱚ",
+  "askHeader": "ᱴᱷᱟᱹᱣᱠᱟᱹ ᱵᱟᱹᱱᱩᱜᱼᱟ",
+  "askHeard": "ᱟᱢᱮᱢ ᱢᱮᱱ ᱠᱮᱫᱟ “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "ᱥᱴᱚᱠ ᱨᱮ ᱥᱮᱞᱮᱫᱽ ᱟᱹᱧ?",
+  "askUdhaar": "ᱩᱫᱷᱟᱹᱨ ᱨᱮ ᱚᱞᱤᱧ?",
+  "askSale": "ᱟᱹᱠᱷᱨᱤᱧ ᱨᱮ ᱚᱞᱤᱧ?",
+  "askNo": "ᱵᱟᱝ",
+  "askDeclined": "ᱴᱷᱤᱠ ᱜᱮᱭᱟ, ᱵᱟᱹᱧ ᱚᱞ ᱞᱮᱫᱟ᱾",
+  "scanHeader": "ᱛᱷᱟᱠ ᱧᱮᱞ ᱮᱱᱟ · {count} ᱜᱚᱴᱟᱝ ᱧᱟᱢ ᱮᱱᱟ",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "ᱥᱴᱚᱠ ᱱᱚᱣᱟ ᱜᱮ ᱥᱮᱴ ᱠᱟᱹᱧ?",
+  "scanConfirmed": "ᱵᱩᱡᱷᱟᱹᱣ ᱮᱱᱟ · ᱥᱴᱚᱠ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱮᱱᱟ",
+  "stockSubtitle": "{count} ᱡᱤᱱᱤᱥ · ᱦᱟᱹᱞᱤᱭᱟᱹᱠ {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 ᱡᱤᱱᱤᱥ ᱠᱚᱢ ᱜᱮᱭᱟ} other{{count} ᱡᱤᱱᱤᱥ ᱠᱚᱢ ᱜᱮᱭᱟ}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "ᱡᱚᱛᱚ ᱴᱷᱤᱠ ᱜᱮᱭᱟ",
+  "orderButton": "ᱚᱰᱟᱨ ᱵᱮᱱᱟᱣ ᱢᱮ",
+  "orderButtonQty": "ᱚᱰᱟᱨ ᱵᱮᱱᱟᱣ ᱢᱮ · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} ᱦᱚᱲ · ᱠᱷᱟᱛᱟ",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "ᱵᱟᱹᱠᱤ",
+  "todayGiven": "ᱛᱮᱦᱮᱧ ᱮᱢ ᱮᱱᱟ +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "ᱛᱮᱦᱮᱧ ᱦᱮᱡ ᱮᱱᱟ −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "ᱵᱟᱹᱠᱤ",
+  "settledBadge": "ᱪᱩᱠᱛᱟᱹ",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} ᱦᱮᱡ ᱮᱱᱟ",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "ᱩᱫᱷᱟᱹᱨ ᱮᱦᱚᱵ {date} · {count} ᱮᱱᱴᱨᱤ",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "ᱢᱩᱪᱟᱹᱫ: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "ᱫᱤᱥᱟᱹ ᱦᱚᱪᱚᱭ ᱢᱮ",
+  "paidButton": "ᱴᱟᱠᱟ ᱦᱮᱡ ᱮᱱᱟ",
+  "paidPrompt": "ᱛᱤᱱᱟᱹᱜ ᱦᱮᱡ ᱮᱱᱟ? ᱞᱟᱹᱭ ᱢᱮ᱾",
+  "historyLabel": "ᱱᱟᱜᱟᱢ",
+  "entryGiven": "ᱩᱫᱷᱟᱹᱨ ᱤᱫᱤ ᱠᱮᱫᱟ",
+  "entryPaid": "ᱴᱟᱠᱟ ᱦᱮᱡ ᱮᱱᱟ",
+  "entrySourceVoice": "ᱨᱚᱲ",
+  "entrySourceCash": "ᱱᱟᱜᱟᱫᱽ",
+  "entrySourcePhoto": "ᱯᱷᱳᱴᱳ",
+  "reminderText": "ᱡᱚᱦᱟᱨ {name} ᱜᱚᱢᱠᱮ, {shop} ᱠᱷᱚᱱ᱾ ᱟᱢᱟᱜ ₹{balance} ᱵᱟᱹᱠᱤ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱥᱟᱨᱦᱟᱣ!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "ᱫᱟᱨᱟᱭ 4 ᱦᱟᱯᱛᱟ · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "ᱫᱟᱨᱟᱭ 4 ᱦᱟᱯᱛᱟ",
+  "perWeek": "{unit} / ᱦᱟᱯᱛᱟ",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "ᱢᱟᱬᱟᱝ · ᱟᱱᱫᱟᱡᱽ",
+  "onHandReorder": "ᱥᱴᱚᱠ ᱨᱮ {onHand} · ᱢᱟᱜᱟᱣ ᱢᱮ {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} ᱡᱤᱱᱤᱥ",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "ᱦᱟᱹᱴᱤᱧ ᱢᱮ",
+  "hisaabTitle": "ᱛᱮᱦᱮᱧᱟᱜ ᱦᱤᱥᱟᱹᱵᱽ",
+  "hisaabSubtitle": "{date} · {count} ᱮᱱᱴᱨᱤ",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "ᱫᱳᱠᱟᱱ ᱵᱚᱸᱫᱽ · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "ᱛᱮᱦᱮᱧᱟᱜ ᱟᱹᱠᱷᱨᱤᱧ",
+  "hisaabGiven": "ᱩᱫᱷᱟᱹᱨ ᱮᱢ ᱮᱱᱟ",
+  "hisaabReceived": "ᱩᱫᱷᱟᱹᱨ ᱦᱮᱡ ᱮᱱᱟ",
+  "hisaabOutstanding": "ᱡᱚᱛᱚ ᱵᱟᱹᱠᱤ",
+  "hisaabLow": "ᱠᱚᱢ ᱜᱮᱭᱟ",
+  "hisaabLowItems": "{items} ᱜᱟᱯᱟ ᱢᱟᱜᱟᱣ ᱢᱮ᱾",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} ᱟᱨ {weeks} ᱦᱟᱯᱛᱟ ᱛᱟᱭᱚᱢ ᱠᱟᱱᱟ᱾",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "ᱜᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱚᱰᱟᱨ ᱵᱮᱱᱟᱣ ᱢᱮ",
+  "hisaabShareButton": "ᱚᱲᱟᱜ ᱛᱮ WhatsApp ᱢᱮ",
+  "todayChip": "ᱛᱮᱦᱮᱧ · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "ᱦᱚᱞᱟ · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "ᱥᱟᱨᱵᱷᱟᱨ ᱵᱟᱝ ᱧᱟᱢ ᱞᱮᱱᱟ᱾ ᱰᱮᱢᱳ ᱛᱮ ᱮᱦᱚᱵᱚᱜ ᱠᱟᱱᱟ᱾",
+  "languageSheetTitle": "Mitra ᱫᱚ ᱚᱠᱟ ᱯᱟᱹᱨᱥᱤ ᱛᱮ ᱨᱚᱲᱟ?",
+  "backLabel": "ᱛᱟᱭᱚᱢ",
+  "voiceNoteLabel": "ᱨᱚᱲ ᱱᱳᱴ",
+  "undo": "ᱨᱩᱣᱟᱹᱲ",
+  "feedbackButton": "ᱯᱷᱤᱰᱵᱮᱠ",
+  "feedbackTitle": "Kirana Mitra ᱪᱮᱫ ᱞᱮᱠᱟ ᱪᱟᱞᱟᱜ ᱠᱟᱱᱟ?",
+  "feedbackUp": "ᱵᱷᱟᱹᱜᱤ",
+  "feedbackDown": "ᱵᱟᱝ ᱴᱷᱤᱠᱟ",
+  "feedbackCommentHint": "ᱟᱨ ᱪᱮᱫ ᱞᱟᱹᱭ ᱥᱟᱱᱟᱭᱮᱫ ᱢᱮᱭᱟ ᱚᱞ ᱢᱮ…",
+  "feedbackVoiceHint": "ᱥᱮ ᱚᱛᱟ ᱠᱟᱛᱮ ᱨᱚᱲ ᱢᱮ",
+  "feedbackVoiceReady": "ᱨᱚᱲ ᱥᱟᱯᱲᱟᱣ ᱮᱱᱟ · {seconds}s",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "ᱵᱷᱮᱡᱟᱭ ᱢᱮ",
+  "feedbackPickRating": "ᱢᱟᱬᱟᱝ ᱵᱷᱟᱹᱜᱤ ᱥᱮ ᱵᱟᱝ ᱴᱷᱤᱠ ᱵᱟᱪᱷᱟᱣ ᱢᱮ",
+  "feedbackThanks": "ᱥᱟᱨᱦᱟᱣ!",
+  "changeLanguage": "ᱯᱟᱹᱨᱥᱤ ᱵᱚᱫᱚᱞ ᱢᱮ",
+  "languageSearchHint": "ᱯᱟᱹᱨᱥᱤ ᱯᱟᱸᱡᱟᱭ ᱢᱮ…",
+  "languageNoMatch": "ᱪᱮᱫ ᱯᱟᱹᱨᱥᱤ ᱦᱚᱸ ᱵᱟᱝ ᱧᱟᱢ ᱞᱮᱱᱟ",
+  "topSellersTitle": "ᱡᱟᱹᱥᱛᱤ ᱟᱹᱠᱷᱨᱤᱧᱚᱜ ᱠᱟᱱ",
+  "topSellersSubtitle": "ᱯᱟᱨᱚᱢᱮᱱ 2 ᱦᱟᱯᱛᱟ · ᱫᱟᱨᱟᱭ 2 ᱦᱟᱯᱛᱟ ᱨᱮᱭᱟᱜ ᱟᱱᱫᱟᱡᱽ",
+  "autoBadge": "ᱚᱴᱳ",
+  "coverDays": "{days} ᱢᱟᱦᱟᱸ ᱨᱮᱭᱟᱜ ᱥᱴᱚᱠ",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 ᱦᱟᱯᱛᱟ",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "ᱡᱟᱹᱥᱛᱤ ᱟᱹᱠᱷᱨᱤᱧᱚᱜ ᱠᱟᱱ ᱡᱤᱱᱤᱥ ᱚᱴᱳ-ᱨᱤᱥᱴᱚᱠ",
+  "autoRestockSubtitle": "ᱠᱚᱢ ᱥᱴᱚᱠ ᱡᱤᱱᱤᱥ ᱧᱤᱫᱟᱹ ᱟᱡ ᱛᱮᱜᱮ ᱚᱰᱟᱨ ᱪᱟᱞᱟᱜᱼᱟ",
+  "distributorPhoneLabel": "ᱰᱤᱥᱴᱨᱤᱵᱤᱭᱩᱴᱟᱨ ᱟᱜ WhatsApp ᱮᱞ",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "ᱥᱟᱺᱪᱟᱣ ᱢᱮ",
+  "settingsSaved": "ᱥᱟᱺᱪᱟᱣ ᱮᱱᱟ",
+  "ordersTitle": "ᱚᱰᱟᱨ ᱠᱚ",
+  "ordersEmpty": "ᱱᱤᱛᱚᱜ ᱪᱮᱫ ᱚᱰᱟᱨ ᱦᱚᱸ ᱵᱟᱹᱱᱩᱜᱼᱟ᱾ Forecast ᱠᱷᱚᱱ ᱚᱰᱟᱨ ᱵᱮᱱᱟᱣ ᱢᱮ᱾",
+  "orderAuto": "ᱚᱴᱳ",
+  "orderManual": "ᱢᱮᱱᱩᱣᱟᱞ",
+  "orderPlaced": "ᱵᱷᱮᱡᱟ ᱮᱱᱟ",
+  "orderCancelled": "ᱵᱟᱹᱛᱤᱞ ᱮᱱᱟ",
+  "viewOrders": "ᱚᱰᱟᱨ ᱠᱚ ᱧᱮᱞ ᱢᱮ",
+  "newOrdersNotice": "ᱧᱤᱫᱟᱹ ᱨᱮᱭᱟᱜ ᱚᱴᱳ ᱚᱰᱟᱨ ᱦᱮᱡ ᱮᱱᱟ"
+}

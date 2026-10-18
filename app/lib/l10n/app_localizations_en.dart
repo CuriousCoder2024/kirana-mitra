@@ -444,4 +444,107 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get undo => 'Undo';
+
+  @override
+  String get feedbackButton => 'Feedback';
+
+  @override
+  String get feedbackTitle => 'Kirana Mitra kaisa chal raha hai?';
+
+  @override
+  String get feedbackUp => 'Achha';
+
+  @override
+  String get feedbackDown => 'Theek nahi';
+
+  @override
+  String get feedbackCommentHint => 'Kuch aur batana ho toh likho…';
+
+  @override
+  String get feedbackVoiceHint => 'Ya dabake bolo';
+
+  @override
+  String feedbackVoiceReady(String seconds) {
+    return 'Aawaz taiyaar · ${seconds}s';
+  }
+
+  @override
+  String get feedbackSend => 'Bhejo';
+
+  @override
+  String get feedbackPickRating => 'Pehle achha ya theek nahi chuno';
+
+  @override
+  String get feedbackThanks => 'Shukriya!';
+
+  @override
+  String get changeLanguage => 'Bhasha badlo';
+
+  @override
+  String get languageSearchHint => 'Bhasha dhoondo…';
+
+  @override
+  String get languageNoMatch => 'Koi bhasha nahi mili';
+
+  @override
+  String get topSellersTitle => 'Top sellers';
+
+  @override
+  String get topSellersSubtitle => 'Pichhle 2 hafte · agle 2 hafte ka anumaan';
+
+  @override
+  String get autoBadge => 'Auto';
+
+  @override
+  String coverDays(String days) {
+    return '$days din';
+  }
+
+  @override
+  String unitsPerFortnight(String units, String unit) {
+    return '$units $unit';
+  }
+
+  @override
+  String get autoRestockTitle => 'Auto-restock top sellers';
+
+  @override
+  String get autoRestockSubtitle =>
+      'Kam stock wale top sellers ka order raat ko apne aap jayega';
+
+  @override
+  String get distributorPhoneLabel => 'Distributor ka WhatsApp number';
+
+  @override
+  String get distributorPhoneHint => '+91 98765 43210';
+
+  @override
+  String get save => 'Save karo';
+
+  @override
+  String get settingsSaved => 'Save ho gaya';
+
+  @override
+  String get ordersTitle => 'Orders';
+
+  @override
+  String get ordersEmpty => 'Abhi koi order nahi. Forecast se Order banao.';
+
+  @override
+  String get orderAuto => 'Auto';
+
+  @override
+  String get orderManual => 'Manual';
+
+  @override
+  String get orderPlaced => 'Bheja';
+
+  @override
+  String get orderCancelled => 'Cancel ho gaya';
+
+  @override
+  String get viewOrders => 'Orders dekho';
+
+  @override
+  String get newOrdersNotice => 'Raat ka auto order aaya';
 }

@@ -1,0 +1,403 @@
+{
+  "@@locale": "kok",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "दुकानचें नांव",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "तुमचें नांव",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "सुरू करात",
+  "requiredField": "उपकार करून हें भरात",
+  "navChat": "उलोवप",
+  "navStock": "स्टॉक",
+  "navUdhaar": "उदारी",
+  "navForecast": "अंदाज",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "डेमो",
+  "changeShop": "दुकान बदलात",
+  "welcomeMessage": "नमस्कार {name}! कितें आयलें, कितें विकलें वा कोणाक उदार दिलें तें सांगात. माइक दाबून धरा आनी उलयात.",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "नमस्कार {name}! सांगात: कितें आयलें, कितें विकलें, कोणाक उदार दिलें. माइक दाबून धरा आनी उलयात.",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "सोडून दिया, रद्द जालें",
+  "voiceTooShort": "मात्शें चड वेळ दाबून धरा आनी उलयात",
+  "micPermissionDenied": "व्हॉईस नोट खातीर मायक्रोफोन परवानगी जाय.",
+  "voiceNoteSent": "🎤 व्हॉईस नोट",
+  "photoSent": "📷 शेल्फ फोटो",
+  "typeMessageHint": "हांगा बरयात…",
+  "send": "धाडा",
+  "thinking": "विचार करता…",
+  "networkError": "सर्व्हर मेळूंक ना. परतून यत्न करात.",
+  "comingSoon": "रोखडेंच येतलो! शेल्फ स्कॅन बेगीन येतलो.",
+  "scanFailed": "फोटो समजलो ना, परतून यत्न करात.",
+  "imageTooLarge": "फोटो खूब व्हड आसा (8 MB वयर). ल्हान फोटो धाडा.",
+  "stockTitle": "स्टॉक",
+  "lowStockBadge": "उणें आसा",
+  "reorderAt": "{level} चेर परतून मागायात",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "सद्या स्टॉक ना. कितें आयलां तें सांगात.",
+  "udhaarTitle": "उदारी",
+  "totalOutstanding": "एकूण बाकी",
+  "emptyLedger": "सद्या कांयच उदारी ना. \"गुप्ताजीक 350 ची उदारी दिली\" अशें सांगात.",
+  "forecastTitle": "अंदाज",
+  "legendHistory": "फाटलो सप्तक",
+  "legendForecast": "अंदाज",
+  "legendBand": "मर्यादा",
+  "orderReady": "ऑर्डर तयार",
+  "shareWhatsapp": "WhatsApp चेर धाडा",
+  "copied": "कॉपी जालें",
+  "copy": "कॉपी",
+  "retry": "परतून यत्न करा",
+  "loading": "लोड जाता…",
+  "errorLoading": "लोड जावंक ना. सकयल ओडून परतून यत्न करात.",
+  "tagline": "उलयात, काम जातलें.",
+  "languageQuestion": "मित्र खंयचे भाशेंत उलयतलो?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "हें भरात",
+  "dockPhoto": "शेल्फ फोटो",
+  "dockType": "बरयात",
+  "micLabel": "दाबून उलयात",
+  "recordingLabel": "आयकता… सोडटकच धाडतलो",
+  "recordingCancelHint": "रद्द करपाक बोट भायर व्हरयात",
+  "confirmHeader": "समजलें · बरोवन घेतलें",
+  "confirmTotalUdhaar": "उदारी · आतां एकूण",
+  "confirmTotalStock": "स्टॉक · आतां एकूण",
+  "confirmTotalSale": "विक्री · आज एकूण",
+  "askHeader": "खात्री ना",
+  "askHeard": "तुमी म्हळें “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "स्टॉकांत घालूं?",
+  "askUdhaar": "उदारींत बरोवूं?",
+  "askSale": "विक्रींत बरोवूं?",
+  "askNo": "नाका",
+  "askDeclined": "ठीक आसा, बरोवंक ना.",
+  "scanHeader": "शेल्फ पळयलें · {count} वस्तू मेळ्ळ्यो",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "स्टॉक होच दवरूं?",
+  "scanConfirmed": "समजलें · स्टॉक अपडेट जालो",
+  "stockSubtitle": "{count} वस्तू · अपडेट {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 वस्तू उणी आसा} other{{count} वस्तू उण्यो आसात}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "सगळें ठीक आसा",
+  "orderButton": "ऑर्डर करात",
+  "orderButtonQty": "ऑर्डर करात · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} लोक · बही-खातें",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "बाकी",
+  "todayGiven": "आज दिलें +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "आज आयलें −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "बाकी",
+  "settledBadge": "चुकतें जालें",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} आयले",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "उदारी सुरू {date} · {count} नोंदी",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "निमाणें: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "उगडास करात",
+  "paidButton": "पयशे आयले",
+  "paidPrompt": "कितले आयले? सांगात.",
+  "historyLabel": "इतिहास",
+  "entryGiven": "उदारी घेतली",
+  "entryPaid": "पयशे आयले",
+  "entrySourceVoice": "आवाज",
+  "entrySourceCash": "रोकड",
+  "entrySourcePhoto": "फोटो",
+  "reminderText": "नमस्कार {name} जी, {shop} कडल्यान. तुमची ₹{balance} बाकी आसा. देव बरें करूं!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "फुडले 4 सप्तक · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "फुडले 4 सप्तक",
+  "perWeek": "{unit} / सप्तक",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "फुडारांत · अंदाज",
+  "onHandReorder": "स्टॉकांत {onHand} · मागायात {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} वस्तू",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "शेअर करात",
+  "hisaabTitle": "आजचो हिशोब",
+  "hisaabSubtitle": "{date} · {count} नोंदी",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "दुकान बंद · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "आजची विक्री",
+  "hisaabGiven": "उदारी दिली",
+  "hisaabReceived": "उदारी आयली",
+  "hisaabOutstanding": "एकूण बाकी",
+  "hisaabLow": "उणें आसा",
+  "hisaabLowItems": "{items} फाल्यां मागायात.",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} {weeks} सप्तक पयस आसा.",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "फाल्यांची ऑर्डर तयार करात",
+  "hisaabShareButton": "घरा WhatsApp करात",
+  "todayChip": "आज · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "काल · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "सर्व्हर मेळूंक ना. डेमो मोडांत सुरू करतां.",
+  "languageSheetTitle": "मित्र खंयचे भाशेंत उलयतलो?",
+  "backLabel": "फाटीं",
+  "voiceNoteLabel": "व्हॉईस नोट",
+  "undo": "फाटीं घेयात",
+  "feedbackButton": "प्रतिक्रिया",
+  "feedbackTitle": "Kirana Mitra कसो चलता?",
+  "feedbackUp": "बरो",
+  "feedbackDown": "बरो ना",
+  "feedbackCommentHint": "आनीक कितें सांगपाचें आसा जाल्यार बरयात…",
+  "feedbackVoiceHint": "ना जाल्यार दाबून उलयात",
+  "feedbackVoiceReady": "आवाज तयार · {seconds}s",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "धाडा",
+  "feedbackPickRating": "पयलीं बरो वा बरो ना तें वेंचून काडात",
+  "feedbackThanks": "देव बरें करूं!",
+  "changeLanguage": "भास बदलात",
+  "languageSearchHint": "भास सोदात…",
+  "languageNoMatch": "भास मेळ्ळी ना",
+  "topSellersTitle": "चड विकपी माल",
+  "topSellersSubtitle": "फाटले 2 सप्तक · फुडल्या 2 सप्तकांचो अंदाज",
+  "autoBadge": "ऑटो",
+  "coverDays": "{days} दिसांचो स्टॉक",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 सप्तक",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "चड विकपी मालाचो ऑटो-रीस्टॉक",
+  "autoRestockSubtitle": "उण्या स्टॉकाचो चड विकपी माल रातचो आपशींच ऑर्डर जातलो",
+  "distributorPhoneLabel": "डिस्ट्रिब्युटराचो WhatsApp नंबर",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "सांबाळा",
+  "settingsSaved": "सांबाळ्ळें",
+  "ordersTitle": "ऑर्डर्स",
+  "ordersEmpty": "सद्या कसलीच ऑर्डर ना. अंदाजांतल्यान ऑर्डर तयार करात.",
+  "orderAuto": "ऑटो",
+  "orderManual": "मॅन्युअल",
+  "orderPlaced": "धाडला",
+  "orderCancelled": "रद्द जाला",
+  "viewOrders": "ऑर्डर्स पळयात",
+  "newOrdersNotice": "रातीची ऑटो ऑर्डर आयली"
+}

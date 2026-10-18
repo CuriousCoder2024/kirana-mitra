@@ -1,0 +1,403 @@
+{
+  "@@locale": "mni",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "দোকানগী মিং",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "অদোমগী মিং",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "হৌসি",
+  "requiredField": "মসি মেনশিনবীয়ু",
+  "navChat": "ৱারী",
+  "navStock": "Stock",
+  "navUdhaar": "লমন",
+  "navForecast": "Forecast",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "Demo",
+  "changeShop": "দোকান হোংদোকপা",
+  "welcomeMessage": "খুরুমজরি {name}! করি লাকপগে, করি য়োনবগে, কনানা ধার লৌবগে হায়বীয়ু। Mic পাইদুনা ঙাংবীয়ু।",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "খুরুমজরি {name}! হায়বীয়ু: করি লাকপগে, করি য়োনবগে, কনানা ধার লৌবগে। Mic নম্বীয়ু অমসুং ঙাংবীয়ু।",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "থাদোক্লবা, cancel ওইরে",
+  "voiceTooShort": "খরা কুয়ানা পাইদুনা ঙাংবীয়ু",
+  "micPermissionDenied": "Voice note গীদমক Microphone গী অয়াবা দরকার ওই।",
+  "voiceNoteSent": "🎤 Voice note",
+  "photoSent": "📷 Shelf photo",
+  "typeMessageHint": "মফমসিদা ইবীয়ু…",
+  "send": "থাবা",
+  "thinking": "খন্নরি…",
+  "networkError": "Server ফংদে। অমুক হন্না হোৎনবীয়ু।",
+  "comingSoon": "থুনা লাক্কদৌরে! Shelf scan থুনা য়াওরক্কনি।",
+  "scanFailed": "Photo খঙবা ঙমদে, অমুক হন্না হোৎনবীয়ু।",
+  "imageTooLarge": "Photo চাউরক্লে (8 MB হেনখ্রে)। খরা অপীকপা অমুক হোৎনবীয়ু।",
+  "stockTitle": "Stock",
+  "lowStockBadge": "ৱাৎলে",
+  "reorderAt": "{level} দা অমুক থাবীয়ু",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "হৌজিক stock লৈতে। করি লাকপগে হায়বীয়ু।",
+  "udhaarTitle": "লমন",
+  "totalOutstanding": "লৈহৌবা অপুনবা",
+  "emptyLedger": "হৌজিক লমন অমত্তা লৈতে। “Gupta ji দা 350 গী ধার পীখ্রে” হায়বীয়ু।",
+  "forecastTitle": "Forecast",
+  "legendHistory": "হৌখিবা চয়োল",
+  "legendForecast": "পানবা",
+  "legendBand": "Range",
+  "orderReady": "Order শেম্লে",
+  "shareWhatsapp": "WhatsApp তা থাবীয়ু",
+  "copied": "Copy তৌরবা",
+  "copy": "Copy",
+  "retry": "অমুক হন্না",
+  "loading": "Loading…",
+  "errorLoading": "পুথোকপা ঙমদে। চিংশিন্দুনা অমুক হোৎনবীয়ু।",
+  "tagline": "ঙাংবীয়ু, লোইশিনগনি।",
+  "languageQuestion": "Mitra না করম্বা লোলদা ঙাংগনি?",
+  "langSampleHindi": "नमस्ते! আজ কি লাকপগে?",
+  "langSampleHinglish": "Namaste! আজ কি লাকপগে?",
+  "langSampleEnglish": "Hello! ঙসি করি লাকপগে?",
+  "fieldRequired": "মসি মেনশিল্লু",
+  "dockPhoto": "Shelf photo",
+  "dockType": "ইবা",
+  "micLabel": "নমদুনা ঙাংবীয়ু",
+  "recordingLabel": "তারি… থাদোকপগা থাগনি",
+  "recordingCancelHint": "Cancel তৌনবগীদমক খুৎ চাউথোকউ",
+  "confirmHeader": "খঙলে · ইখ্রে",
+  "confirmTotalUdhaar": "লমন · হৌজিক অপুনবা",
+  "confirmTotalStock": "Stock · হৌজিক অপুনবা",
+  "confirmTotalSale": "য়োনবা · ঙসিগী অপুনবা",
+  "askHeader": "শেংদে",
+  "askHeard": "অদোম্না “{text}” হায়রে",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "Stock তা হাপকদরা?",
+  "askUdhaar": "লমন্ডা ইগদরা?",
+  "askSale": "য়োনবদা ইগদরা?",
+  "askNo": "নত্তে",
+  "askDeclined": "য়ারে, ইদে।",
+  "scanHeader": "Shelf য়েংলে · পোৎলম {count} ফংলে",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "Stock অসিদা set তৌগদরা?",
+  "scanConfirmed": "খঙলে · stock update তৌরে",
+  "stockSubtitle": "পোৎলম {count} · update {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{পোৎলম 1 ৱাৎলে} other{পোৎলম {count} ৱাৎলে}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "পুম্নমক চপ চারে",
+  "orderButton": "Order শেম্বা",
+  "orderButtonQty": "Order শেম্বা · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "মীওই {count} · বহিখাতা",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "লৈহৌবা",
+  "todayGiven": "ঙসি পীবা +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "ঙসি লাকপা −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "লৈহৌবা",
+  "settledBadge": "লোইরে",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} লাক্লে",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "লমন হৌবা {date} · entry {count}",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "অরোইবা: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "নীংশিংবা",
+  "paidButton": "পৈশা লাক্লে",
+  "paidPrompt": "কয়া লাকপগে? হায়বীয়ু।",
+  "historyLabel": "History",
+  "entryGiven": "ধার লৌরে",
+  "entryPaid": "পৈশা লাক্লে",
+  "entrySourceVoice": "voice",
+  "entrySourceCash": "cash",
+  "entrySourcePhoto": "photo",
+  "reminderText": "খুরুমজরি {name} ji, {shop} দগীনি। অদোমগী ₹{balance} লৈহৌরি। থাগৎচরি!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "লাক্কদৌরিবা চয়োল 4 · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "লাক্কদৌরিবা চয়োল 4",
+  "perWeek": "{unit} / চয়োল",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "তুংদা · forecast",
+  "onHandReorder": "Stock তা {onHand} লৈ · {qty} {unit} কৌজিল্লু",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "পোৎলম {count}",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "Share",
+  "hisaabTitle": "ঙসিগী হিসাব",
+  "hisaabSubtitle": "{date} · entry {count}",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "দোকান থিংলে · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "ঙসি য়োনখিবা",
+  "hisaabGiven": "ধার পীবা",
+  "hisaabReceived": "ধার লাকপা",
+  "hisaabOutstanding": "লৈহৌবা অপুনবা",
+  "hisaabLow": "ৱাৎলে",
+  "hisaabLowItems": "{items} হায়াং কৌজিল্লু।",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} ফংনবা চয়োল {weeks} ৱাৎলি।",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "হায়াংগী order শেম্বা",
+  "hisaabShareButton": "য়ুমদা WhatsApp তৌবীয়ু",
+  "todayChip": "ঙসি · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "ঙরাং · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "Server ফংদে। Demo mode দা হৌদোক্লি।",
+  "languageSheetTitle": "Mitra না করম্বা লোলদা ঙাংগনি?",
+  "backLabel": "হন্দোকপা",
+  "voiceNoteLabel": "Voice note",
+  "undo": "হন্দোকউ",
+  "feedbackButton": "Feedback",
+  "feedbackTitle": "Kirana Mitra করম তৌরি?",
+  "feedbackUp": "ফৈ",
+  "feedbackDown": "ফত্তে",
+  "feedbackCommentHint": "অতোপ্পা হায়নিংবা লৈরবদি ইবীয়ু…",
+  "feedbackVoiceHint": "নত্রগা নম্বীয়ু অমসুং ঙাংবীয়ু",
+  "feedbackVoiceReady": "খোনজেল শেম্লে · {seconds}s",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "থাবীয়ু",
+  "feedbackPickRating": "হান্না ফৈ নত্রগা ফত্তে খনবীয়ু",
+  "feedbackThanks": "থাগৎচরি!",
+  "changeLanguage": "লোল হোংবা",
+  "languageSearchHint": "লোল থিবীয়ু…",
+  "languageNoMatch": "লোল অমত্তা ফংদে",
+  "topSellersTitle": "খ্বাইদগী য়োনবা",
+  "topSellersSubtitle": "হৌখিবা চয়োল 2 · লাক্কদৌরিবা চয়োল 2 গী পানবা",
+  "autoBadge": "Auto",
+  "coverDays": "নুমিৎ {days} গী stock",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / চয়োল 2",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "Top sellers মশানা restock তৌবা",
+  "autoRestockSubtitle": "ৱাৎলবা top sellers গী order নুমিদাংদা মশামক চৎখিগনি",
+  "distributorPhoneLabel": "Distributor গী WhatsApp number",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "Save তৌবীয়ু",
+  "settingsSaved": "Save তৌরে",
+  "ordersTitle": "Orders",
+  "ordersEmpty": "হৌজিক order অমত্তা লৈতে। Forecast তগী Order শেম্বীয়ু।",
+  "orderAuto": "Auto",
+  "orderManual": "Manual",
+  "orderPlaced": "থাখ্রে",
+  "orderCancelled": "Cancel তৌখ্রে",
+  "viewOrders": "Orders য়েংবা",
+  "newOrdersNotice": "নুমিদাংগী auto order লাক্লে"
+}

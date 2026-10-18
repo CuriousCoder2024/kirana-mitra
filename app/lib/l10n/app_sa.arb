@@ -1,0 +1,403 @@
+{
+  "@@locale": "sa",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "आपणस्य नाम",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "भवतः नाम",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "आरभ्यताम्",
+  "requiredField": "कृपया एतत् पूरयतु",
+  "navChat": "वार्ता",
+  "navStock": "संग्रहः",
+  "navUdhaar": "ऋणम्",
+  "navForecast": "पूर्वानुमानम्",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "परीक्षणम्",
+  "changeShop": "आपणं परिवर्तयतु",
+  "welcomeMessage": "नमस्ते {name}! किं समागतम्, किं विक्रीतम्, कस्मै ऋणं दत्तम् इति वदतु। ध्वनिग्राहिकां संपीड्य भाषताम्।",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "नमस्ते {name}! वदतु: किं समागतम्, किं विक्रीतम्, कस्मै ऋणं दत्तम्। ध्वनिग्राहिकां संपीड्य भाषताम्।",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "त्यक्तम्, निरस्तम्",
+  "voiceTooShort": "किञ्चित्कालं संपीड्य वदतु",
+  "micPermissionDenied": "ध्वनिसन्देशार्थं ध्वनिग्राहिकायाः अनुमतिः आवश्यकी।",
+  "voiceNoteSent": "🎤 ध्वनिसन्देशः",
+  "photoSent": "📷 पट्टिकाचित्रम्",
+  "typeMessageHint": "अत्र लिखतु…",
+  "send": "प्रेषयतु",
+  "thinking": "चिन्तयन्…",
+  "networkError": "सम्पर्कः न जातः। पुनः प्रयतताम्।",
+  "comingSoon": "शीघ्रम् आगमिष्यति! पट्टिका-स्कैन शीघ्रमेव आगमिष्यति।",
+  "scanFailed": "चित्रं न स्पष्टम्, पुनः प्रयतताम्।",
+  "imageTooLarge": "चित्रं बृहत् अस्ति (8 MB तः अधिकम्)। लघु चित्रं योजयतु।",
+  "stockTitle": "संग्रहः",
+  "lowStockBadge": "न्यूनम् अस्ति",
+  "reorderAt": "{level} स्तरे पुनः आदिशतु",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "अधुना संग्रहः नास्ति। किं समागतम् इति वदतु।",
+  "udhaarTitle": "ऋणम्",
+  "totalOutstanding": "कुलम् अवशिष्टम्",
+  "emptyLedger": "अधुना ऋणं नास्ति। वदतु \"Gupta ji महोदयाय 350 ऋणं दत्तम्\"।",
+  "forecastTitle": "पूर्वानुमानम्",
+  "legendHistory": "पूर्वसप्ताहः",
+  "legendForecast": "अनुमानम्",
+  "legendBand": "सीमा",
+  "orderReady": "आदेशः सज्जः",
+  "shareWhatsapp": "WhatsApp मध्ये प्रेषयतु",
+  "copied": "प्रतिकृतम्",
+  "copy": "प्रतिकरोतु",
+  "retry": "पुनः प्रयतताम्",
+  "loading": "लोड् भवति…",
+  "errorLoading": "लोड् न जातम्। अधः कर्षतु।",
+  "tagline": "वदतु, भविष्यति।",
+  "languageQuestion": "मित्रः कस्यां भाषायां वदेत्?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "एतत् पूरयतु",
+  "dockPhoto": "पट्टिकाचित्रम्",
+  "dockType": "लिखतु",
+  "micLabel": "संपीड्य वदतु",
+  "recordingLabel": "शृणोमि… त्यक्ते सति प्रेषयिष्यति",
+  "recordingCancelHint": "निरसनाय अङ्गुलिं बहिः नयतु",
+  "confirmHeader": "अवगतम् · लिखितम्",
+  "confirmTotalUdhaar": "ऋणम् · कुलम् अधुना",
+  "confirmTotalStock": "संग्रहः · कुलम् अधुना",
+  "confirmTotalSale": "विक्रयः · कुलम् अद्य",
+  "askHeader": "निश्चितं न",
+  "askHeard": "भवता उक्तम् “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "संग्रहे योजयामि किम्?",
+  "askUdhaar": "ऋणरूपेण लिखामि किम्?",
+  "askSale": "विक्रयरूपेण लिखामि किम्?",
+  "askNo": "न",
+  "askDeclined": "अस्तु, न लिखितम्।",
+  "scanHeader": "पट्टिका दृष्टा · {count} वस्तूनि लब्धानि",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "संग्रहः अयमेव स्थाप्यताम् किम्?",
+  "scanConfirmed": "अवगतम् · संग्रहः नवीकृतः",
+  "stockSubtitle": "{count} वस्तूनि · नवीकृतम् {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 वस्तु न्यूनम् अस्ति} other{{count} वस्तूनि न्यूनानि सन्ति}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "सर्वं सम्यक् अस्ति",
+  "orderButton": "आदेशं रचयतु",
+  "orderButtonQty": "आदेशं रचयतु · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} जनाः · लेखापुस्तिका",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "अवशिष्टम्",
+  "todayGiven": "अद्य दत्तम् +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "अद्य प्राप्तम् −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "अवशिष्टम्",
+  "settledBadge": "शोधितम्",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} प्राप्तम्",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "ऋणप्रारम्भः {date} · {count} प्रविष्टयः",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "अन्तिमम्: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "स्मारयतु",
+  "paidButton": "धनं प्राप्तम्",
+  "paidPrompt": "कियत् प्राप्तम्? वदतु।",
+  "historyLabel": "इतिहासः",
+  "entryGiven": "ऋणं दत्तम्",
+  "entryPaid": "धनं प्राप्तम्",
+  "entrySourceVoice": "ध्वनिः",
+  "entrySourceCash": "नगदम्",
+  "entrySourcePhoto": "चित्रम्",
+  "reminderText": "नमस्ते {name} महोदय, {shop} तः। भवतः ₹{balance} अवशिष्टम् अस्ति। धन्यवादाः!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "अग्रिमाः 4 सप्ताहाः · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "अग्रिमाः 4 सप्ताहाः",
+  "perWeek": "{unit} / सप्ताहम्",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "अग्रिमम् · पूर्वानुमानम्",
+  "onHandReorder": "हस्ते {onHand} · आनयतु {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} वस्तूनि",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "वितरतु",
+  "hisaabTitle": "अद्यतनः आयव्ययः",
+  "hisaabSubtitle": "{date} · {count} प्रविष्टयः",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "आपणं पिहितम् · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "अद्यतनः विक्रयः",
+  "hisaabGiven": "ऋणं दत्तम्",
+  "hisaabReceived": "ऋणं प्राप्तम्",
+  "hisaabOutstanding": "कुलम् अवशिष्टम्",
+  "hisaabLow": "न्यूनम् अस्ति",
+  "hisaabLowItems": "{items} श्वः आनयतु।",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} {weeks} सप्ताहाः अवशिष्टाः।",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "श्वस्तनम् आदेशं रचयतु",
+  "hisaabShareButton": "गृहे WhatsApp प्रेषयतु",
+  "todayChip": "अद्य · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "ह्यः · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "सेवकः न लब्धः। परीक्षण-स्थितौ आरभते।",
+  "languageSheetTitle": "मित्रः कस्यां भाषायां वदेत्?",
+  "backLabel": "पृष्ठतः",
+  "voiceNoteLabel": "ध्वनिसन्देशः",
+  "undo": "पूर्वावस्था",
+  "feedbackButton": "प्रतिपुष्टिः",
+  "feedbackTitle": "Kirana Mitra कथं प्रचलति?",
+  "feedbackUp": "उत्तमम्",
+  "feedbackDown": "न सम्यक्",
+  "feedbackCommentHint": "अन्यत् वक्तव्यं चेत् लिखतु…",
+  "feedbackVoiceHint": "वा संपीड्य वदतु",
+  "feedbackVoiceReady": "ध्वनिः सज्जः · {seconds}s",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "प्रेषयतु",
+  "feedbackPickRating": "प्रथमम् उत्तमं वा न सम्यक् वा चिनोतु",
+  "feedbackThanks": "धन्यवादाः!",
+  "changeLanguage": "भाषां परिवर्तयतु",
+  "languageSearchHint": "भाषां अन्विष्यतु…",
+  "languageNoMatch": "कापि भाषा न लब्धा",
+  "topSellersTitle": "मुख्यविक्रयाः",
+  "topSellersSubtitle": "पूर्वे 2 सप्ताहाः · अग्रिम-2-सप्ताहयोः अनुमानम्",
+  "autoBadge": "स्वचालितम्",
+  "coverDays": "{days} दिनानां संग्रहः",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 सप्ताहौ",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "मुख्यवस्तूनां स्वचालित-आदेशः",
+  "autoRestockSubtitle": "न्यूनसंग्रहयुक्तानां मुख्यवस्तूनाम् आदेशः रात्रौ स्वयमेव गमिष्यति",
+  "distributorPhoneLabel": "वितरकस्य WhatsApp सङ्ख्या",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "संरक्षतु",
+  "settingsSaved": "संरक्षितम्",
+  "ordersTitle": "आदेशाः",
+  "ordersEmpty": "अधुना कोऽपि आदेशः नास्ति। पूर्वानुमानतः आदेशं रचयतु।",
+  "orderAuto": "स्वचालितम्",
+  "orderManual": "हस्तकृतम्",
+  "orderPlaced": "प्रेषितम्",
+  "orderCancelled": "निरस्तम्",
+  "viewOrders": "आदेशान् पश्यतु",
+  "newOrdersNotice": "रात्रेः स्वचालित-आदेशः आगतः"
+}

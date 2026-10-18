@@ -1,0 +1,403 @@
+{
+  "@@locale": "gu",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "દુકાનનું નામ",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "તમારું નામ",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "શરૂ કરો",
+  "requiredField": "કૃપા કરીને આ ભરો",
+  "navChat": "વાત",
+  "navStock": "સ્ટોક",
+  "navUdhaar": "ઉધાર",
+  "navForecast": "અંદાજ",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "ડેમો",
+  "changeShop": "દુકાન બદલો",
+  "welcomeMessage": "નમસ્તે {name}! શું આવ્યું, શું વેચાયું કે કોણે ઉધાર લીધું તે જણાવો. માઇક દબાવીને બોલો.",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "નમસ્તે {name}! બોલો: શું આવ્યું, શું વેચાયું, કોને ઉધાર આપ્યું. માઇક દબાવીને બોલો.",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "રદ કર્યું",
+  "voiceTooShort": "જરા વધુ વાર દબાવી રાખીને બોલો",
+  "micPermissionDenied": "વૉઇસ નોટ માટે માઇક્રોફોનની પરવાનગી જરૂરી છે.",
+  "voiceNoteSent": "🎤 વૉઇસ નોટ",
+  "photoSent": "📷 છાજલીનો ફોટો",
+  "typeMessageHint": "અહીં લખો…",
+  "send": "મોકલો",
+  "thinking": "વિચારે છે…",
+  "networkError": "સર્વર સાથે સંપર્ક ન થયો. ફરી પ્રયાસ કરો.",
+  "comingSoon": "ટૂંક સમયમાં આવશે! શેલ્ફ સ્કેન જલદી આવી રહ્યું છે.",
+  "scanFailed": "ફોટો વંચાયો નહીં, ફરી પ્રયાસ કરો.",
+  "imageTooLarge": "ફોટો બહુ મોટો છે (8 MB થી વધુ). નાનો ફોટો પાડો.",
+  "stockTitle": "સ્ટોક",
+  "lowStockBadge": "ઓછો છે",
+  "reorderAt": "{level} પર ફરી મંગાવો",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "હજુ સ્ટોક નથી. બોલો શું આવ્યું.",
+  "udhaarTitle": "ઉધાર",
+  "totalOutstanding": "કુલ બાકી",
+  "emptyLedger": "હજુ કોઈ ઉધાર નથી. બોલો \"ગુપ્તાજીને 350નું ઉધાર આપ્યું\".",
+  "forecastTitle": "અંદાજ",
+  "legendHistory": "ગયા અઠવાડિયે",
+  "legendForecast": "અંદાજ",
+  "legendBand": "રેન્જ",
+  "orderReady": "ઓર્ડર તૈયાર",
+  "shareWhatsapp": "WhatsApp પર મોકલો",
+  "copied": "કૉપિ થઈ ગયું",
+  "copy": "કૉપિ કરો",
+  "retry": "ફરી પ્રયાસ કરો",
+  "loading": "લોડ થાય છે…",
+  "errorLoading": "ખૂલ્યું નહીં. ફરી પ્રયાસ કરવા નીચે ખેંચો.",
+  "tagline": "બોલો, થઈ જશે.",
+  "languageQuestion": "Mitra કઈ ભાષામાં બોલે?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "આ વિગત ભરો",
+  "dockPhoto": "છાજલીનો ફોટો",
+  "dockType": "લખો",
+  "micLabel": "દબાવીને બોલો",
+  "recordingLabel": "સાંભળું છું… છોડશો એટલે મોકલાશે",
+  "recordingCancelHint": "રદ કરવા આંગળી બહાર ખેંચો",
+  "confirmHeader": "સમજી ગયો · નોંધી લીધું",
+  "confirmTotalUdhaar": "ઉધાર · હવે કુલ",
+  "confirmTotalStock": "સ્ટોક · હવે કુલ",
+  "confirmTotalSale": "વેચાણ · આજનું કુલ",
+  "askHeader": "પાકી ખબર નથી",
+  "askHeard": "તમે કહ્યું “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "સ્ટોકમાં ઉમેરું?",
+  "askUdhaar": "ઉધારમાં લખું?",
+  "askSale": "વેચાણમાં લખું?",
+  "askNo": "ના",
+  "askDeclined": "ભલે, નથી લખ્યું.",
+  "scanHeader": "શેલ્ફ જોયું · {count} વસ્તુઓ મળી",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "સ્ટોક આટલો નક્કી કરી દઉં?",
+  "scanConfirmed": "સમજી ગયો · સ્ટોક અપડેટ થઈ ગયો",
+  "stockSubtitle": "{count} વસ્તુઓ · છેલ્લે {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 વસ્તુ ઓછી છે} other{{count} વસ્તુઓ ઓછી છે}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "બધું બરાબર છે",
+  "orderButton": "ઓર્ડર બનાવો",
+  "orderButtonQty": "ઓર્ડર બનાવો · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} ગ્રાહકો · ખાતાવહી",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "બાકી",
+  "todayGiven": "આજે આપ્યા +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "આજે આવ્યા −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "બાકી",
+  "settledBadge": "ચૂકતે",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} આવ્યા",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "ઉધાર શરૂ {date} · {count} એન્ટ્રી",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "છેલ્લે: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "યાદ અપાવો",
+  "paidButton": "રૂપિયા આવ્યા",
+  "paidPrompt": "કેટલા આવ્યા? બોલો.",
+  "historyLabel": "ઇતિહાસ",
+  "entryGiven": "ઉધાર આપ્યું",
+  "entryPaid": "રૂપિયા આવ્યા",
+  "entrySourceVoice": "અવાજ",
+  "entrySourceCash": "રોકડ",
+  "entrySourcePhoto": "ફોટો",
+  "reminderText": "નમસ્તે {name}જી, {shop} તરફથી. આપના ₹{balance} બાકી છે. આભાર!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "આવતા 4 અઠવાડિયા · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "આવતા 4 અઠવાડિયા",
+  "perWeek": "{unit} / અઠવાડિયું",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "આગળ · અંદાજ",
+  "onHandReorder": "સ્ટોકમાં {onHand} · મંગાવો {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} વસ્તુઓ",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "શેર કરો",
+  "hisaabTitle": "આજનો હિસાબ",
+  "hisaabSubtitle": "{date} · {count} એન્ટ્રી",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "દુકાન બંધ · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "આજનું વેચાણ",
+  "hisaabGiven": "ઉધાર આપ્યું",
+  "hisaabReceived": "ઉધાર આવ્યું",
+  "hisaabOutstanding": "કુલ બાકી",
+  "hisaabLow": "ઓછો છે",
+  "hisaabLowItems": "{items} કાલે મંગાવો.",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} {weeks} અઠવાડિયા દૂર છે.",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "કાલનો ઓર્ડર બનાવો",
+  "hisaabShareButton": "ઘરે WhatsApp કરો",
+  "todayChip": "આજે · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "ગઈકાલે · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "સર્વર મળ્યું નથી. ડેમો મોડમાં શરૂ કરી રહ્યા છીએ.",
+  "languageSheetTitle": "Mitra કઈ ભાષામાં બોલે?",
+  "backLabel": "પાછા જાઓ",
+  "voiceNoteLabel": "વૉઇસ નોટ",
+  "undo": "પહેલાં જેવું કરો",
+  "feedbackButton": "પ્રતિભાવ",
+  "feedbackTitle": "Kirana Mitra કેવું ચાલે છે?",
+  "feedbackUp": "સરસ",
+  "feedbackDown": "બરાબર નથી",
+  "feedbackCommentHint": "બીજું કંઈ જણાવવું હોય તો લખો…",
+  "feedbackVoiceHint": "અથવા દબાવીને બોલો",
+  "feedbackVoiceReady": "અવાજ તૈયાર · {seconds} સેકન્ડ",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "મોકલો",
+  "feedbackPickRating": "પહેલાં સારું કે ખરાબ પસંદ કરો",
+  "feedbackThanks": "ખૂબ આભાર!",
+  "changeLanguage": "ભાષા બદલો",
+  "languageSearchHint": "ભાષા શોધો…",
+  "languageNoMatch": "કોઈ ભાષા ન મળી",
+  "topSellersTitle": "સૌથી વધુ વેચાતી વસ્તુઓ",
+  "topSellersSubtitle": "છેલ્લા 2 અઠવાડિયા · આગળના 2 અઠવાડિયાનો અંદાજ",
+  "autoBadge": "ઑટો",
+  "coverDays": "{days} દિવસનો સ્ટોક",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 અઠવાડિયા",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "ટોપ સેલર્સ આપોઆપ રીસ્ટોક કરો",
+  "autoRestockSubtitle": "ઓછા સ્ટોકવાળા ટોપ સેલર્સનો ઓર્ડર રાત્રે આપમેળે જતો રહેશે",
+  "distributorPhoneLabel": "ડિસ્ટ્રીબ્યુટરનો WhatsApp નંબર",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "સાચવો",
+  "settingsSaved": "સેવ થઈ ગયું",
+  "ordersTitle": "ઓર્ડર્સ",
+  "ordersEmpty": "હજુ કોઈ ઓર્ડર નથી. અંદાજમાંથી ઓર્ડર બનાવો.",
+  "orderAuto": "ઑટો",
+  "orderManual": "મેન્યુઅલ",
+  "orderPlaced": "મોકલાયો",
+  "orderCancelled": "રદ થયો",
+  "viewOrders": "ઓર્ડર જુઓ",
+  "newOrdersNotice": "રાતનો ઑટો ઓર્ડર આવ્યો"
+}

@@ -1,0 +1,403 @@
+{
+  "@@locale": "pa",
+  "@@x-machine-translated": "gemini-3.8-flash, 2026-10-18, unreviewed",
+  "appTitle": "Kirana Mitra",
+  "shopNameLabel": "ਦੁਕਾਨ ਦਾ ਨਾਂ",
+  "shopNameHint": "Gupta General Store",
+  "ownerNameLabel": "ਤੁਹਾਡਾ ਨਾਂ",
+  "ownerNameHint": "Ramesh Gupta",
+  "langHindi": "हिंदी",
+  "langEnglish": "English",
+  "langHinglish": "Hinglish",
+  "startButton": "ਸ਼ੁਰੂ ਕਰੋ",
+  "requiredField": "ਕਿਰਪਾ ਕਰਕੇ ਇਹ ਭਰੋ",
+  "navChat": "ਗੱਲਬਾਤ",
+  "navStock": "ਸਟਾਕ",
+  "navUdhaar": "ਉਧਾਰ",
+  "navForecast": "ਅੰਦਾਜ਼ਾ",
+  "chatTitle": "Kirana Mitra",
+  "demoMode": "ਡੈਮੋ",
+  "changeShop": "ਦੁਕਾਨ ਬਦਲੋ",
+  "welcomeMessage": "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ {name}! ਦੱਸੋ ਕੀ ਆਇਆ, ਕੀ ਵਿਕਿਆ, ਜਾਂ ਕਿਸਨੇ ਉਧਾਰ ਲਿਆ। ਮਾਈਕ ਦੱਬ ਕੇ ਬੋਲੋ।",
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeMessageHinglish": "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ {name}! ਬੋਲੋ: ਕੀ ਆਇਆ, ਕੀ ਵਿਕਿਆ, ਕਿਸਨੂੰ ਉਧਾਰ ਦਿੱਤਾ। ਮਾਈਕ ਦੱਬ ਕੇ ਰੱਖੋ ਤੇ ਬੋਲੋ।",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "ਛੱਡ ਦਿੱਤਾ, ਕੈਂਸਲ ਹੋ ਗਿਆ",
+  "voiceTooShort": "ਥੋੜ੍ਹਾ ਹੋਰ ਦੱਬ ਕੇ ਬੋਲੋ",
+  "micPermissionDenied": "ਵੌਇਸ ਨੋਟ ਲਈ ਮਾਈਕ੍ਰੋਫ਼ੋਨ ਦੀ ਮਨਜ਼ੂਰੀ ਚਾਹੀਦੀ ਹੈ।",
+  "voiceNoteSent": "🎤 ਵੌਇਸ ਨੋਟ",
+  "photoSent": "📷 ਸ਼ੈਲਫ਼ ਦੀ ਫ਼ੋਟੋ",
+  "typeMessageHint": "ਇੱਥੇ ਲਿਖੋ…",
+  "send": "ਭੇਜੋ",
+  "thinking": "ਸੋਚ ਰਿਹਾ ਹਾਂ…",
+  "networkError": "ਸਰਵਰ ਨਾਲ ਜੁੜ ਨਹੀਂ ਸਕਿਆ। ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+  "comingSoon": "ਛੇਤੀ ਆ ਰਿਹਾ ਹੈ! ਸ਼ੈਲਫ਼ ਸਕੈਨ ਜਲਦ ਆਵੇਗਾ।",
+  "scanFailed": "ਫ਼ੋਟੋ ਸਮਝ ਨਹੀਂ ਆਈ, ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+  "imageTooLarge": "ਫ਼ੋਟੋ ਬਹੁਤ ਵੱਡੀ ਹੈ (8 MB ਤੋਂ ਵੱਧ)। ਛੋਟੀ ਫ਼ੋਟੋ ਲਵੋ।",
+  "stockTitle": "ਸਟਾਕ",
+  "lowStockBadge": "ਘੱਟ ਹੈ",
+  "reorderAt": "{level} 'ਤੇ ਮੁੜ ਮੰਗਾਓ",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "ਅਜੇ ਕੋਈ ਸਟਾਕ ਨਹੀਂ ਹੈ। ਬੋਲੋ ਕੀ ਆਇਆ।",
+  "udhaarTitle": "ਉਧਾਰ",
+  "totalOutstanding": "ਕੁੱਲ ਬਾਕੀ",
+  "emptyLedger": "ਅਜੇ ਕੋਈ ਉਧਾਰ ਨਹੀਂ। ਬੋਲੋ \"ਗੁਪਤਾ ਜੀ ਨੂੰ 350 ਦਾ ਉਧਾਰ ਦਿੱਤਾ\"।",
+  "forecastTitle": "ਅੰਦਾਜ਼ਾ",
+  "legendHistory": "ਪਿਛਲੇ ਹਫ਼ਤੇ",
+  "legendForecast": "ਅੰਦਾਜ਼ਾ",
+  "legendBand": "ਰੇਂਜ",
+  "orderReady": "ਆਰਡਰ ਤਿਆਰ",
+  "shareWhatsapp": "WhatsApp 'ਤੇ ਭੇਜੋ",
+  "copied": "ਕਾਪੀ ਹੋ ਗਿਆ",
+  "copy": "ਕਾਪੀ",
+  "retry": "ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
+  "loading": "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…",
+  "errorLoading": "ਲੋਡ ਨਹੀਂ ਹੋ ਸਕਿਆ। ਰੀਫ੍ਰੈਸ਼ ਕਰਨ ਲਈ ਹੇਠਾਂ ਖਿੱਚੋ।",
+  "tagline": "ਬੋਲੋ, ਹੋ ਜਾਵੇਗਾ।",
+  "languageQuestion": "ਮਿੱਤਰ ਕਿਸ ਭਾਸ਼ਾ ਵਿੱਚ ਬੋਲੇ?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "ਇਹ ਭਰੋ",
+  "dockPhoto": "ਸ਼ੈਲਫ਼ ਫ਼ੋਟੋ",
+  "dockType": "ਲਿਖੋ",
+  "micLabel": "ਦੱਬ ਕੇ ਬੋਲੋ",
+  "recordingLabel": "ਸੁਣ ਰਿਹਾ ਹਾਂ… ਛੱਡੋਗੇ ਤਾਂ ਭੇਜ ਦਿੱਤਾ ਜਾਵੇਗਾ",
+  "recordingCancelHint": "ਕੈਂਸਲ ਕਰਨ ਲਈ ਉਂਗਲ ਬਾਹਰ ਖਿੱਚੋ",
+  "confirmHeader": "ਸਮਝ ਗਿਆ · ਲਿਖ ਲਿਆ",
+  "confirmTotalUdhaar": "ਉਧਾਰ · ਹੁਣ ਕੁੱਲ",
+  "confirmTotalStock": "ਸਟਾਕ · ਹੁਣ ਕੁੱਲ",
+  "confirmTotalSale": "ਵਿਕਰੀ · ਅੱਜ ਕੁੱਲ",
+  "askHeader": "ਪੱਕਾ ਨਹੀਂ",
+  "askHeard": "ਤੁਸੀਂ ਕਿਹਾ “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "ਸਟਾਕ ਵਿੱਚ ਜੋੜਾਂ?",
+  "askUdhaar": "ਉਧਾਰ ਵਿੱਚ ਲਿਖਾਂ?",
+  "askSale": "ਵਿਕਰੀ ਵਿੱਚ ਲਿਖਾਂ?",
+  "askNo": "ਨਹੀਂ",
+  "askDeclined": "ਠੀਕ ਹੈ, ਨਹੀਂ ਲਿਖਿਆ।",
+  "scanHeader": "ਸ਼ੈਲਫ਼ ਦੇਖੀ · {count} ਚੀਜ਼ਾਂ ਮਿਲੀਆਂ",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "ਸਟਾਕ ਇਹੋ ਸੈੱਟ ਕਰ ਦੇਵਾਂ?",
+  "scanConfirmed": "ਸਮਝ ਗਿਆ · ਸਟਾਕ ਅੱਪਡੇਟ ਹੋ ਗਿਆ",
+  "stockSubtitle": "{count} ਚੀਜ਼ਾਂ · ਅੱਪਡੇਟ {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 ਚੀਜ਼ ਘੱਟ ਹੈ} other{{count} ਚੀਜ਼ਾਂ ਘੱਟ ਹਨ}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "ਸਭ ਠੀਕ ਹੈ",
+  "orderButton": "ਆਰਡਰ ਬਣਾਓ",
+  "orderButtonQty": "ਆਰਡਰ ਬਣਾਓ · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} ਗਾਹਕ · ਬਹੀ-ਖਾਤਾ",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "ਬਾਕੀ",
+  "todayGiven": "ਅੱਜ ਦਿੱਤਾ +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "ਅੱਜ ਆਇਆ −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "ਬਾਕੀ",
+  "settledBadge": "ਚੁਕਤਾ",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} ਆਇਆ",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "ਉਧਾਰ ਸ਼ੁਰੂ {date} · {count} ਐਂਟਰੀਆਂ",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "ਆਖ਼ਰੀ: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "ਯਾਦ ਦਿਵਾਓ",
+  "paidButton": "ਪੈਸੇ ਆਏ",
+  "paidPrompt": "ਕਿੰਨੇ ਆਏ? ਬੋਲੋ।",
+  "historyLabel": "ਹਿਸਟਰੀ",
+  "entryGiven": "ਉਧਾਰ ਲਿਆ",
+  "entryPaid": "ਪੈਸੇ ਆਏ",
+  "entrySourceVoice": "ਆਵਾਜ਼",
+  "entrySourceCash": "ਨਕਦ",
+  "entrySourcePhoto": "ਫ਼ੋਟੋ",
+  "reminderText": "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ {name} ਜੀ, {shop} ਵੱਲੋਂ। ਤੁਹਾਡੇ ₹{balance} ਬਾਕੀ ਹਨ। ਧੰਨਵਾਦ!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "ਅਗਲੇ 4 ਹਫ਼ਤੇ · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "ਅਗਲੇ 4 ਹਫ਼ਤੇ",
+  "perWeek": "{unit} / ਹਫ਼ਤਾ",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "ਅੱਗੇ · ਅੰਦਾਜ਼ਾ",
+  "onHandReorder": "ਸਟਾਕ ਵਿੱਚ {onHand} · ਮੰਗਾਓ {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} ਚੀਜ਼ਾਂ",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "ਸ਼ੇਅਰ ਕਰੋ",
+  "hisaabTitle": "ਅੱਜ ਦਾ ਹਿਸਾਬ",
+  "hisaabSubtitle": "{date} · {count} ਐਂਟਰੀਆਂ",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "ਦੁਕਾਨ ਬੰਦ · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "ਅੱਜ ਦੀ ਵਿਕਰੀ",
+  "hisaabGiven": "ਉਧਾਰ ਦਿੱਤਾ",
+  "hisaabReceived": "ਉਧਾਰ ਆਇਆ",
+  "hisaabOutstanding": "ਕੁੱਲ ਬਾਕੀ",
+  "hisaabLow": "ਘੱਟ ਹੈ",
+  "hisaabLowItems": "{items} ਕੱਲ੍ਹ ਮੰਗਾਓ।",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} {weeks} ਹਫ਼ਤੇ ਦੂਰ ਹੈ।",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "ਕੱਲ੍ਹ ਦਾ ਆਰਡਰ ਬਣਾਓ",
+  "hisaabShareButton": "ਘਰ WhatsApp ਕਰੋ",
+  "todayChip": "ਅੱਜ · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "ਕੱਲ੍ਹ · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "ਸਰਵਰ ਨਹੀਂ ਮਿਲਿਆ। ਡੈਮੋ ਮੋਡ ਵਿੱਚ ਸ਼ੁਰੂ ਕਰ ਰਿਹਾ ਹਾਂ।",
+  "languageSheetTitle": "ਮਿੱਤਰ ਕਿਸ ਭਾਸ਼ਾ ਵਿੱਚ ਬੋਲੇ?",
+  "backLabel": "ਪਿੱਛੇ",
+  "voiceNoteLabel": "ਵੌਇਸ ਨੋਟ",
+  "undo": "ਵਾਪਸ",
+  "feedbackButton": "ਫੀਡਬੈਕ",
+  "feedbackTitle": "Kirana Mitra ਕਿਵੇਂ ਚੱਲ ਰਿਹਾ ਹੈ?",
+  "feedbackUp": "ਵਧੀਆ",
+  "feedbackDown": "ਠੀਕ ਨਹੀਂ",
+  "feedbackCommentHint": "ਕੁਝ ਹੋਰ ਦੱਸਣਾ ਹੋਵੇ ਤਾਂ ਲਿਖੋ…",
+  "feedbackVoiceHint": "ਜਾਂ ਦੱਬ ਕੇ ਬੋਲੋ",
+  "feedbackVoiceReady": "ਆਵਾਜ਼ ਤਿਆਰ · {seconds} ਸਕਿੰਟ",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "ਭੇਜੋ",
+  "feedbackPickRating": "ਪਹਿਲਾਂ ਵਧੀਆ ਜਾਂ ਠੀਕ ਨਹੀਂ ਚੁਣੋ",
+  "feedbackThanks": "ਧੰਨਵਾਦ!",
+  "changeLanguage": "ਭਾਸ਼ਾ ਬਦਲੋ",
+  "languageSearchHint": "ਭਾਸ਼ਾ ਲੱਭੋ…",
+  "languageNoMatch": "ਕੋਈ ਭਾਸ਼ਾ ਨਹੀਂ ਮਿਲੀ",
+  "topSellersTitle": "ਸਭ ਤੋਂ ਵੱਧ ਵਿਕਣ ਵਾਲਾ",
+  "topSellersSubtitle": "ਪਿਛਲੇ 2 ਹਫ਼ਤੇ · ਅਗਲੇ 2 ਹਫ਼ਤਿਆਂ ਦਾ ਅੰਦਾਜ਼ਾ",
+  "autoBadge": "ਆਟੋ",
+  "coverDays": "{days} ਦਿਨਾਂ ਦਾ ਸਟਾਕ",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit} / 2 ਹਫ਼ਤੇ",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "ਵੱਧ ਵਿਕਣ ਵਾਲੀਆਂ ਚੀਜ਼ਾਂ ਆਟੋ-ਮੰਗਾਓ",
+  "autoRestockSubtitle": "ਘੱਟ ਸਟਾਕ ਵਾਲੀਆਂ ਜ਼ਿਆਦਾ ਵਿਕਣ ਵਾਲੀਆਂ ਚੀਜ਼ਾਂ ਦਾ ਆਰਡਰ ਰਾਤ ਨੂੰ ਆਪਣੇ ਆਪ ਜਾਵੇਗਾ",
+  "distributorPhoneLabel": "ਡਿਸਟ੍ਰੀਬਿਊਟਰ ਦਾ WhatsApp ਨੰਬਰ",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "ਸੇਵ ਕਰੋ",
+  "settingsSaved": "ਸੇਵ ਹੋ ਗਿਆ",
+  "ordersTitle": "ਆਰਡਰ",
+  "ordersEmpty": "ਅਜੇ ਕੋਈ ਆਰਡਰ ਨਹੀਂ। ਅੰਦਾਜ਼ੇ ਤੋਂ ਆਰਡਰ ਬਣਾਓ।",
+  "orderAuto": "ਆਟੋ",
+  "orderManual": "ਮੈਨੂਅਲ",
+  "orderPlaced": "ਭੇਜ ਦਿੱਤਾ",
+  "orderCancelled": "ਕੈਂਸਲ ਹੋ ਗਿਆ",
+  "viewOrders": "ਆਰਡਰ ਦੇਖੋ",
+  "newOrdersNotice": "ਰਾਤ ਦਾ ਆਟੋ ਆਰਡਰ ਆਇਆ"
+}
