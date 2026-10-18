@@ -18,6 +18,10 @@ load_env() {
     . "$INFRA_DIR/.env"
     set +a
   fi
+  # Use a named gcloud configuration without touching the active one.
+  if [[ -n "${GCLOUD_CONFIG:-}" ]]; then
+    export CLOUDSDK_ACTIVE_CONFIG_NAME="$GCLOUD_CONFIG"
+  fi
   REGION="${REGION:-asia-south1}"
   BQ_DATASET="${BQ_DATASET:-kirana}"
   CLOUD_RUN_SERVICE="${CLOUD_RUN_SERVICE:-kirana-mitra-api}"

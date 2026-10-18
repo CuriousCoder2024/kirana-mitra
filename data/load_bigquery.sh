@@ -4,11 +4,14 @@
 # Usage:
 #   data/load_bigquery.sh [--dry-run] [load|train|forecast|evaluate|all]
 #
-#   load      create dataset `kirana` (asia-south1) and load the CSVs
-#   train     bqml/train_arima.sql   -> model kirana.item_demand_arima
-#   forecast  bqml/forecast.sql      -> 4-week forecast per item (prints rows)
-#   evaluate  bqml/evaluate.sql      -> holdout MAPE table kirana.forecast_eval
-#   all       load + train + forecast + evaluate   (default)
+#   load          create dataset `kirana` (asia-south1), load the CSVs, create views
+#   train         bqml/train_arima.sql    -> model kirana.item_demand_arima
+#   forecast      bqml/forecast.sql       -> one row per item per week (backend query)
+#   forecast-wide bqml/forecast_wide.sql  -> one row per item with arrays + reorder_qty
+#   evaluate      bqml/evaluate.sql       -> holdout MAPE/WAPE table kirana.forecast_eval
+#   all           load + train + forecast + evaluate   (default)
+#   --shop ID     shop_id for the forecast queries (default shp_demo)
+#   --start DATE  first forecast day, YYYY-MM-DD (default: day after the last sale)
 #
 # PROJECT_ID is read from the environment or from infra/.env. Nothing runs
 # without it. With --dry-run (or DRY_RUN=1) every bq command is printed
@@ -28,14 +31,19 @@ DATASET="${BQ_DATASET:-kirana}"
 LOCATION="${BQ_LOCATION:-asia-south1}"
 DRY_RUN="${DRY_RUN:-0}"
 STEP="all"
+SHOP_ID="shp_demo"
+START_DATE=""
 
-for arg in "$@"; do
-  case "$arg" in
+while [[ $# -gt 0 ]]; do
+  case "$1" in
     --dry-run|-n) DRY_RUN=1 ;;
-    load|train|forecast|evaluate|all) STEP="$arg" ;;
-    -h|--help) sed -n '2,24p' "${BASH_SOURCE[0]}"; exit 0 ;;
-    *) echo "unknown argument: $arg" >&2; exit 2 ;;
+    --shop) SHOP_ID="$2"; shift ;;
+    --start) START_DATE="$2"; shift ;;
+    load|train|forecast|forecast-wide|evaluate|all) STEP="$1" ;;
+    -h|--help) sed -n '2,27p' "${BASH_SOURCE[0]}"; exit 0 ;;
+    *) echo "unknown argument: $1" >&2; exit 2 ;;
   esac
+  shift
 done
 
 # Pull PROJECT_ID (and friends) from infra/.env if the shell did not set it.
@@ -44,6 +52,11 @@ if [[ -z "${PROJECT_ID:-}" && -f "$REPO/infra/.env" ]]; then
   # shellcheck disable=SC1091
   . "$REPO/infra/.env"
   set +a
+fi
+
+# Use a named gcloud configuration without touching the active one.
+if [[ -n "${GCLOUD_CONFIG:-}" ]]; then
+  export CLOUDSDK_ACTIVE_CONFIG_NAME="$GCLOUD_CONFIG"
 fi
 
 if [[ -z "${PROJECT_ID:-}" ]]; then
@@ -69,15 +82,18 @@ run() {
 }
 
 run_sql() {
-  local file="$1"
+  # run_sql FILE [extra bq flags...]
+  local file="$1"; shift
   if [[ "$DRY_RUN" == "1" ]]; then
-    echo "DRY RUN: bq --project_id=$PROJECT_ID --location=$LOCATION query --use_legacy_sql=false --format=prettyjson < $file"
+    echo "DRY RUN: bq --project_id=$PROJECT_ID --location=$LOCATION query --use_legacy_sql=false --format=prettyjson $* < $file"
   else
-    echo "+ bq query < $file"
+    echo "+ bq query $* < $file"
     bq --project_id="$PROJECT_ID" --location="$LOCATION" query \
-      --use_legacy_sql=false --format=prettyjson < "$file"
+      --use_legacy_sql=false --format=prettyjson --max_rows=1000 "$@" < "$file"
   fi
 }
+
+FORECAST_PARAMS=(--parameter="shop_id:STRING:$SHOP_ID" --parameter="start_date:STRING:$START_DATE")
 
 BQ=(bq --project_id="$PROJECT_ID" --location="$LOCATION")
 
@@ -110,17 +126,20 @@ do_load() {
   # stock from Cloud SQL. The backend overwrites this table.
   local seed_sql="CREATE TABLE IF NOT EXISTS \`$DATASET.stock_on_hand\` AS SELECT item_id, reorder_level * 2 AS on_hand, CURRENT_TIMESTAMP() AS updated_at FROM \`$DATASET.catalogue\`"
   run "${BQ[@]}" query --use_legacy_sql=false "$seed_sql"
+
+  run_sql "$HERE/bqml/views.sql"
 }
 
 case "$STEP" in
   load)     do_load ;;
   train)    run_sql "$HERE/bqml/train_arima.sql" ;;
-  forecast) run_sql "$HERE/bqml/forecast.sql" ;;
+  forecast) run_sql "$HERE/bqml/forecast.sql" "${FORECAST_PARAMS[@]}" ;;
+  forecast-wide) run_sql "$HERE/bqml/forecast_wide.sql" "${FORECAST_PARAMS[@]}" ;;
   evaluate) run_sql "$HERE/bqml/evaluate.sql" ;;
   all)
     do_load
     run_sql "$HERE/bqml/train_arima.sql"
-    run_sql "$HERE/bqml/forecast.sql"
+    run_sql "$HERE/bqml/forecast.sql" "${FORECAST_PARAMS[@]}"
     run_sql "$HERE/bqml/evaluate.sql"
     ;;
 esac
