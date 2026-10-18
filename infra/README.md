@@ -77,6 +77,19 @@ the container, while `GET /healthz/` reaches FastAPI; the exact path
 `GET /health` with the same JSON (verified on revision 00002); use that for
 uptime checks and the app.
 
+## Firestore: the backend's store
+
+Owner's decision (2026-10-18): persistence is Firestore, not Cloud SQL.
+`setup.sh` enables `firestore.googleapis.com`, creates the `(default)`
+database in Native mode in asia-south1 (a project has exactly one, so the
+step is idempotent) and grants the Cloud Run service account
+`roles/datastore.user`. `deploy.sh` sets `STORE=firestore` and
+`FIRESTORE_DATABASE=(default)` on the service. Cost: free tier covers 1 GiB
+stored and 50k reads / 20k writes per day
+([pricing](https://cloud.google.com/firestore/pricing)), far above demo
+traffic. The Cloud SQL step stays in the scripts behind `--with-cloudsql`
+and is not used.
+
 ## Cloud Scheduler: daily auto-restock
 
 `setup.sh` creates (or updates) job `kirana-auto-restock` in asia-south1:

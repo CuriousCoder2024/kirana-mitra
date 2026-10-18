@@ -37,6 +37,9 @@ ENV_VARS+=",CONFIRM_THRESHOLD=${CONFIRM_THRESHOLD:-0.7}"
 ENV_VARS+=",GCS_BUCKET=${GCS_BUCKET:-}"
 ENV_VARS+=",BQ_DATASET=$BQ_DATASET"
 ENV_VARS+=",FORECAST_SOURCE=${FORECAST_SOURCE:-bigquery}"
+# Persistent store: Firestore Native "(default)" database created by setup.sh.
+ENV_VARS+=",STORE=${STORE:-firestore}"
+ENV_VARS+=",FIRESTORE_DATABASE=${FIRESTORE_DATABASE:-(default)}"
 # Shared secret for POST /auto-restock/run (Cloud Scheduler sends it as
 # X-Scheduler-Token). Generated once with `openssl rand -hex 24` into
 # infra/.env; setup.sh puts the same value on the scheduler job.
