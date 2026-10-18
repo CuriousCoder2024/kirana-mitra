@@ -66,7 +66,18 @@ Navratri day 1 (Sun 11 Oct) and the Janmashtami weekend.
 | `kirana.festivals`, `kirana.festival_uplift` | the two CSVs | festival uplift in `forecast.sql` |
 | `kirana.stock_on_hand` | seeded at 2x `reorder_level` | `on_hand` and `reorder_qty`; the backend should overwrite it from Cloud SQL before calling the forecast |
 
-## What the backend calls
+## What the backend actually reads (keep these column names stable)
+
+`backend/app/forecast.py` calls `ML.FORECAST(MODEL kirana.item_demand_arima, ...)`
+directly and reads `kirana.sales_daily`, `kirana.catalogue`, `kirana.festivals`
+and `kirana.festival_uplift` (last 42 days, `@shop_id`; unknown shops map to
+`shp_demo`), then does the Monday-start week bucketing, festival ramp, on_hand
+join and reorder maths in Python. Those four tables and the model name are
+the contract; `forecast.sql`, `forecast_wide.sql`, `item_history_weekly`,
+`festival_multiplier_daily` and `stock_on_hand` are reference queries for the
+console and the slides and can change freely.
+
+## Reference query (same maths in SQL)
 
 **`bqml/forecast.sql`**, query parameters `@shop_id` (STRING) and
 `@start_date` (STRING `YYYY-MM-DD`, or `''` for the day after the shop's last
