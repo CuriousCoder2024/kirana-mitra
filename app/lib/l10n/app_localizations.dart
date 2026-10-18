@@ -1118,6 +1118,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Koi ek shelf chuno; photo waise hi scan hogi jaise camera se.'**
   String get sampleShelfHint;
+
+  /// No description provided for @askYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Haan, add karo'**
+  String get askYes;
 }
 
 class _AppLocalizationsDelegate

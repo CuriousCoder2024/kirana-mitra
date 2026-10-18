@@ -565,6 +565,9 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get sampleShelfHint =>
       'कोई एक शेल्फ चुनो; फोटो वैसे ही स्कैन होगी जैसे कैमरे से।';
+
+  @override
+  String get askYes => 'हाँ, जोड़ो';
 }
 
 /// The translations for Hindi, using the Latin script (`hi_Latn`).
@@ -1130,4 +1133,7 @@ class AppLocalizationsHiLatn extends AppLocalizationsHi {
   @override
   String get sampleShelfHint =>
       'Koi ek shelf chuno; photo waise hi scan hogi jaise camera se.';
+
+  @override
+  String get askYes => 'Haan, add karo';
 }

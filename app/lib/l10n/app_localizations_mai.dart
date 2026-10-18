@@ -565,4 +565,7 @@ class AppLocalizationsMai extends AppLocalizations {
   @override
   String get sampleShelfHint =>
       'Koi ek shelf chuno; photo waise hi scan hogi jaise camera se.';
+
+  @override
+  String get askYes => 'Haan, add karo';
 }

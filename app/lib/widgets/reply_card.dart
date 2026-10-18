@@ -12,6 +12,10 @@ import 'km_chip.dart';
 
 /// Handoff §4.5 (Samjha card), §4.6 (Pakka nahi card) and §5.4 (shelf-scan
 /// result). One widget switches on the message kind and status.
+/// Chip actions that mean "no": rendered as the single Nahi button, never
+/// alongside a local one.
+const Set<String> _denyActions = {'cancel', 'deny', 'reject', 'dismiss', 'no', 'decline'};
+
 class ReplyCard extends StatelessWidget {
   const ReplyCard({
     super.key,
@@ -33,13 +37,16 @@ class ReplyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    // Exactly one confirm and one deny control. The backend's own chips win;
+    // the local strings only fill a missing side.
+    final confirmChip = message.quickActions.where((a) => a.action == 'confirm').firstOrNull;
+    final denyChip = message.quickActions.where((a) => _denyActions.contains(a.action)).firstOrNull;
     final navChips = message.quickActions
-        .where((a) => a.action != 'confirm' && a.action != 'undo')
+        .where((a) => a.action != 'confirm' && a.action != 'undo' && !_denyActions.contains(a.action))
         .toList();
-    final confirmLabel = message.quickActions
-        .where((a) => a.action == 'confirm')
-        .map((a) => a.label)
-        .firstOrNull;
+    final confirmLabel = confirmChip?.label;
+    final yesLabel = confirmLabel == null || confirmLabel.isEmpty ? l.askYes : confirmLabel;
+    final noLabel = denyChip == null || denyChip.label.isEmpty ? l.askNo : denyChip.label;
 
     if (message.kind == ChatKind.scan && message.scan != null) {
       // Nothing recognised (or nothing to confirm): just the reply text.
@@ -62,8 +69,8 @@ class ReplyCard extends StatelessWidget {
         ),
         footer: switch (message.status) {
           CardStatus.pending => _AskFooter(
-            confirmLabel: confirmLabel ?? l.askNo,
-            noLabel: l.askNo,
+            confirmLabel: yesLabel,
+            noLabel: noLabel,
             busy: busy,
             onConfirm: onConfirm,
             onDecline: onDecline,
@@ -114,8 +121,8 @@ class ReplyCard extends StatelessWidget {
         ),
         footer: message.status == CardStatus.pending
             ? _AskFooter(
-                confirmLabel: confirmLabel ?? l.askNo,
-                noLabel: l.askNo,
+                confirmLabel: yesLabel,
+                noLabel: noLabel,
                 busy: busy,
                 onConfirm: onConfirm,
                 onDecline: onDecline,

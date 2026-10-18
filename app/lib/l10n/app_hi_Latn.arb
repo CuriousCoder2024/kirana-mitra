@@ -405,5 +405,6 @@
   "sampleShelf": "Sample shelf",
   "takePhoto": "Camera",
   "sampleShelfTitle": "Sample shelf",
-  "sampleShelfHint": "Koi ek shelf chuno; photo waise hi scan hogi jaise camera se."
+  "sampleShelfHint": "Koi ek shelf chuno; photo waise hi scan hogi jaise camera se.",
+  "askYes": "Haan, add karo"
 }
