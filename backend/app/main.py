@@ -363,9 +363,11 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
     async def auto_restock_run(shop_id: str | None = None,
                                x_scheduler_token: str | None = Header(default=None)):
         """Cloud Scheduler entry point (header X-Scheduler-Token = env SCHEDULER_TOKEN).
-        For every shop with auto_restock on (or just ?shop_id=), place today's auto order
-        if there is anything to order and none was placed today; posts an undoable bot
-        message into the shop's chat. Idempotent per shop per day."""
+        For every shop with auto_restock on (or just ?shop_id=), order the items that pass
+        all three signals: top-10 seller by actual units over the last 4 weeks, on_hand
+        covering fewer than 7 days at the forecast rate, and each of the last 2 weeks at
+        least 1.2x the baseline weekly average. One auto order per shop per day, with an
+        undoable bot message in the shop's chat explaining each line."""
         if not settings.scheduler_token or x_scheduler_token != settings.scheduler_token:
             raise ApiError(401, "unauthorized", "missing or wrong X-Scheduler-Token")
         shops = [get_shop(shop_id)] if shop_id else repo.list_shops()
@@ -386,7 +388,7 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
                                                             shop.shop_id, exc)
                 skipped.append(AutoRestockSkip(shop_id=shop.shop_id, reason="forecast_failed"))
                 continue
-            lines = order_lines_from_forecast(repo, shop, items)
+            lines = order_lines_from_forecast(repo, shop, items, auto=True)
             if not lines:
                 skipped.append(AutoRestockSkip(shop_id=shop.shop_id, reason="nothing_to_order"))
                 continue

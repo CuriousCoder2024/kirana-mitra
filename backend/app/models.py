@@ -178,6 +178,8 @@ class ForecastItem(BaseModel):
     on_hand: int
     reorder_qty: int
     reorder_reason: str
+    # complete weeks of actual units ending on the last sale, oldest first (internal, not serialised)
+    history_weekly_long: list[int] = Field(default_factory=list, exclude=True)
 
 
 class FestivalRef(BaseModel):
@@ -207,6 +209,10 @@ class ReorderLine(BaseModel):
     name: str
     qty: int
     unit: Unit
+    # auto-order lines carry the reasoning; manual lines leave these null
+    rank: int | None = None
+    cover_days: int | None = None
+    demand_ratio: float | None = None
 
 
 class ReorderReply(BaseModel):
@@ -230,6 +236,9 @@ class TopItem(BaseModel):
     cover_days: int
     reorder_qty: int
     reorder_reason: str
+    rank: int  # 1 = most units sold over the last 4 weeks of actual sales
+    demand_ratio: float  # weaker of the last 2 weeks vs the baseline weekly average
+    auto_restock_eligible: bool
 
 
 class TopItemsReply(BaseModel):

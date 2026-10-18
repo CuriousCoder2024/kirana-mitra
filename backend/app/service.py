@@ -10,6 +10,8 @@ Rules (docs/api-contract.md):
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from app.matching import match_customer, match_item
 from app.models import (Entities, ExtractedItem, Extraction, ExtractionReply, QuickAction,
                         ShelfItem, ShelfLowStock, ShelfScan, ShelfScanReply)
@@ -413,13 +415,81 @@ def reorder_text(shop: ShopRecord, lines: list[tuple[str, int, str]]) -> str:
     return f"{head}\n{body}\n{tail}"
 
 
-# ---- top items (Phase 7) ---------------------------------------------------------------
+# ---- top items and auto-restock signals (Phase 7) ----------------------------------------
+
+from app.forecast import REORDER_COVER_WEEKS  # noqa: E402
+
+TOP_SELLER_RANK = 10      # (1) in the top N by actual units sold over the last 4 weeks
+AUTO_COVER_DAYS = 7       # (2) on_hand covers fewer than this many days at the forecast rate
+DEMAND_UPLIFT = 1.2       # (3) each of the last SUSTAINED_WEEKS weeks >= this x the baseline
+SUSTAINED_WEEKS = 2
+BASELINE_WEEKS = 8        # baseline = the 8 weeks before the sustained window (10 weeks total)
+RANK_WEEKS = 4
+
+
+@dataclass
+class RestockSignals:
+    rank: int
+    units_4w: int
+    cover_days: int
+    demand_ratio: float
+    top_seller: bool
+    low_stock: bool
+    sustained_demand: bool
+
+    @property
+    def eligible(self) -> bool:
+        return self.top_seller and self.low_stock and self.sustained_demand
+
+
+def cover_days_for(on_hand: int, forecast_weekly: list[int], weeks: int = REORDER_COVER_WEEKS) -> int:
+    weeks_n = max(1, min(weeks, len(forecast_weekly)))
+    per_day = sum(forecast_weekly[:weeks_n]) / (7 * weeks_n)
+    return min(999, int(on_hand / per_day)) if per_day > 0 else 999
+
+
+def demand_ratio_for(history_long: list[int]) -> float:
+    """Weaker of the last SUSTAINED_WEEKS weeks divided by the baseline weekly average.
+
+    Baseline = the BASELINE_WEEKS weeks before the window when there are at least
+    SUSTAINED_WEEKS + BASELINE_WEEKS weeks of history, else the whole-history average.
+    0.0 when there is no usable history."""
+    if len(history_long) < SUSTAINED_WEEKS + 1:
+        return 0.0
+    last = history_long[-SUSTAINED_WEEKS:]
+    before = history_long[:-SUSTAINED_WEEKS]
+    if len(history_long) >= SUSTAINED_WEEKS + BASELINE_WEEKS:
+        baseline_weeks = before[-BASELINE_WEEKS:]
+    else:
+        baseline_weeks = history_long
+    baseline = sum(baseline_weeks) / len(baseline_weeks)
+    if baseline <= 0:
+        return 0.0
+    return round(min(last) / baseline, 2)
+
+
+def restock_signals(forecast_items) -> dict[str, RestockSignals]:
+    """The three auto-restock signals per shaped forecast item, keyed by item_id."""
+    units = {it.item_id: sum(it.history_weekly_long[-RANK_WEEKS:]) for it in forecast_items}
+    ranked = sorted(forecast_items, key=lambda it: (-units[it.item_id], it.name))
+    out: dict[str, RestockSignals] = {}
+    for rank, it in enumerate(ranked, start=1):
+        cover = cover_days_for(it.on_hand, it.forecast_weekly)
+        ratio = demand_ratio_for(it.history_weekly_long)
+        out[it.item_id] = RestockSignals(
+            rank=rank, units_4w=units[it.item_id], cover_days=cover, demand_ratio=ratio,
+            top_seller=rank <= TOP_SELLER_RANK and units[it.item_id] > 0,
+            low_stock=cover < AUTO_COVER_DAYS,
+            sustained_demand=ratio >= DEMAND_UPLIFT,
+        )
+    return out
 
 
 def top_items(forecast_items, weeks: int, limit: int):
     """Rank shaped forecast items by expected demand over the next `weeks` weeks."""
     from app.models import TopItem
 
+    signals = restock_signals(forecast_items)
     out = []
     for it in forecast_items:
         weeks_n = max(1, min(weeks, len(it.forecast_weekly)))
@@ -427,12 +497,14 @@ def top_items(forecast_items, weeks: int, limit: int):
         history_units = sum(it.history_weekly[-weeks_n:])
         trend = (round((forecast_units - history_units) * 100 / history_units)
                  if history_units > 0 else None)
-        per_day = forecast_units / (7 * weeks_n)
-        cover_days = min(999, int(it.on_hand / per_day)) if per_day > 0 else 999
+        sig = signals[it.item_id]
         out.append(TopItem(item_id=it.item_id, name=it.name, unit=it.unit,
                            forecast_units=forecast_units, history_units=history_units,
-                           trend_pct=trend, on_hand=it.on_hand, cover_days=cover_days,
-                           reorder_qty=it.reorder_qty, reorder_reason=it.reorder_reason))
+                           trend_pct=trend, on_hand=it.on_hand,
+                           cover_days=cover_days_for(it.on_hand, it.forecast_weekly, weeks_n),
+                           reorder_qty=it.reorder_qty, reorder_reason=it.reorder_reason,
+                           rank=sig.rank, demand_ratio=sig.demand_ratio,
+                           auto_restock_eligible=sig.eligible))
     out.sort(key=lambda t: (-t.forecast_units, t.name))
     return out[:limit]
 
@@ -440,15 +512,28 @@ def top_items(forecast_items, weeks: int, limit: int):
 # ---- orders and auto-restock (Phase 7) ---------------------------------------------------
 
 
-def order_lines_from_forecast(repo: Repository, shop: ShopRecord, forecast_items) -> list[dict]:
+def order_lines_from_forecast(repo: Repository, shop: ShopRecord, forecast_items,
+                              auto: bool = False) -> list[dict]:
+    """Manual: every item with reorder_qty > 0. Auto: only items passing all three signals,
+    with the reasoning on each line."""
     catalogue = {i.item_id: i for i in repo.list_items(shop.shop_id)}
+    signals = restock_signals(forecast_items) if auto else {}
     lines = []
     for it in forecast_items:
         if it.reorder_qty <= 0:
             continue
+        if auto and not signals[it.item_id].eligible:
+            continue
         pack = catalogue[it.item_id].pack_size if it.item_id in catalogue else None
-        lines.append({"name": f"{it.name} {pack}".strip() if pack else it.name,
-                      "qty": it.reorder_qty, "unit": it.unit})
+        line = {"name": f"{it.name} {pack}".strip() if pack else it.name,
+                "qty": it.reorder_qty, "unit": it.unit}
+        if auto:
+            sig = signals[it.item_id]
+            line.update({"rank": sig.rank, "cover_days": sig.cover_days,
+                         "demand_ratio": sig.demand_ratio})
+        lines.append(line)
+    if auto:
+        lines.sort(key=lambda l: l["rank"])
     return lines
 
 
@@ -471,15 +556,31 @@ def auto_order_today(repo: Repository, shop_id: str, day: str) -> OrderRecord | 
                  if o.source == "auto" and o.created_at[:10] == day), None)
 
 
+def _short_name(name: str) -> str:
+    """'Britannia Good Day 100g' -> 'Britannia Good Day'."""
+    import re
+
+    return re.sub(r"\s+\S*\d\S*$", "", name)
+
+
+def auto_line_reason(lang: str, line: dict) -> str:
+    """'top-3 seller, 4 din ka stock, 2 hafte se demand 1.4x'."""
+    rank, cover, ratio = line.get("rank"), line.get("cover_days"), line.get("demand_ratio")
+    return _localized(
+        lang,
+        f"टॉप-{rank} सेलर, {cover} दिन का स्टॉक, {SUSTAINED_WEEKS} हफ़्ते से माँग {ratio}x",
+        f"top-{rank} seller, {cover} days of stock, demand {ratio}x for {SUSTAINED_WEEKS} weeks",
+        f"top-{rank} seller, {cover} din ka stock, {SUSTAINED_WEEKS} hafte se demand {ratio}x",
+    )
+
+
 def post_auto_order_message(repo: Repository, shop: ShopRecord, order: OrderRecord) -> BotMessageRecord:
     """Bot message in the shop's chat announcing the auto order, undoable like any write."""
     lang = shop.language
-    import re
-
-    def short(name: str) -> str:  # "Britannia Good Day 100g" -> "Britannia Good Day"
-        return re.sub(r"\s+\S*\d\S*$", "", name)
-
-    summary = ", ".join(f"{short(l['name'])} {l['qty']} {l['unit']}" for l in order.lines)
+    parts = []
+    for l in order.lines:
+        why = f" ({auto_line_reason(lang, l)})" if l.get("rank") is not None else ""
+        parts.append(f"{_short_name(l['name'])} {l['qty']} {l['unit']}{why}")
     head = _localized(lang, "ऑटो-ऑर्डर भेजा:", "Auto-order sent:", "Auto-order bheja:")
     tail = _localized(lang, "रद्द करें?", "Undo?", "Undo?")
     message_id = new_id("msg")
@@ -487,7 +588,7 @@ def post_auto_order_message(repo: Repository, shop: ShopRecord, order: OrderReco
                                        intent="auto_order", order_id=order.order_id))
     msg = BotMessageRecord(
         message_id=message_id, shop_id=shop.shop_id, created_at=order.created_at,
-        kind="auto_order", reply_text=f"{head} {summary}. {tail}",
+        kind="auto_order", reply_text=f"{head} {'; '.join(parts)}. {tail}",
         quick_actions=[
             {"label": "Undo", "action": "undo", "payload": {"message_id": message_id}},
             {"label": _localized(lang, "ऑर्डर देखो", "View orders", "Orders dekho"),

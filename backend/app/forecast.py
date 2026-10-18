@@ -42,6 +42,8 @@ logger = logging.getLogger("kirana.forecast")
 DEMO_SERIES = "shp_demo"
 HORIZON_DAYS = 35  # enough to cover 4 Monday-start weeks from any start day
 REORDER_COVER_WEEKS = 2  # reorder_qty covers this many of the 4 forecast weeks (owner decision)
+HISTORY_WEEKS_LONG = 10  # complete weeks of actual sales kept per item for the restock signals
+HISTORY_DAYS = 7 * HISTORY_WEEKS_LONG + 7  # fetched from the source (one spare week for alignment)
 CACHE_TTL_S = 600
 
 
@@ -86,6 +88,7 @@ class RawForecast:
     history: dict[str, dict[date, int]]  # item_id -> day -> qty
     festivals: list[Festival]
     uplift: dict[tuple[str, str], float]  # (profile, category | '*') -> multiplier
+    first_date: date = date.min  # first day of history loaded (weeks before it are unknown)
 
 
 # ---- shaping (pure) -----------------------------------------------------------
@@ -215,6 +218,15 @@ def shape_forecast(raw: RawForecast, shop_items: list[ItemRecord], language: str
         history = raw.history.get(row.item_id, {})
         hist = [sum(q for d, q in history.items() if ws <= d < ws + timedelta(days=7))
                 for ws in hist_weeks]
+        # Complete 7-day weeks ending on the last sale date, oldest first, for the
+        # auto-restock signals (the Monday-aligned chart weeks may end in a partial week).
+        long_hist = []
+        for k in range(HISTORY_WEEKS_LONG - 1, -1, -1):
+            end = raw.last_date - timedelta(days=7 * k)
+            start_w = end - timedelta(days=6)
+            if start_w < raw.first_date:
+                continue  # not enough history for this week
+            long_hist.append(sum(q for d, q in history.items() if start_w <= d <= end))
         forecast_weekly = [int(round(x)) for x in fc]
         on_hand = int(round(shop_item.quantity))
         # Order enough to cover the next REORDER_COVER_WEEKS weeks, not the whole chart.
@@ -232,6 +244,7 @@ def shape_forecast(raw: RawForecast, shop_items: list[ItemRecord], language: str
             reorder_qty=round_up_to_pack(need, shop_item.carton_size),
             reorder_reason=reorder_reason(language, peak_name, peak_mult, cover_demand, on_hand,
                                           forecast_weekly[:REORDER_COVER_WEEKS]),
+            history_weekly_long=long_hist,
         ))
     out.sort(key=lambda i: (-i.reorder_qty, i.name))
     return weeks, festivals_in_window(raw.festivals, weeks), out
@@ -320,6 +333,7 @@ class LocalForecastSource(ForecastSource):
         festivals = read_festivals_csv(os.path.join(d, "festivals.csv"))
         uplift = read_uplift_csv(os.path.join(d, "festival_uplift.csv"))
         last_date = max((day for h in history.values() for day in h), default=date.today())
+        first_date = min((day for h in history.values() for day in h), default=last_date)
         start = last_date + timedelta(days=1)
         forecast: dict[str, list[DailyPoint]] = {}
         for row in catalogue:
@@ -333,7 +347,8 @@ class LocalForecastSource(ForecastSource):
                 spread = statistics.pstdev(same_weekday) if len(same_weekday) > 1 else base * 0.3
                 points.append(DailyPoint(day, base, max(0.0, base - spread), base + spread))
             forecast[row.item_id] = points
-        return RawForecast(series_shop_id, last_date, catalogue, forecast, history, festivals, uplift)
+        return RawForecast(series_shop_id, last_date, catalogue, forecast, history, festivals, uplift,
+                           first_date=first_date)
 
 
 class BigQueryForecastSource(ForecastSource):
@@ -392,11 +407,12 @@ class BigQueryForecastSource(ForecastSource):
         for r in self._query(
             f"SELECT item_id, date, qty FROM `{ds}.sales_daily` "
             f"WHERE shop_id = @shop_id "
-            f"AND date >= DATE_SUB((SELECT MAX(date) FROM `{ds}.sales_daily`), INTERVAL 42 DAY)",
+            f"AND date >= DATE_SUB((SELECT MAX(date) FROM `{ds}.sales_daily`), INTERVAL {HISTORY_DAYS} DAY)",
             shop_id=series_shop_id,
         ):
             history.setdefault(r["item_id"], {})[r["date"]] = int(r["qty"])
         last_date = max((day for h in history.values() for day in h), default=date.today())
+        first_date = min((day for h in history.values() for day in h), default=last_date)
         forecast: dict[str, list[DailyPoint]] = {}
         for r in self._query(
             f"SELECT item_id, DATE(forecast_timestamp) AS day, forecast_value AS fc, "
@@ -408,7 +424,8 @@ class BigQueryForecastSource(ForecastSource):
         ):
             forecast.setdefault(r["item_id"], []).append(
                 DailyPoint(r["day"], float(r["fc"]), float(r["lo"]), float(r["hi"])))
-        return RawForecast(series_shop_id, last_date, catalogue, forecast, history, festivals, uplift)
+        return RawForecast(series_shop_id, last_date, catalogue, forecast, history, festivals, uplift,
+                           first_date=first_date)
 
 
 def make_forecast_source(settings) -> ForecastSource:

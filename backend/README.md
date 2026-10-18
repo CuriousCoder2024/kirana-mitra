@@ -205,11 +205,25 @@ are copied to `tests/eval/forecast_results.csv`: over 40 items the 14-day volume
 - `PATCH /shops/{shop_id}` sets `auto_restock` (default false), `distributor_phone` (`+91...`,
   used as the `wa.me` number) and `language`. Both settings are in the Shop object.
 - `POST /auto-restock/run[?shop_id=]` is the Cloud Scheduler entry point and needs the
-  `X-Scheduler-Token` header. For each shop with `auto_restock` on it computes the reorder lines;
-  if there are any and no auto order exists for today, it records an Order (`source: auto`,
-  `status: placed`) and posts a bot message into the shop's chat ("Auto-order bheja: ... Undo?")
-  with `undo` and `open_orders` quick actions. `POST /undo` with that message id sets the order to
+  `X-Scheduler-Token` header. For each shop with `auto_restock` on it orders only the items that
+  pass all three signals (constants in `app/service.py`):
+  1. **top seller**: rank ≤ `TOP_SELLER_RANK` (10) by actual units sold over the last 4 complete
+     weeks (history, not forecast);
+  2. **low stock**: `cover_days` < `AUTO_COVER_DAYS` (7), where cover days = on_hand divided by the
+     forecast daily rate over the next 2 weeks;
+  3. **sustained demand**: each of the last `SUSTAINED_WEEKS` (2) weeks is at least `DEMAND_UPLIFT`
+     (1.2) times the average of the 8 weeks before them; with fewer than 10 weeks of history, both
+     weeks must beat the whole-history weekly average by that factor. `demand_ratio` is the weaker
+     of the two weeks over the baseline.
+  The quantity is the usual 2-week `reorder_qty`. Each auto line carries `rank`, `cover_days` and
+  `demand_ratio`, and the bot message says why ("Parle-G 264 packet (top-1 seller, 2 din ka stock,
+  2 hafte se demand 1.4x)"). If anything qualifies and no auto order exists for today, it records
+  an Order (`source: auto`, `status: placed`) and posts that message into the shop's chat with
+  `undo` and `open_orders` quick actions; `POST /undo` with the message id sets the order to
   `cancelled`. The run is idempotent per shop per day, cancelled orders included.
+  `GET /top-items` exposes the same three signals per item (`rank`, `cover_days`, `demand_ratio`)
+  plus `auto_restock_eligible`. Manual `POST /reorder` is unchanged: every item with
+  `reorder_qty > 0`, no reasoning fields.
 - `GET /orders/{shop_id}` lists orders newest first; `POST /reorder` records one with
   `source: manual`. `GET /messages/{shop_id}?since=` returns the last 50 server-side bot messages
   so the app can show them when it opens.
