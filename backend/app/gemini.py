@@ -8,6 +8,9 @@ the eval can be exercised without credentials.
 
 from __future__ import annotations
 
+import logging
+import time
+
 import json
 import re
 from typing import Protocol
@@ -124,6 +127,18 @@ def build_system_prompt(catalogue: list[ItemRecord]) -> str:
 
 # ---- live client ----------------------------------------------------------------
 
+logger = logging.getLogger("kirana.gemini")
+
+
+def _is_transient(exc: Exception) -> bool:
+    """Timeouts, 429s and 5xx are worth one retry; auth/permission/schema are not."""
+    name = type(exc).__name__.lower()
+    msg = str(exc).lower()
+    if "timeout" in name or "timeout" in msg or "timed out" in msg:
+        return True
+    return any(code in msg for code in ("429", "500", "502", "503", "504", "resource_exhausted", "unavailable"))
+
+
 
 class GeminiExtractor:
     def __init__(self, settings: Settings) -> None:
@@ -134,10 +149,15 @@ class GeminiExtractor:
                 "GOOGLE_CLOUD_PROJECT is not set; export it (or set MOCK_GEMINI=1)."
             )
         self.model = settings.gemini_model
+        from google.genai import types as _types
+
+        # A stuck call must not hang the shopkeeper: cap each request at 40 s
+        # (wall clock), then retry once on a transient failure.
         self._client = genai.Client(
             vertexai=True,
             project=settings.google_cloud_project,
             location=settings.google_cloud_location,
+            http_options=_types.HttpOptions(timeout=40_000),
         )
 
     def extract(
@@ -168,15 +188,29 @@ class GeminiExtractor:
             response_mime_type="application/json",
             response_schema=Extraction,
             temperature=0.1,
+            # Extraction needs no deliberation; the default thinking budget pushed
+            # p95 past 40 s and caused 504 DEADLINE_EXCEEDED on the global endpoint.
+            thinking_config=types.ThinkingConfig(thinking_level=types.ThinkingLevel.LOW),
         )
-        try:
-            response = self._client.models.generate_content(
-                model=self.model,
-                contents=[types.Content(role="user", parts=parts)],
-                config=config,
-            )
-        except Exception as exc:  # network / auth / quota
-            raise GeminiFailed(f"{type(exc).__name__}: {exc}") from exc
+        response = None
+        last_exc: Exception | None = None
+        for attempt in range(2):
+            try:
+                response = self._client.models.generate_content(
+                    model=self.model,
+                    contents=[types.Content(role="user", parts=parts)],
+                    config=config,
+                )
+                break
+            except Exception as exc:  # network / auth / quota / timeout
+                last_exc = exc
+                logger.warning("gemini attempt %d failed: %s: %s", attempt + 1,
+                               type(exc).__name__, str(exc)[:300])
+                if not _is_transient(exc):
+                    break
+                time.sleep(1.5)
+        if response is None:
+            raise GeminiFailed(f"{type(last_exc).__name__}: {last_exc}") from last_exc
         parsed = getattr(response, "parsed", None)
         if isinstance(parsed, Extraction):
             return parsed

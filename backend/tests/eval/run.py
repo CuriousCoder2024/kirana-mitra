@@ -66,12 +66,24 @@ def main(argv: list[str] | None = None) -> int:
         rows, latencies, failures = [], [], 0
         for s in samples:
             t0 = time.perf_counter()
-            r = c.post("/chat", json={"shop_id": shop_id, "text": s["text"]})
+            try:
+                r = c.post("/chat", json={"shop_id": shop_id, "text": s["text"]})
+                status = r.status_code
+            except httpx.HTTPError as exc:  # timeout / connection: count, don't crash
+                r, status = None, f"{type(exc).__name__}"
             ms = (time.perf_counter() - t0) * 1000
             latencies.append(ms)
-            if r.status_code != 200:
+            if r is None or status != 200:
                 failures += 1
-                rows.append((s["id"], s["expected"]["intent"], f"HTTP {r.status_code}", "-", "-", ms, {}))
+                label = f"HTTP {status}" if r is not None else str(status)
+                detail = ""
+                if r is not None:
+                    try:
+                        detail = r.json().get("error", {}).get("message", "")[:120]
+                    except Exception:
+                        detail = ""
+                print(f"  [{s['id']}] {label} {detail}")
+                rows.append((s["id"], s["expected"]["intent"], label, "-", "-", ms, {}))
                 continue
             rep = r.json()
             sc = score(s, rep)
