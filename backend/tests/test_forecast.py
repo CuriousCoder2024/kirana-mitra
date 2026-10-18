@@ -222,8 +222,10 @@ def test_bigquery_source_live():
                                  settings.bq_location)
     try:
         raw = src.load("shp_created_in_app")
-    except Exception as exc:  # dataset or model not there yet
-        pytest.skip(f"BigQuery not ready: {exc}")
+    except Exception as exc:
+        if "Not found" in str(exc) or "notFound" in str(exc):  # dataset or model not there yet
+            pytest.skip(f"BigQuery not ready: {exc}")
+        raise
     assert raw.series_shop_id == "shp_demo"
     assert len(raw.catalogue) == 40
     assert raw.forecast and all(len(v) == 35 for v in raw.forecast.values())

@@ -394,9 +394,10 @@ class BigQueryForecastSource(ForecastSource):
         for r in self._query(
             f"SELECT item_id, DATE(forecast_timestamp) AS day, forecast_value AS fc, "
             f"prediction_interval_lower_bound AS lo, prediction_interval_upper_bound AS hi "
+            # ML.FORECAST's settings struct must be literal constants, so the horizon
+            # is formatted in (it is a module constant, never user input).
             f"FROM ML.FORECAST(MODEL `{ds}.{self.model}`, "
-            f"STRUCT(@horizon AS horizon, 0.8 AS confidence_level))",
-            horizon=HORIZON_DAYS,
+            f"STRUCT({int(HORIZON_DAYS)} AS horizon, 0.8 AS confidence_level))",
         ):
             forecast.setdefault(r["item_id"], []).append(
                 DailyPoint(r["day"], float(r["fc"]), float(r["lo"]), float(r["hi"])))

@@ -1,0 +1,2 @@
+date,model,holdout_days,items,overall_total_error_pct,median_item_mape_pct,median_item_wape_pct,mean_item_wape_pct,source
+2026-10-18,kirana.item_demand_arima_holdout (ARIMA_PLUS + festival uplift),14,40,11.0,43.9,50.9,60.7,data/bqml/evaluate.sql -> kirana.forecast_eval (queried 2026-10-18)
