@@ -342,5 +342,61 @@
   "languageSheetTitle": "Mitra kis bhasha mein bole?",
   "backLabel": "Peeche",
   "voiceNoteLabel": "Voice note",
-  "undo": "Undo"
+  "undo": "Undo",
+  "feedbackButton": "Feedback",
+  "feedbackTitle": "Kirana Mitra kaisa chal raha hai?",
+  "feedbackUp": "Achha",
+  "feedbackDown": "Theek nahi",
+  "feedbackCommentHint": "Kuch aur batana ho toh likho…",
+  "feedbackVoiceHint": "Ya dabake bolo",
+  "feedbackVoiceReady": "Aawaz taiyaar · {seconds}s",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "Bhejo",
+  "feedbackPickRating": "Pehle achha ya theek nahi chuno",
+  "feedbackThanks": "Shukriya!",
+  "changeLanguage": "Bhasha badlo",
+  "languageSearchHint": "Bhasha dhoondo…",
+  "languageNoMatch": "Koi bhasha nahi mili",
+  "topSellersTitle": "Top sellers",
+  "topSellersSubtitle": "Pichhle 2 hafte · agle 2 hafte ka anumaan",
+  "autoBadge": "Auto",
+  "coverDays": "{days} din",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit}",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "Auto-restock top sellers",
+  "autoRestockSubtitle": "Kam stock wale top sellers ka order raat ko apne aap jayega",
+  "distributorPhoneLabel": "Distributor ka WhatsApp number",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "Save karo",
+  "settingsSaved": "Save ho gaya",
+  "ordersTitle": "Orders",
+  "ordersEmpty": "Abhi koi order nahi. Forecast se Order banao.",
+  "orderAuto": "Auto",
+  "orderManual": "Manual",
+  "orderPlaced": "Bheja",
+  "orderCancelled": "Cancel ho gaya",
+  "viewOrders": "Orders dekho",
+  "newOrdersNotice": "Raat ka auto order aaya"
 }

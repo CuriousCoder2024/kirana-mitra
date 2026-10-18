@@ -5,6 +5,8 @@ class Shop {
     required this.ownerName,
     required this.language,
     this.createdAt,
+    this.autoRestock = false,
+    this.distributorPhone,
   });
 
   final String shopId;
@@ -14,6 +16,8 @@ class Shop {
   /// `hi`, `en` or `hi-Latn`.
   final String language;
   final String? createdAt;
+  final bool autoRestock;
+  final String? distributorPhone;
 
   factory Shop.fromJson(Map<String, dynamic> json) => Shop(
         shopId: json['shop_id'] as String,
@@ -21,6 +25,8 @@ class Shop {
         ownerName: json['owner_name'] as String? ?? '',
         language: json['language'] as String? ?? 'hi-Latn',
         createdAt: json['created_at'] as String?,
+        autoRestock: json['auto_restock'] as bool? ?? false,
+        distributorPhone: json['distributor_phone'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,5 +35,7 @@ class Shop {
         'owner_name': ownerName,
         'language': language,
         if (createdAt != null) 'created_at': createdAt,
+        'auto_restock': autoRestock,
+        'distributor_phone': distributorPhone,
       };
 }

@@ -209,4 +209,83 @@ class DioApiClient implements ApiClient {
         ));
     return DaySummary.fromJson(json);
   }
+
+  // ---- v1.1 ----
+
+  @override
+  Future<LanguagesResponse> languages() async {
+    final json = await _run(() => _dio.get('/languages'));
+    return LanguagesResponse.fromJson(json);
+  }
+
+  @override
+  Future<Shop> updateShop(String shopId, {bool? autoRestock, String? distributorPhone}) async {
+    final json = await _run(() => _dio.patch('/shops/$shopId', data: {
+          'auto_restock': ?autoRestock,
+          'distributor_phone': ?distributorPhone,
+        }));
+    return Shop.fromJson(json);
+  }
+
+  @override
+  Future<TopItemsResponse> topItems(String shopId, {int weeks = 2}) async {
+    final json = await _run(() => _dio.get('/top-items/$shopId', queryParameters: {'weeks': weeks}));
+    return TopItemsResponse.fromJson(json);
+  }
+
+  @override
+  Future<OrdersResponse> orders(String shopId) async {
+    final json = await _run(() => _dio.get('/orders/$shopId'));
+    return OrdersResponse.fromJson(json);
+  }
+
+  @override
+  Future<MessagesResponse> messages(String shopId, {DateTime? since}) async {
+    final json = await _run(() => _dio.get(
+          '/messages/$shopId',
+          queryParameters: since == null ? null : {'since': since.toUtc().toIso8601String()},
+        ));
+    return MessagesResponse.fromJson(json);
+  }
+
+  @override
+  Future<FeedbackReply> feedback({
+    required String shopId,
+    required String screen,
+    required String rating,
+    String? comment,
+    required String appVersion,
+    required String platform,
+  }) async {
+    final json = await _run(() => _dio.post('/feedback', data: {
+          'shop_id': shopId,
+          'screen': screen,
+          'rating': rating,
+          if (comment != null && comment.isNotEmpty) 'comment': comment,
+          'app_version': appVersion,
+          'platform': platform,
+        }));
+    return FeedbackReply.fromJson(json);
+  }
+
+  @override
+  Future<FeedbackReply> feedbackVoice({
+    required String shopId,
+    required String screen,
+    required String rating,
+    required UploadBlob audio,
+    required String appVersion,
+    required String platform,
+  }) async {
+    final form = FormData.fromMap({
+      'shop_id': shopId,
+      'screen': screen,
+      'rating': rating,
+      'app_version': appVersion,
+      'platform': platform,
+      'audio': _multipart(audio),
+    });
+    final json = await _run(() => _dio.post('/feedback-voice', data: form));
+    return FeedbackReply.fromJson(json);
+  }
 }

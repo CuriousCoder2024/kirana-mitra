@@ -60,4 +60,36 @@ abstract class ApiClient {
 
   /// GET /summary/{shop_id}?date=YYYY-MM-DD (date defaults to today).
   Future<DaySummary> summary(String shopId, {String? date});
+
+  // ---- v1.1 ----
+
+  Future<LanguagesResponse> languages();
+
+  /// PATCH /shops/{shop_id}; both fields optional.
+  Future<Shop> updateShop(String shopId, {bool? autoRestock, String? distributorPhone});
+
+  Future<TopItemsResponse> topItems(String shopId, {int weeks = 2});
+
+  Future<OrdersResponse> orders(String shopId);
+
+  /// Server-side bot messages (auto-order notices) created after [since].
+  Future<MessagesResponse> messages(String shopId, {DateTime? since});
+
+  Future<FeedbackReply> feedback({
+    required String shopId,
+    required String screen,
+    required String rating,
+    String? comment,
+    required String appVersion,
+    required String platform,
+  });
+
+  Future<FeedbackReply> feedbackVoice({
+    required String shopId,
+    required String screen,
+    required String rating,
+    required UploadBlob audio,
+    required String appVersion,
+    required String platform,
+  });
 }

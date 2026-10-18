@@ -342,5 +342,61 @@
   "languageSheetTitle": "मित्र किस भाषा में बोले?",
   "backLabel": "पीछे",
   "voiceNoteLabel": "वॉइस नोट",
-  "undo": "अनडू"
+  "undo": "अनडू",
+  "feedbackButton": "फ़ीडबैक",
+  "feedbackTitle": "किराना मित्र कैसा चल रहा है?",
+  "feedbackUp": "अच्छा",
+  "feedbackDown": "ठीक नहीं",
+  "feedbackCommentHint": "कुछ और बताना हो तो लिखो…",
+  "feedbackVoiceHint": "या दबाकर बोलो",
+  "feedbackVoiceReady": "आवाज़ तैयार · {seconds}s",
+  "@feedbackVoiceReady": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "feedbackSend": "भेजो",
+  "feedbackPickRating": "पहले अच्छा या ठीक नहीं चुनो",
+  "feedbackThanks": "शुक्रिया!",
+  "changeLanguage": "भाषा बदलो",
+  "languageSearchHint": "भाषा ढूँढो…",
+  "languageNoMatch": "कोई भाषा नहीं मिली",
+  "topSellersTitle": "टॉप सेलर",
+  "topSellersSubtitle": "पिछले 2 हफ्ते · अगले 2 हफ्ते का अनुमान",
+  "autoBadge": "ऑटो",
+  "coverDays": "{days} दिन",
+  "@coverDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "unitsPerFortnight": "{units} {unit}",
+  "@unitsPerFortnight": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "autoRestockTitle": "टॉप सेलर का ऑटो-रीस्टॉक",
+  "autoRestockSubtitle": "कम स्टॉक वाले टॉप सेलर का ऑर्डर रात को अपने आप जाएगा",
+  "distributorPhoneLabel": "डिस्ट्रीब्यूटर का WhatsApp नंबर",
+  "distributorPhoneHint": "+91 98765 43210",
+  "save": "सेव करो",
+  "settingsSaved": "सेव हो गया",
+  "ordersTitle": "ऑर्डर",
+  "ordersEmpty": "अभी कोई ऑर्डर नहीं। अनुमान से ऑर्डर बनाओ।",
+  "orderAuto": "ऑटो",
+  "orderManual": "मैनुअल",
+  "orderPlaced": "भेजा",
+  "orderCancelled": "कैंसल हो गया",
+  "viewOrders": "ऑर्डर देखो",
+  "newOrdersNotice": "रात का ऑटो ऑर्डर आया"
 }

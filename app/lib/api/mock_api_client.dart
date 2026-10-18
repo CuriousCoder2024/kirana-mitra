@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import '../l10n/languages.dart';
 import '../models/models.dart';
 import 'api_client.dart';
 
@@ -630,13 +631,22 @@ class MockApiClient implements ApiClient {
       text.writeln('- ${l.name}: ${l.qty} ${l.unit}');
     }
     text.write('Please deliver by Thursday. Dhanyavaad!');
-    return ReorderResponse(
-      orderId: _id('ord'),
-      lines: lines,
-      text: text.toString(),
-      whatsappUrl:
-          'https://wa.me/?text=${Uri.encodeComponent(text.toString())}',
+    final orderId = _id('ord');
+    final url = 'https://wa.me/${_distributorPhone?.replaceAll(RegExp(r'[^0-9]'), '') ?? ''}?text=${Uri.encodeComponent(text.toString())}';
+    _orders.insert(
+      0,
+      Order(
+        orderId: orderId,
+        shopId: shopId,
+        createdAt: _now(),
+        status: 'placed',
+        source: 'manual',
+        lines: [for (final l in lines) OrderLine(name: l.name, qty: l.qty, unit: l.unit)],
+        text: text.toString(),
+        whatsappUrl: url,
+      ),
     );
+    return ReorderResponse(orderId: orderId, lines: lines, text: text.toString(), whatsappUrl: url);
   }
 
   @override
@@ -657,6 +667,142 @@ class MockApiClient implements ApiClient {
           'Aaj ka hisaab: bikri ₹8,450, 23 entries. Udhaar diya ₹350, aaya ₹500, '
           'kul baaki ₹$outstanding. Kam hai: $lowNames. Diwali 3 hafte door hai.',
     );
+  }
+
+  // ----------------------------------------------------------------- v1.1 --
+
+  bool _autoRestock = false;
+  String? _distributorPhone;
+  final List<Order> _orders = [];
+  final List<ServerMessage> _messages = [];
+  bool _seededAuto = false;
+
+  @override
+  Future<LanguagesResponse> languages() async {
+    await _wait();
+    return const LanguagesResponse(languages: kLanguages);
+  }
+
+  @override
+  Future<Shop> updateShop(String shopId, {bool? autoRestock, String? distributorPhone}) async {
+    await _wait();
+    if (autoRestock != null) _autoRestock = autoRestock;
+    if (distributorPhone != null) _distributorPhone = distributorPhone.isEmpty ? null : distributorPhone;
+    if (_autoRestock && !_seededAuto) _seedAutoOrder();
+    return Shop(
+      shopId: shopId,
+      shopName: 'Gupta General Store',
+      ownerName: 'Ramesh Gupta',
+      language: 'hi-Latn',
+      createdAt: _now(),
+      autoRestock: _autoRestock,
+      distributorPhone: _distributorPhone,
+    );
+  }
+
+  /// The first time auto-restock is switched on, pretend the nightly run
+  /// placed an order so Orders and the chat notice have something to show.
+  void _seedAutoOrder() {
+    _seededAuto = true;
+    final messageId = _id('msg');
+    final text = 'Auto order (Diwali week):\n- Parle-G 70g: 264 packet\n- Maggi 70g: 120 packet\nPlease deliver by Thursday.';
+    _orders.insert(
+      0,
+      Order(
+        orderId: _id('ord'),
+        shopId: 'shp_mock',
+        createdAt: _now(),
+        status: 'placed',
+        source: 'auto',
+        messageId: messageId,
+        lines: const [
+          OrderLine(name: 'Parle-G 70g', qty: 264, unit: 'packet', rank: 1, coverDays: 1.9, demandRatio: 1.4),
+          OrderLine(name: 'Maggi 70g', qty: 120, unit: 'packet', rank: 2, coverDays: 0.8, demandRatio: 1.6),
+        ],
+        text: text,
+        whatsappUrl: 'https://wa.me/${_distributorPhone?.replaceAll(RegExp(r'[^0-9]'), '') ?? ''}?text=${Uri.encodeComponent(text)}',
+      ),
+    );
+    _messages.insert(
+      0,
+      ServerMessage(
+        messageId: messageId,
+        createdAt: _now(),
+        replyText: 'Raat ko auto order bheja: Parle-G 264 packet, Maggi 120 packet. Galat laga toh Undo dabao.',
+        quickActions: [
+          QuickAction(label: 'Undo', action: 'undo', payload: {'message_id': messageId}),
+          const QuickAction(label: 'Orders dekho', action: 'open_orders'),
+        ],
+      ),
+    );
+    _undoable.add(MapEntry(messageId, () {
+      final idx = _orders.indexWhere((o) => o.messageId == messageId);
+      if (idx >= 0) _orders[idx] = _orders[idx].copyWith(status: 'cancelled');
+    }));
+    _undoText[messageId] = 'Theek hai, auto order cancel kar diya.';
+  }
+
+  @override
+  Future<TopItemsResponse> topItems(String shopId, {int weeks = 2}) async {
+    await _wait();
+    return TopItemsResponse(
+      generatedAt: _now(),
+      items: const [
+        TopItem(itemId: 'itm_parleg', name: 'Parle-G', unit: 'packet', rank: 1, forecastUnits: 301, historyUnits: 259, trendPct: 16, onHand: 42, coverDays: 1.9, demandRatio: 1.4, reorderQty: 264, reorderReason: 'Diwali week demand ~1.8x', autoRestockEligible: true),
+        TopItem(itemId: 'itm_maggi', name: 'Maggi', unit: 'packet', rank: 2, forecastUnits: 172, historyUnits: 130, trendPct: 32, onHand: 6, coverDays: 0.8, demandRatio: 1.6, reorderQty: 120, reorderReason: 'Stock khatam, guests', autoRestockEligible: true),
+        TopItem(itemId: 'itm_fortune', name: 'Fortune Oil', unit: 'litre', rank: 3, forecastUnits: 79, historyUnits: 50, trendPct: 58, onHand: 14, coverDays: 2.4, demandRatio: 1.3, reorderQty: 48, reorderReason: 'Diwali frying', autoRestockEligible: true),
+        TopItem(itemId: 'itm_tata_salt', name: 'Tata Salt', unit: 'packet', rank: 4, forecastUnits: 60, historyUnits: 62, trendPct: -3, onHand: 30, coverDays: 7, demandRatio: 1.0, reorderQty: 0, reorderReason: null, autoRestockEligible: false),
+        TopItem(itemId: 'itm_amul', name: 'Amul Butter', unit: 'piece', rank: 5, forecastUnits: 53, historyUnits: 35, trendPct: 51, onHand: 9, coverDays: 2.4, demandRatio: 1.2, reorderQty: 36, reorderReason: 'Festive demand', autoRestockEligible: false),
+        TopItem(itemId: 'itm_surf', name: 'Surf Excel', unit: 'packet', rank: 6, forecastUnits: 22, historyUnits: 24, trendPct: -8, onHand: 4, coverDays: 2.5, demandRatio: 0.9, reorderQty: 12, reorderReason: null, autoRestockEligible: false),
+      ],
+    );
+  }
+
+  @override
+  Future<OrdersResponse> orders(String shopId) async {
+    await _wait();
+    return OrdersResponse(orders: List.unmodifiable(_orders));
+  }
+
+  @override
+  Future<MessagesResponse> messages(String shopId, {DateTime? since}) async {
+    await _wait();
+    return MessagesResponse(
+      messages: _messages.where((m) {
+        if (since == null) return true;
+        final t = DateTime.tryParse(m.createdAt);
+        return t == null || t.isAfter(since);
+      }).toList(),
+    );
+  }
+
+  @override
+  Future<FeedbackReply> feedback({
+    required String shopId,
+    required String screen,
+    required String rating,
+    String? comment,
+    required String appVersion,
+    required String platform,
+  }) async {
+    await _wait();
+    return FeedbackReply(
+      feedbackId: _id('fb'),
+      replyText: rating == 'up' ? 'Shukriya! Aapka feedback mil gaya.' : 'Shukriya, hum sudhaar karenge.',
+    );
+  }
+
+  @override
+  Future<FeedbackReply> feedbackVoice({
+    required String shopId,
+    required String screen,
+    required String rating,
+    required UploadBlob audio,
+    required String appVersion,
+    required String platform,
+  }) async {
+    await Future<void>.delayed(latency * 2);
+    return FeedbackReply(feedbackId: _id('fb'), replyText: 'Shukriya! Aapki baat sun li.');
   }
 
   // -------------------------------------------------------------- helpers --
