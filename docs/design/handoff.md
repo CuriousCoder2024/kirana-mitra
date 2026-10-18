@@ -260,13 +260,21 @@ stripe (not red: nothing in the shop is wrong), 22 dp wifi-off icon, title 17/70
 Voice notes and photos that failed to send are queued locally and resent when connectivity
 returns; the card then becomes a 3 s leaf toast "Bhej diya".
 
-### 4.19 Item tile (`ItemTile`) — v2.1
-44 dp, radius 12, three sources in order of preference:
+### 4.19 Item tile (`ItemTile`) — v2.1, photo first
+44 dp, radius 12, four sources in order of preference:
 
-1. **Photo tile.** The shopkeeper's own photo of the pack: a crop from the last shelf scan that
-   matched this item, or a photo taken by tapping the tile on the Stock row ("Photo lo"). Cover-fit,
-   1 dp sand border. Stored locally per item; never fetched from the network.
-2. **Illustrated tile.** A brand-colour pack illustration from `docs/design/assets/items/<slug>.svg`
+1. **Shopkeeper's photo.** A crop from the last shelf scan that matched this item, or a photo
+   taken by tapping the tile on the Stock row ("Photo lo"). Cover-fit, 1 dp sand border. Stored
+   locally per item; never fetched from the network.
+2. **Catalogue photo.** `docs/design/assets/photos/items/<item_id>.jpg` (512 px long side) with
+   its 120 × 120 crop in `items/thumbs/<item_id>.jpg`. Copy both folders to
+   `app/assets/photos/items/`. Use the thumb at 44 dp in rows and chips, the 512 px file in the
+   shelf-scan card and the customer-facing order text preview. Item ids match
+   `data/catalogue.csv` (`itm_001` … `itm_040`). Every file's source, author and licence is in
+   `docs/design/assets/photos/ATTRIBUTION.md`; files marked generated are AI placeholders with
+   generic wordmarks and must be replaced before any public release. Show attribution in the
+   app's About screen ("Product photos: Open Food Facts contributors, CC BY-SA 3.0").
+3. **Illustrated tile.** A brand-colour pack illustration from `docs/design/assets/items/<slug>.svg`
    (copy the folder to `app/assets/items/`). 64 × 64 viewBox with its own cream `#FFF4E6`
    background, so render with `SvgPicture.asset` at 44 dp and no extra container colour. Match by
    catalogue item name, lower-cased, spaces to hyphens:
@@ -284,13 +292,15 @@ returns; the card then becomes a 3 s leaf toast "Bhej diya".
 
    The illustrations use colour and pack shape only (pouch, box, jar, bottle, one or two colour
    bands), no logos, wordmarks or text, so nothing trademarked ships in the bundle. Items added
-   by voice that are not in the catalogue fall through to 3.
-3. **Letter tile.** First letter in Baloo 2 20/800 on a tinted background cycling saffronTint,
+   by voice that are not in the catalogue fall through to 4.
+4. **Letter tile.** First letter in Baloo 2 20/800 on a tinted background cycling saffronTint,
    leafTint, haldiTint, sand.
 
 The same tile appears in shelf-scan count rows (4.8) at 36 dp and in the Mangao item chips at
-24 dp as a leading icon. If real pack photographs are licensed later, they drop into source 2
-as PNGs at 128 × 128 with the same file names; nothing else changes.
+24 dp as a leading icon. Shelf-scan demo images live in `docs/design/assets/photos/shelves/`
+(`shelf_01.jpg` … , 1280 px); the mock client should return one of them as the "photo" for the
+scan demo so the result card shows a real shelf. The photo set is rebuilt with
+`uv run docs/design/assets/photos/fetch_photos.py`.
 
 ### 4.15 App bar
 56 dp, cream (same as scaffold), no elevation, no solid saffron. Title in Baloo 2 22/700 ink,
