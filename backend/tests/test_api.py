@@ -72,7 +72,8 @@ def test_stock_in_fuzzy_matches_and_updates_stock(client, scripted, shop_id):
 
 def test_sale_reduces_stock_and_flags_low_stock(client, scripted, shop_id):
     scripted.push(intent="sale", entities={"items": [{"name": "Nescafe", "quantity": 5, "unit": "piece"}]})
-    chat(client, shop_id)
+    reply = chat(client, shop_id)
+    assert reply["reply_text"].endswith("Ab total: Nescafe 1 piece. Nescafe kam hai, reorder 3.")  # QA A13
     nescafe = next(i for i in client.get(f"/stock/{shop_id}").json()["items"] if i["name"] == "Nescafe")
     assert nescafe["quantity"] == 1
     assert nescafe["low_stock"] is True
@@ -84,8 +85,11 @@ def test_low_confidence_holds_until_confirm(client, scripted, shop_id):
                   reply_text="Samjha: Maggi 5 packet?")
     reply = chat(client, shop_id, "shayad 5 maggi aaye")
     assert reply["applied"] is False
-    assert reply["quick_actions"] == [{"label": "Haan, add karo", "action": "confirm",
-                                       "payload": {"message_id": reply["message_id"]}}]
+    assert reply["reply_text"] == "Confirm karo: Maggi 70g, 5 packet stock mein add karoon?"  # never "Samjha"
+    assert reply["quick_actions"] == [
+        {"label": "Haan, add karo", "action": "confirm", "payload": {"message_id": reply["message_id"]}},
+        {"label": "Nahi", "action": "dismiss", "payload": {"message_id": reply["message_id"]}},
+    ]
     maggi = next(i for i in client.get(f"/stock/{shop_id}").json()["items"] if i["name"] == "Maggi")
     assert maggi["quantity"] == 30  # untouched
 
@@ -94,6 +98,8 @@ def test_low_confidence_holds_until_confirm(client, scripted, shop_id):
     confirmed = r.json()
     assert confirmed["applied"] is True
     assert confirmed["message_id"] == reply["message_id"]
+    # the echo is rebuilt from the entities, not the held question (QA A7)
+    assert confirmed["reply_text"] == "Samjha: Maggi 70g, 5 packet stock mein add kiya. Ab total: Maggi 35 packet."
     assert confirmed["quick_actions"][0]["action"] == "undo"
     maggi = next(i for i in client.get(f"/stock/{shop_id}").json()["items"] if i["name"] == "Maggi")
     assert maggi["quantity"] == 35

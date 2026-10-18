@@ -58,10 +58,15 @@ Return JSON matching the schema with these fields:
   Fields not relevant to the intent are null (items is []).
 - reply_text: one short sentence that confirms what will be recorded, starting with the
   language's word for "Understood:" ("Samjha:" / "समझा:" / "Got it:" / "বুঝেছি:" / "புரிந்தது:" ...).
-  Language of reply_text: {reply_rule} If the user's message is clearly in a different
-  language or script mix than that, mirror the user's instead. Never transliterate a
-  non-Latin language into Roman letters, except Hinglish. Do not invent running totals; the
-  backend appends them. For question: answer briefly if you can from
+  Language of reply_text: {reply_rule} This is the shop owner's reading language: use it even
+  when the message was spoken or typed in another language or script (a Hinglish shop gets
+  Roman Hinglish for a Devanagari voice note; a Hindi shop gets Devanagari with the units
+  written in Devanagari: पैकेट, कार्टन, पीस, किलो, लीटर). Never mix two scripts in one
+  reply, except brand names and ₹ amounts. Do not invent running totals; the backend appends
+  them. For a question, do not say you will check: the backend answers from the store.
+  For unclear, never start with "Samjha"/"समझा"/"Got it" and never say anything was noted;
+  ask one short question. "khatam ho gaya" / "finished" for a catalogue item means a sale of
+  all remaining units: intent sale with quantity null. For question: answer briefly if you can from
   the catalogue below, else say what you need. For unclear: ask one short clarifying question.
 
 Catalogue of this shop (name | pack | unit | on hand):
@@ -208,13 +213,14 @@ class GeminiExtractor:
         self.model = settings.gemini_model
         from google.genai import types as _types
 
-        # A stuck call must not hang the shopkeeper: cap each request at 40 s
-        # (wall clock), then retry once on a transient failure.
+        # A stuck call must not hang the shopkeeper: cap each request at 25 s (wall
+        # clock), then retry once on a transient failure, so the worst case stays
+        # under the app's 60 s receive timeout (QA report A2).
         self._client = genai.Client(
             vertexai=True,
             project=settings.google_cloud_project,
             location=settings.google_cloud_location,
-            http_options=_types.HttpOptions(timeout=40_000),
+            http_options=_types.HttpOptions(timeout=25_000),
         )
 
     def extract(
@@ -254,10 +260,7 @@ class GeminiExtractor:
                 text="Count the units of each product visible on this shelf and return the JSON."
             ),
         ]
-        # Vision over a full shelf takes longer than a one-line extraction; the 40 s
-        # chat deadline produced 504 DEADLINE_EXCEEDED on busier images.
-        return self._generate(parts, build_shelf_prompt(catalogue, shop_language), ShelfScan,
-                              timeout_ms=90_000)
+        return self._generate(parts, build_shelf_prompt(catalogue, shop_language), ShelfScan)
 
     def summarize(self, facts: dict, shop_language: str) -> str:
         from google.genai import types
@@ -273,17 +276,28 @@ class GeminiExtractor:
         config = types.GenerateContentConfig(
             temperature=0.4,
             thinking_config=types.ThinkingConfig(thinking_level=types.ThinkingLevel.LOW),
-            http_options=types.HttpOptions(timeout=20_000),
+            http_options=types.HttpOptions(timeout=25_000),
         )
-        try:
-            response = self._client.models.generate_content(
-                model=self.model, contents=prompt, config=config)
-        except Exception as exc:
-            raise GeminiFailed(f"{type(exc).__name__}: {exc}") from exc
+        response = self._call_with_retry(contents=prompt, config=config)
         text = (response.text or "").strip()
         if not text:
             raise GeminiFailed("empty summary")
         return text
+
+    def _call_with_retry(self, contents, config):
+        last_exc: Exception | None = None
+        for attempt in range(2):
+            try:
+                return self._client.models.generate_content(model=self.model, contents=contents,
+                                                            config=config)
+            except Exception as exc:
+                last_exc = exc
+                logger.warning("gemini attempt %d failed: %s: %s", attempt + 1,
+                               type(exc).__name__, str(exc)[:300])
+                if not _is_transient(exc):
+                    break
+                time.sleep(1.5)
+        raise GeminiFailed(f"{type(last_exc).__name__}: {last_exc}") from last_exc
 
     def transcribe(self, audio: tuple[bytes, str], shop_language: str) -> str:
         from google.genai import types
@@ -292,19 +306,15 @@ class GeminiExtractor:
         config = types.GenerateContentConfig(
             temperature=0.0,
             thinking_config=types.ThinkingConfig(thinking_level=types.ThinkingLevel.LOW),
-            http_options=types.HttpOptions(timeout=30_000),
+            http_options=types.HttpOptions(timeout=25_000),
         )
-        try:
-            response = self._client.models.generate_content(
-                model=self.model,
-                contents=[types.Content(role="user", parts=[
-                    types.Part.from_bytes(data=data, mime_type=mime),
-                    types.Part.from_text(text=(
-                        "Transcribe this voice note exactly, in the speaker's own language and "
-                        "script (Hinglish in Roman letters). Return only the transcript."))])],
-                config=config)
-        except Exception as exc:
-            raise GeminiFailed(f"{type(exc).__name__}: {exc}") from exc
+        response = self._call_with_retry(
+            contents=[types.Content(role="user", parts=[
+                types.Part.from_bytes(data=data, mime_type=mime),
+                types.Part.from_text(text=(
+                    "Transcribe this voice note exactly, in the speaker's own language and "
+                    "script (Hinglish in Roman letters). Return only the transcript."))])],
+            config=config)
         return (response.text or "").strip()
 
     def _generate(self, parts, system_instruction: str, schema, timeout_ms: int | None = None):

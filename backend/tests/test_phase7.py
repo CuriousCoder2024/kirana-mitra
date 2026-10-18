@@ -208,7 +208,9 @@ def test_mock_extractor_detects_scripts_and_falls_back_to_english(mock_client):
     sid = mock_client.post("/shops", json={"shop_name": "G", "owner_name": "R", "language": "ta"}).json()["shop_id"]
     body = mock_client.post("/chat", json={"shop_id": sid, "text": "গুপ্তা জি ne 350 udhaar liya"}).json()
     assert body["language"] == "bn"
-    assert body["reply_text"].startswith("Got it:")
+    # the mock cannot read the Bengali name, so the entry is held; the English template is used
+    assert body["reply_text"].startswith(("Got it:", "Please confirm:"))
+    assert not any("\u0980" <= ch <= "\u09ff" for ch in body["reply_text"])
     assert body["intent"] == "udhaar_given"
 
 

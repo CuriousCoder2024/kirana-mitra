@@ -44,7 +44,7 @@ from app.models import (
     StockReply,
     UndoReply,
 )
-from app.service import (NotFound, UndoExpired, auto_order_today, build_reply, build_shelf_reply,
+from app.service import (NotFound, UndoExpired, auto_order_today, build_reply, build_shelf_reply, busy_text,
                          confirm, create_order, feedback_thanks, order_lines_from_forecast,
                          post_auto_order_message, summary_facts, summary_template, today_ist,
                          top_items, undo)
@@ -58,8 +58,8 @@ MAX_IMAGE_BYTES = 8 * 1024 * 1024
 
 
 class ApiError(Exception):
-    def __init__(self, status: int, code: str, message: str) -> None:
-        self.status, self.code, self.message = status, code, message
+    def __init__(self, status: int, code: str, message: str, reply_text: str | None = None) -> None:
+        self.status, self.code, self.message, self.reply_text = status, code, message, reply_text
 
 
 def create_app(settings: Settings | None = None, repo: Repository | None = None,
@@ -112,8 +112,10 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
 
     @app.exception_handler(ApiError)
     async def _api_error(_: Request, exc: ApiError):
-        return JSONResponse(status_code=exc.status,
-                            content={"error": {"code": exc.code, "message": exc.message}})
+        body = {"code": exc.code, "message": exc.message}
+        if exc.reply_text:
+            body["reply_text"] = exc.reply_text
+        return JSONResponse(status_code=exc.status, content={"error": body})
 
     @app.exception_handler(RequestValidationError)
     async def _invalid(_: Request, exc: RequestValidationError):
@@ -171,7 +173,7 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
             extraction = get_extractor().extract(
                 body.text, None, repo.list_items(shop.shop_id), shop.language)
         except GeminiFailed as exc:
-            raise ApiError(502, "gemini_failed", str(exc))
+            raise ApiError(502, "gemini_failed", str(exc), reply_text=busy_text(shop.language))
         return build_reply(repo, shop, extraction, settings.confirm_threshold)
 
     @app.post("/voice-note", response_model=ExtractionReply)
@@ -193,7 +195,7 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
             extraction = await run_in_threadpool(get_extractor().extract,
                 None, (data, mime), repo.list_items(shop.shop_id), shop.language)
         except GeminiFailed as exc:
-            raise ApiError(502, "gemini_failed", str(exc))
+            raise ApiError(502, "gemini_failed", str(exc), reply_text=busy_text(shop.language))
         return build_reply(repo, shop, extraction, settings.confirm_threshold)
 
     # ---- confirm / undo ---------------------------------------------------------
@@ -266,7 +268,7 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
             scan = await run_in_threadpool(get_extractor().scan_shelf, (data, mime), repo.list_items(shop.shop_id),
                                               shop.language)
         except GeminiFailed as exc:
-            raise ApiError(502, "gemini_failed", str(exc))
+            raise ApiError(502, "gemini_failed", str(exc), reply_text=busy_text(shop.language))
         return build_shelf_reply(repo, shop, scan)
 
     # ---- Phase 5: forecast / summary / reorder ----------------------------------------
@@ -441,7 +443,7 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
         try:
             comment = await run_in_threadpool(get_extractor().transcribe, (data, mime), shop.language)
         except GeminiFailed as exc:
-            raise ApiError(502, "gemini_failed", str(exc))
+            raise ApiError(502, "gemini_failed", str(exc), reply_text=busy_text(shop.language))
         return _store_feedback(shop, screen.strip(), rating, comment or None, app_version, platform)
 
     return app

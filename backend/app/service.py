@@ -63,13 +63,100 @@ def _localized(language: str, hi: str, en: str, hinglish: str) -> str:
     return {"hi": hi, "hi-Latn": hinglish}.get(language, en)
 
 
+_UNIT_HI = {"packet": "पैकेट", "carton": "कार्टन", "piece": "पीस", "kg": "किलो", "litre": "लीटर",
+            "box": "बॉक्स"}
+_UNIT_EN_PLURAL = {"packet": "packets", "carton": "cartons", "piece": "pieces", "kg": "kg",
+                   "litre": "litres", "box": "boxes"}
+
+
+def unit_word(unit: str | None, language: str, qty: float = 1) -> str:
+    """Unit in the shop's script: packet -> पैकेट for Hindi, plural for English."""
+    unit = unit or "piece"
+    if language == "hi":
+        return _UNIT_HI.get(unit, unit)
+    if language == "en" and qty != 1:
+        return _UNIT_EN_PLURAL.get(unit, unit)
+    return unit
+
+
+def busy_text(language: str) -> str:
+    """What the app shows as a bot bubble when Gemini fails after the retry."""
+    return _localized(language, "सर्वर थोड़ा व्यस्त है, 10 सेकंड बाद फिर बोलें।",
+                      "Server is a bit busy, please try again in 10 seconds.",
+                      "Server thoda busy hai, 10 second baad phir bolo.")
+
+
+def _script_fits(text: str, language: str) -> bool:
+    """True when Gemini's sentence is in the shop's script (brand names and ₹ are Latin anyway)."""
+    from app.languages import BY_CODE, detect_script, script_matches
+
+    script = detect_script(text)
+    if language in ("en", "hi-Latn"):
+        return script in (None, "Latin")
+    info = BY_CODE.get(language)
+    return script_matches(text, language) and (info is None or script == info.script)
+
+
+def _items_phrase(items: list[ExtractedItem], language: str) -> str:
+    parts = []
+    for it in items:
+        if not it.quantity:
+            continue
+        name = f"{it.name} {it.pack_size}" if it.pack_size else it.name
+        parts.append(f"{name}, {_fmt_qty(it.quantity)} {unit_word(it.unit, language, it.quantity)}")
+    joiner = _localized(language, " और ", " and ", " aur ")
+    return joiner.join(parts)
+
+
+def entry_sentence(intent: str, ent: Entities, language: str, held: bool = False) -> str:
+    """Fixed one-line template for a write (applied) or a confirmation ask (held)."""
+    head = (_localized(language, "कन्फ़र्म करें:", "Please confirm:", "Confirm karo:") if held
+            else _localized(language, "समझा:", "Got it:", "Samjha:"))
+    customer = ent.customer_name or _localized(language, "ग्राहक", "customer", "customer")
+    amount = _rupees(int(ent.amount or 0))
+    items = _items_phrase(ent.items, language)
+    if intent == "stock_in":
+        body = (_localized(language, f"{items} स्टॉक में जोड़ूँ?", f"add {items} to stock?",
+                           f"{items} stock mein add karoon?") if held else
+                _localized(language, f"{items} स्टॉक में जोड़े।", f"added {items} to stock.",
+                           f"{items} stock mein add kiya."))
+    elif intent == "sale":
+        body = (_localized(language, f"{items} बिके लिखूँ?", f"record {items} sold?",
+                           f"{items} bike likhoon?") if held else
+                _localized(language, f"{items} बिके।", f"sold {items}.", f"{items} bike."))
+    elif intent == "udhaar_given":
+        body = (_localized(language, f"{customer}, {amount} उधार लिखूँ?", f"{customer}, {amount} on credit?",
+                           f"{customer}, {amount} udhaar likhoon?") if held else
+                _localized(language, f"{customer}, {amount} उधार।", f"{customer}, {amount} on credit.",
+                           f"{customer}, {amount} udhaar."))
+    else:  # udhaar_paid
+        body = (_localized(language, f"{customer} ने {amount} वापस दिए, लिखूँ?",
+                           f"{customer} paid back {amount}?", f"{customer} ne {amount} wapas diye, likhoon?")
+                if held else
+                _localized(language, f"{customer} ने {amount} वापस दिए।", f"{customer} paid back {amount}.",
+                           f"{customer} ne {amount} wapas diye."))
+    return f"{head} {body}"
+
+
+def ask_sentence(language: str) -> str:
+    return _localized(language, "समझ नहीं आया। कौन सा सामान, कितना, या किसका उधार?",
+                      "I did not get that. Which item, how many, or whose udhaar?",
+                      "Samajh nahi aaya. Kaunsa item, kitna, ya kiska udhaar?")
+
+
+def _starts_like_noted(text: str) -> bool:
+    low = text.strip().lower()
+    return low.startswith(("samjha", "समझा", "got it", "noted", "note kar", "note kiya"))
+
+
 def apply_extraction(
     repo: Repository, shop: ShopRecord, message_id: str, extraction: Extraction
 ) -> tuple[str, list[QuickAction]]:
-    """Write the extraction. Returns (totals suffix for reply_text, quick actions)."""
+    """Write the extraction. Returns (totals suffix for reply_text, quick actions).
+    All wording follows the shop's language, not the detected one (QA A4, A8)."""
     applied = AppliedMessage(message_id=message_id, shop_id=shop.shop_id, intent=extraction.intent)
     ent = extraction.entities
-    lang = extraction.language
+    lang = shop.language
     totals: list[str] = []
     actions: list[QuickAction] = [
         QuickAction(label="Undo", action="undo", payload={"message_id": message_id})
@@ -78,6 +165,7 @@ def apply_extraction(
     if extraction.intent in {"stock_in", "sale"}:
         sign = 1 if extraction.intent == "stock_in" else -1
         catalogue = {i.name: i for i in repo.list_items(shop.shop_id)}
+        low_notes: list[str] = []
         for it in ent.items:
             qty = it.quantity or 0
             if qty <= 0:
@@ -95,13 +183,20 @@ def apply_extraction(
             rec = repo.adjust_stock(shop.shop_id, rec.item_id, sign * base_qty)
             catalogue[rec.name] = rec
             applied.stock_moves.append(StockMove(rec.item_id, sign * base_qty))
-            conv = (f" ({_fmt_qty(qty)} {it.unit} = {_fmt_qty(base_qty)} {rec.unit})"
+            conv = (f" ({_fmt_qty(qty)} {unit_word(it.unit, lang, qty)} = "
+                    f"{_fmt_qty(base_qty)} {unit_word(rec.unit, lang, base_qty)})"
                     if base_qty != qty else "")
-            totals.append(f"{rec.name} {_fmt_qty(rec.quantity)} {rec.unit}{conv}")
+            totals.append(f"{rec.name} {_fmt_qty(rec.quantity)} {unit_word(rec.unit, lang, rec.quantity)}{conv}")
+            if sign < 0 and rec.quantity <= rec.reorder_level:
+                low_notes.append(_localized(lang, f"{rec.name} कम है, reorder {_fmt_qty(rec.reorder_level)}",
+                                            f"{rec.name} is low, reorder {_fmt_qty(rec.reorder_level)}",
+                                            f"{rec.name} kam hai, reorder {_fmt_qty(rec.reorder_level)}"))
         if extraction.intent == "sale" and ent.amount:
             applied.sale_amount = int(ent.amount)
         label = _localized(lang, "अब स्टॉक", "Now in stock", "Ab total")
         suffix = f"{label}: {', '.join(totals)}." if totals else ""
+        if low_notes:
+            suffix = f"{suffix} {'; '.join(low_notes)}."
         actions.append(
             QuickAction(label=_localized(lang, "स्टॉक देखो", "View stock", "Stock dekho"),
                         action="open_stock")
@@ -115,8 +210,13 @@ def apply_extraction(
         entry = repo.add_ledger_entry(shop.shop_id, customer, delta, extraction.intent, message_id)
         applied.ledger_entry_ids.append(entry.entry_id)
         balance = repo.customer_balance(shop.shop_id, customer)
-        label = _localized(lang, "कुल बकाया", "Balance", "Total")
-        suffix = f"{label} {_rupees(balance)}."
+        if extraction.intent == "udhaar_paid" and balance == 0:
+            suffix = _localized(lang, f"{customer} का पूरा उधार चुकता, ₹0 बाकी।",
+                                f"{customer} is fully settled, ₹0 outstanding.",
+                                f"{customer} ka poora udhaar chukta, ₹0 baaki.")
+        else:
+            label = _localized(lang, "कुल बकाया", "Balance", "Total")
+            suffix = f"{label} {_rupees(balance)}."
         actions.append(
             QuickAction(label=_localized(lang, "उधार देखो", "View udhaar", "Udhaar dekho"),
                         action="open_udhaar")
@@ -128,6 +228,41 @@ def apply_extraction(
     return suffix, actions
 
 
+def answer_question(repo: Repository, shop: ShopRecord, ent: Entities) -> str | None:
+    """Answer a `question` from the store (stock level or udhaar balance); None if we cannot."""
+    lang = shop.language
+    if ent.customer_name:
+        known = repo.customer_names(shop.shop_id)
+        customer = match_customer(ent.customer_name, known)
+        if customer in known:
+            balance = repo.customer_balance(shop.shop_id, customer)
+            if balance > 0:
+                return _localized(lang, f"{customer} का उधार {_rupees(balance)} बाकी है।",
+                                  f"{customer} owes {_rupees(balance)}.",
+                                  f"{customer} ka udhaar {_rupees(balance)} baaki hai.")
+            return _localized(lang, f"{customer} का कोई उधार बाकी नहीं है।",
+                              f"{customer} has nothing outstanding.",
+                              f"{customer} ka koi udhaar baaki nahi hai.")
+        return _localized(lang, f"{ent.customer_name} का कोई उधार लिखा नहीं है।",
+                          f"No udhaar is recorded for {ent.customer_name}.",
+                          f"{ent.customer_name} ka koi udhaar likha nahi hai.")
+    if ent.items:
+        catalogue = {i.name: i for i in repo.list_items(shop.shop_id)}
+        answers = []
+        for it in ent.items:
+            rec = catalogue.get(it.name)
+            if rec is None:
+                continue
+            name = f"{rec.name} {rec.pack_size}" if rec.pack_size else rec.name
+            answers.append(_localized(
+                lang, f"{name} अभी {_fmt_qty(rec.quantity)} {unit_word(rec.unit, lang, rec.quantity)} है।",
+                f"{name}: {_fmt_qty(rec.quantity)} {unit_word(rec.unit, lang, rec.quantity)} in stock.",
+                f"{name} abhi {_fmt_qty(rec.quantity)} {unit_word(rec.unit, lang, rec.quantity)} hai."))
+        if answers:
+            return " ".join(answers)
+    return None
+
+
 def build_reply(
     repo: Repository,
     shop: ShopRecord,
@@ -136,42 +271,78 @@ def build_reply(
     message_id: str | None = None,
     force_apply: bool = False,
 ) -> ExtractionReply:
-    """Turn a raw extraction into the contract's ExtractionReply, writing if allowed."""
+    """Turn a raw extraction into the contract's ExtractionReply, writing if allowed.
+
+    reply_text always follows the shop's language and script: Gemini's sentence is kept
+    only when it is in that script, otherwise a fixed template is used; the running-total
+    suffix, held asks, question answers and refusals are always templates."""
     message_id = message_id or new_id("msg")
     extraction = extraction.model_copy(
         update={"entities": resolve_items(repo, shop.shop_id, extraction.entities)}
     )
     intent = extraction.intent
-    reply_text = extraction.reply_text.strip()
+    lang = shop.language
+    ent = extraction.entities
+    gemini_text = extraction.reply_text.strip()
     applied = False
     actions: list[QuickAction] = []
 
+    # (4a) a repayment can never take a balance below zero
+    if intent == "udhaar_paid" and ent.amount and ent.amount > 0:
+        customer = match_customer(ent.customer_name or "", repo.customer_names(shop.shop_id))
+        balance = repo.customer_balance(shop.shop_id, customer) if customer else 0
+        if balance <= 0:
+            reply_text = _localized(lang, f"{ent.customer_name or 'ग्राहक'} का कोई उधार लिखा नहीं है।",
+                                    f"No udhaar is recorded for {ent.customer_name or 'this customer'}.",
+                                    f"{ent.customer_name or 'Customer'} ka koi udhaar likha nahi hai.")
+            # the intent was detected correctly; the business rule just refuses the write
+            return ExtractionReply(message_id=message_id, intent="udhaar_paid", confidence=extraction.confidence,
+                                   transcript=extraction.transcript, language=extraction.language,
+                                   entities=_clean_entities("udhaar_paid", ent), applied=False,
+                                   reply_text=reply_text, quick_actions=[])
+        if ent.amount > balance:
+            ent = ent.model_copy(update={"amount": balance})
+            extraction = extraction.model_copy(update={"entities": ent})
+
     if intent in WRITE_INTENTS and _has_writable_entities(extraction):
         if force_apply or extraction.confidence >= threshold:
+            first = (gemini_text if gemini_text and not force_apply and _script_fits(gemini_text, lang)
+                     else entry_sentence(intent, ent, lang))
             suffix, actions = apply_extraction(repo, shop, message_id, extraction)
             applied = True
-            if suffix:
-                reply_text = f"{reply_text} {suffix}".strip()
+            reply_text = f"{first} {suffix}".strip()
         else:
             repo.put_pending(shop.shop_id, message_id, extraction.model_dump())
-            ask = _localized(
-                extraction.language,
-                "क्या यह सही है?",
-                "Is this right?",
-                "Sahi hai?",
-            )
-            if ask not in reply_text:
-                reply_text = f"{reply_text} {ask}".strip()
+            reply_text = entry_sentence(intent, ent, lang, held=True)
             actions = [
                 QuickAction(
-                    label=_localized(extraction.language, "हाँ, जोड़ दो", "Yes, add it", "Haan, add karo"),
+                    label=_localized(lang, "हाँ, जोड़ दो", "Yes, add it", "Haan, add karo"),
                     action="confirm",
                     payload={"message_id": message_id},
-                )
+                ),
+                QuickAction(label=_localized(lang, "नहीं", "No", "Nahi"), action="dismiss",
+                            payload={"message_id": message_id}),
             ]
     elif intent in WRITE_INTENTS:
         # Writable intent but nothing to write with (no item / amount): treat as unclear.
         intent = "unclear"
+        reply_text = ask_sentence(lang)
+    elif intent == "question":
+        answered = answer_question(repo, shop, ent)
+        if answered:
+            reply_text = answered
+        elif gemini_text and _script_fits(gemini_text, lang) and not any(
+                w in gemini_text.lower() for w in ("check kar", "batata hoon", "dekh kar", "will check")):
+            reply_text = gemini_text
+        else:
+            reply_text = _localized(lang, "किस सामान या किस ग्राहक के बारे में पूछ रहे हैं?",
+                                    "Which item or customer are you asking about?",
+                                    "Kis item ya kis customer ke baare mein pooch rahe ho?")
+    else:  # unclear: never claim anything was noted
+        if gemini_text and _script_fits(gemini_text, lang) and not _starts_like_noted(gemini_text):
+            reply_text = gemini_text
+        else:
+            reply_text = ask_sentence(lang)
 
     return ExtractionReply(
         message_id=message_id,
@@ -179,7 +350,7 @@ def build_reply(
         confidence=extraction.confidence,
         transcript=extraction.transcript,
         language=extraction.language,
-        entities=_clean_entities(intent, extraction.entities),
+        entities=_clean_entities(intent, ent),
         applied=applied,
         reply_text=reply_text,
         quick_actions=actions,
@@ -204,6 +375,8 @@ def _clean_entities(intent: str, ent: Entities) -> Entities:
 
 
 def confirm(repo: Repository, shop: ShopRecord, message_id: str, threshold: float) -> ExtractionReply:
+    """Apply a held entry. The echo is rebuilt from the entities (template), never the
+    held question (QA A7)."""
     pending = repo.pop_pending(shop.shop_id, message_id)
     if pending is None:
         raise NotFound("No pending message with that id")
@@ -339,7 +512,7 @@ def apply_shelf_scan(repo: Repository, shop: ShopRecord, message_id: str,
             applied.stock_moves.append(StockMove(rec.item_id, delta))
         items.append(ExtractedItem(name=rec.name, pack_size=rec.pack_size, quantity=count,
                                    unit=rec.unit))
-        totals.append(f"{rec.name} {_fmt_qty(rec.quantity)} {rec.unit}")
+        totals.append(f"{rec.name} {_fmt_qty(rec.quantity)} {unit_word(rec.unit, lang, rec.quantity)}")
     repo.record_applied(applied)
     head = _localized(lang, "स्टॉक अपडेट किया:", "Stock updated:", "Stock update kiya:")
     return ExtractionReply(
@@ -364,7 +537,7 @@ def undo(repo: Repository, shop: ShopRecord, message_id: str) -> str:
     parts: list[str] = []
     for move in applied.stock_moves:
         rec = repo.adjust_stock(shop.shop_id, move.item_id, -move.delta)
-        parts.append(f"{rec.name} {_fmt_qty(rec.quantity)} {rec.unit}")
+        parts.append(f"{rec.name} {_fmt_qty(rec.quantity)} {unit_word(rec.unit, lang, rec.quantity)}")
     customer_totals: list[str] = []
     entries = {e.entry_id: e for e in repo.list_ledger(shop.shop_id)}
     for entry_id in applied.ledger_entry_ids:

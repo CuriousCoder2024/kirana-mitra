@@ -326,6 +326,7 @@ class ErrorBody(BaseModel):
     code: Literal["not_found", "invalid", "gemini_failed", "undo_expired", "not_implemented",
                   "unauthorized"]
     message: str
+    reply_text: str | None = None  # gemini_failed: a sentence in the shop language for the chat
 
 
 class ErrorReply(BaseModel):
