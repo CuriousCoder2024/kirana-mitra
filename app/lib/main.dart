@@ -17,15 +17,21 @@ class KiranaMitraApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final prefsReady = ref.watch(sharedPreferencesProvider).hasValue;
-    final apiReady = ref.watch(apiClientFutureProvider).hasValue;
+    final prefs = ref.watch(sharedPreferencesProvider);
+    final api = ref.watch(apiClientFutureProvider);
     final theme = buildKmTheme();
 
-    if (!prefsReady || !apiReady) {
+    // Never spin forever: a failed startup provider is reported on the splash
+    // (and in the log) rather than leaving the user on a spinner.
+    final startupError = prefs.error ?? api.error;
+    if (startupError != null) {
+      debugPrint('Kirana Mitra: startup failed: $startupError');
+    }
+    if (prefs.isLoading || api.isLoading) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: theme,
-        home: const _Splash(),
+        home: _Splash(error: startupError?.toString()),
       );
     }
 
@@ -44,26 +50,34 @@ class KiranaMitraApp extends ConsumerWidget {
 }
 
 class _Splash extends StatelessWidget {
-  const _Splash();
+  const _Splash({this.error});
+
+  final String? error;
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: KmColors.cream,
       body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              radius: 44,
-              backgroundColor: KmColors.saffron,
-              child: Icon(Icons.storefront_rounded, size: 48, color: Colors.white),
-            ),
-            SizedBox(height: 20),
-            Text('Kirana Mitra', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: KmColors.brown)),
-            SizedBox(height: 24),
-            SizedBox(width: 28, height: 28, child: CircularProgressIndicator(color: KmColors.saffron, strokeWidth: 3)),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircleAvatar(
+                radius: 44,
+                backgroundColor: KmColors.saffron,
+                child: Icon(Icons.storefront_rounded, size: 48, color: Colors.white),
+              ),
+              const SizedBox(height: 20),
+              const Text('Kirana Mitra', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: KmColors.brown)),
+              const SizedBox(height: 24),
+              if (error == null)
+                const SizedBox(width: 28, height: 28, child: CircularProgressIndicator(color: KmColors.saffron, strokeWidth: 3))
+              else
+                Text(error!, textAlign: TextAlign.center, style: const TextStyle(color: KmColors.terracotta, fontSize: 14)),
+            ],
+          ),
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'api_client.dart';
 import 'dio_api_client.dart';
 import 'mock_api_client.dart';
+import '../settings/server_settings.dart';
 
 const bool kUseMock = bool.fromEnvironment('USE_MOCK');
 
@@ -14,7 +15,14 @@ final mockClientProvider = Provider<MockApiClient>((ref) => MockApiClient());
 /// mock. `--dart-define USE_MOCK=true` forces the mock.
 final apiClientFutureProvider = FutureProvider<ApiClient>((ref) async {
   if (kUseMock) return ref.watch(mockClientProvider);
-  final live = DioApiClient();
+  // Runtime override (Server sheet) wins over the API_BASE_URL dart-define.
+  String? override;
+  try {
+    override = await ServerSettings.load();
+  } catch (e) {
+    debugPrint('Kirana Mitra: could not read server override: $e');
+  }
+  final live = DioApiClient(baseUrl: override);
   if (await live.healthz()) return live;
   debugPrint('Kirana Mitra: backend at ${live.baseUrl} not reachable, using mock');
   return ref.watch(mockClientProvider);

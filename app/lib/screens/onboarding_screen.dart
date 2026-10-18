@@ -6,6 +6,7 @@ import '../api/api_client.dart';
 import '../api/api_provider.dart';
 import '../models/models.dart';
 import '../l10n/app_localizations.dart';
+import '../settings/server_settings.dart';
 import '../state/shop_prefs.dart';
 import '../theme.dart';
 
@@ -79,7 +80,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text(l.appTitle, style: text.displaySmall, textAlign: TextAlign.center),
+                GestureDetector(
+                  // Long-press the title to open the Server sheet (lib/settings).
+                  onLongPress: () => showServerSettingsSheet(context),
+                  child: Text(l.appTitle, style: text.displaySmall, textAlign: TextAlign.center),
+                ),
                 const SizedBox(height: 8),
                 Text(l.onboardingTitle, style: text.titleLarge, textAlign: TextAlign.center),
                 const SizedBox(height: 4),

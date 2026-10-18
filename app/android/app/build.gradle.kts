@@ -30,6 +30,14 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
+            // R8 (on by default in Flutter release builds) strips Kotlin coroutine
+            // and stdlib classes that shared_preferences_android 2.5 reaches via
+            // Pigeon suspend functions (NoSuchMethodError getAll(...Continuation),
+            // then ClassNotFoundException kotlin.Result). Every prefs call then
+            // fails and the app never leaves the splash. Shrinking only saves a
+            // few hundred KB of Java here, so keep release builds unshrunk.
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }
