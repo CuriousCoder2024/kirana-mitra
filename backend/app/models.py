@@ -143,10 +143,16 @@ class ShelfItem(BaseModel):
     confidence: float = Field(ge=0.0, le=1.0)
 
 
+class UnmatchedProduct(BaseModel):
+    name: str  # brand/product as printed, not in the catalogue
+    count: int = Field(ge=0)
+
+
 class ShelfScan(BaseModel):
     """What Gemini vision returns for a shelf photo. Used as the response_schema."""
 
     items: list[ShelfItem] = Field(default_factory=list)
+    unmatched: list[UnmatchedProduct] = Field(default_factory=list)
     reply_text: str
 
 
@@ -162,6 +168,8 @@ class ShelfScanReply(BaseModel):
     low_stock: list[ShelfLowStock]
     reply_text: str
     quick_actions: list[QuickAction] = Field(default_factory=list)
+    # extra data the contract allows: products seen on the shelf that are not in the catalogue
+    unmatched: list[UnmatchedProduct] = Field(default_factory=list)
 
 
 # ---- forecast / summary / reorder (Phase 5) ------------------------------------

@@ -108,16 +108,20 @@ SHELF_PROMPT = """You are Kirana Mitra, counting stock on a shelf photo from a s
 shop (kirana). Identify every packaged product you can see and count the units.
 
 Rules:
-- Count UNITS, not product types. Every visible front-facing packet, box, bottle, sachet or pouch
+- Count UNITS, not product types. Every visible FRONT-FACING packet, box, bottle, sachet or pouch
   is one unit (each "facing" on the shelf counts as one). If a product is stacked and you can see
-  the stack, count each visible unit in the stack. Do not guess units hidden behind the front row.
-- Match each product to the shop catalogue below when it is clearly the same product, and use the
-  catalogue's exact name and pack_size. If the pack size is not readable, use the catalogue's.
-  Products that are not in the catalogue get their brand name as printed on the pack.
-- Group all units of the same product into ONE entry.
-- confidence: 0.0-1.0 that both the identification and the count are right. Blurry, partly hidden
-  or far-away products get a lower confidence.
-- Ignore shelves, price tags, posters, people and empty space.
+  the stack, count each visible unit in the stack. Count only what you can actually see: never
+  guess units hidden behind the front row, inside closed boxes, or cut off at the photo edge.
+- `items`: ONLY products that match an entry of the shop catalogue below (same brand and
+  product; the pack size may differ). Use the catalogue's exact name; copy its pack_size unless
+  a different size is clearly printed. One entry per catalogue product, all units summed.
+- `unmatched`: products you can identify on the shelf that are NOT in the catalogue, with the
+  brand/product name as printed and your unit count. Do not put these in `items`. Leave empty
+  if there are none. Skip unbranded loose goods (sacks, jars of grain, vegetables).
+- If no catalogue product is visible, `items` is [] and reply_text says so.
+- confidence: 0.0-1.0 that both the identification and the count are right. Blurry, partly hidden,
+  far-away or edge-cut products get a lower confidence; be honest, do not round up.
+- Ignore shelves, price tags, posters, calendars, people, sacks and empty space.
 - reply_text: one short line in the shop's language listing what you saw, e.g.
   "Shelf pe dikha: Maggi 6, Parle-G 12, Tata Salt 3." / "शेल्फ पर दिखा: मैगी 6, पारले-जी 12." /
   "On the shelf: Maggi 6, Parle-G 12." Do not mention reorder levels; the backend adds them.
@@ -474,7 +478,9 @@ class MockExtractor:
                            count=k, confidence=conf) for n, k, conf in canned]
         head = {"hi": "शेल्फ पर दिखा:", "en": "On the shelf:", "hi-Latn": "Shelf pe dikha:"}.get(
             shop_language, "On the shelf:")
-        return ShelfScan(items=items,
+        from app.models import UnmatchedProduct
+
+        return ShelfScan(items=items, unmatched=[UnmatchedProduct(name="Kurkure", count=4)],
                          reply_text=f"{head} " + ", ".join(f"{i.name} {i.count}" for i in items) + ".")
 
     def summarize(self, facts: dict, shop_language: str) -> str:

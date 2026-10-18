@@ -159,7 +159,9 @@ Interactive docs: http://localhost:8080/docs
    (items with name, pack_size, count, confidence; each visible facing is one unit). Names are
    snapped to the catalogue, counts at or below `reorder_level` go into `low_stock`, and the
    result is held under `message_id`. `/confirm` then sets each item's stock to the counted
-   quantity (an absolute set, not an add); `/undo` restores the previous quantities.
+   quantity (an absolute set, not an add); `/undo` restores the previous quantities. Products
+   Gemini sees that are not in the catalogue come back under `unmatched` (name, count) as extra
+   data and are never written to stock; the prompt counts front-facing units only.
 
 ## Forecast, summary, reorder
 
@@ -277,13 +279,17 @@ uv run python -m tests.eval.run            # against http://localhost:8080
 uv run python -m tests.eval.run --base https://your-cloud-run-url
 ```
 
-Shelf-scan eval: five synthetic shelf images with exact per-brand counts in
-`tests/eval/shelf/` (see its README for why synthetic). Reports detection recall, precision,
-exact-count rate, mean absolute count error and latency, appending to
-`tests/eval/shelf/results.csv`.
+Shelf-scan eval, two sets. `synthetic` (default): five generated shelf images with exact
+per-brand counts in `tests/eval/shelf/` (see its README). `real`: the licensed kirana photos
+under `docs/design/assets/photos/shelves/`, referenced by path and hand-labelled with count
+tolerances in `tests/eval/shelf/real/labels.json` (see that README; most of those photos show
+none of the 15 catalogue products at a readable size, so the real set mainly exercises the
+`unmatched` list). Both report detection recall, precision, exact-count rate within tolerance,
+mean absolute count error and latency, appending to `tests/eval/shelf/results.csv` with the set.
 
 ```bash
 uv run python -m tests.eval.shelf.run --base http://localhost:8090
+uv run python -m tests.eval.shelf.run --base http://localhost:8090 --set real
 ```
 
 ## Docker (Cloud Run, Phase 6)

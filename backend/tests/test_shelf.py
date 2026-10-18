@@ -55,15 +55,16 @@ def test_shelf_scan_holds_then_confirm_sets_absolute_stock(client, scripted, sho
                                          "message_id": body["message_id"]}).status_code == 404
 
 
-def test_shelf_scan_merges_duplicates_and_keeps_unknown_products(client, scripted, shop_id):
+def test_shelf_scan_merges_duplicates_and_reports_unknown_products_as_unmatched(client, scripted, shop_id):
     scripted.push_scan([("Maggi", 4, 0.9), ("maggi noodles", 2, 0.7), ("Kurkure", 5, 0.8)])
     body = scan(client, shop_id).json()
     by = {i["name"]: i for i in body["items"]}
+    assert set(by) == {"Maggi"}
     assert by["Maggi"]["count"] == 6 and by["Maggi"]["confidence"] == 0.7
-    assert by["Kurkure"]["count"] == 5 and by["Kurkure"]["pack_size"] is None
+    assert body["unmatched"] == [{"name": "Kurkure", "count": 5}]  # extra data, never stock
     client.post("/confirm", json={"shop_id": shop_id, "message_id": body["message_id"]})
     stock = {i["name"]: i["quantity"] for i in client.get(f"/stock/{shop_id}").json()["items"]}
-    assert stock["Maggi"] == 6 and stock["Kurkure"] == 5
+    assert stock["Maggi"] == 6 and "Kurkure" not in stock
 
 
 def test_shelf_scan_with_nothing_seen_has_no_confirm(client, scripted, shop_id):
@@ -89,5 +90,6 @@ def test_mock_extractor_shelf_scan(mock_client):
     body = mock_client.post("/shelf-scan", data={"shop_id": sid},
                             files={"image": ("s.png", b"\x89PNG", "image/png")}).json()
     assert [i["count"] for i in body["items"]] == [6, 12, 3]
+    assert body["unmatched"] == [{"name": "Kurkure", "count": 4}]
     assert body["reply_text"].startswith("शेल्फ पर दिखा:")
     assert body["quick_actions"][0]["label"] == "हाँ, अपडेट करो"

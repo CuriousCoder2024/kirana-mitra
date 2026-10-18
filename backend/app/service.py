@@ -218,10 +218,17 @@ def resolve_shelf_items(repo: Repository, shop_id: str, scan: ShelfScan) -> Shel
     """Snap Gemini's product names onto the catalogue and merge duplicates."""
     catalogue = repo.list_items(shop_id)
     merged: dict[str, ShelfItem] = {}
+    unmatched = list(scan.unmatched)
     for raw in scan.items:
         hit = match_item(raw.name, catalogue)
-        name = hit.name if hit else raw.name.strip()
-        pack = raw.pack_size or (hit.pack_size if hit else None)
+        if hit is None:
+            # Gemini put a non-catalogue product in items: keep it as extra data, not stock
+            from app.models import UnmatchedProduct
+
+            unmatched.append(UnmatchedProduct(name=raw.name.strip(), count=raw.count))
+            continue
+        name = hit.name
+        pack = raw.pack_size or hit.pack_size
         if name in merged:
             prev = merged[name]
             merged[name] = prev.model_copy(update={
@@ -229,7 +236,7 @@ def resolve_shelf_items(repo: Repository, shop_id: str, scan: ShelfScan) -> Shel
                 "confidence": min(prev.confidence, raw.confidence)})
         else:
             merged[name] = raw.model_copy(update={"name": name, "pack_size": pack})
-    return scan.model_copy(update={"items": list(merged.values())})
+    return scan.model_copy(update={"items": list(merged.values()), "unmatched": unmatched})
 
 
 def build_shelf_reply(repo: Repository, shop: ShopRecord, scan: ShelfScan,
@@ -251,7 +258,7 @@ def build_shelf_reply(repo: Repository, shop: ShopRecord, scan: ShelfScan,
                                     "Nothing recognisable on the shelf.",
                                     "Shelf pe koi item nahi dikha.")
         return ShelfScanReply(message_id=message_id, items=[], low_stock=[], reply_text=reply,
-                              quick_actions=[])
+                              quick_actions=[], unmatched=scan.unmatched)
     if low:
         kam = "; ".join(
             _localized(lang, f"{x.name} कम है (reorder {_fmt_qty(x.reorder_level)})",
@@ -264,6 +271,7 @@ def build_shelf_reply(repo: Repository, shop: ShopRecord, scan: ShelfScan,
     repo.put_pending(shop.shop_id, message_id, {"kind": "shelf_scan", "scan": scan.model_dump()})
     return ShelfScanReply(
         message_id=message_id, items=scan.items, low_stock=low, reply_text=reply,
+        unmatched=scan.unmatched,
         quick_actions=[QuickAction(
             label=_localized(lang, "हाँ, अपडेट करो", "Yes, update", "Haan, update karo"),
             action="confirm", payload={"message_id": message_id})],

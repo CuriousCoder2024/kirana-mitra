@@ -1,0 +1,51 @@
+{
+  "_notes": "Hand-counted on 2026-10-18 from the photos in docs/design/assets/photos/shelves/ (viewed at 2x crops). Only the backend's 15-item demo catalogue is labelled. 'counts' = products identified with confidence, 'tol' = count tolerance; 'maybe' = products that look like a catalogue brand but whose label is unreadable (reported, never scored); 'unmatched_expected' = brands clearly visible that are not in the catalogue. Most photos contain none of the 15 catalogue products at a readable size, so recall is measured over very few items.",
+  "shelf_01.jpg": {
+    "path": "docs/design/assets/photos/shelves/shelf_01.jpg",
+    "counts": {},
+    "maybe": {"Red Label": "about 8 red tea cartons on the right-hand middle shelf, brand unreadable", "Colgate": "small toothpaste cartons bottom right, brand unreadable"},
+    "unmatched_expected": ["Complan", "Boost", "Horlicks", "Cerelac", "Lipton"]
+  },
+  "shelf_02.jpg": {
+    "path": "docs/design/assets/photos/shelves/shelf_02.jpg",
+    "counts": {},
+    "maybe": {"Colgate": "red toothpaste cartons, 10 to 15, brand unreadable", "Lifebuoy": "red soap wrappers lower left, brand unreadable"},
+    "unmatched_expected": ["Hamam", "Clinic Plus", "Parachute", "Nivea"]
+  },
+  "shelf_03.jpg": {
+    "path": "docs/design/assets/photos/shelves/shelf_03.jpg",
+    "counts": {},
+    "maybe": {"Maggi": "yellow packets stacked top centre, about 10, brand unreadable", "Surf Excel": "blue sachet strips, brand unreadable"},
+    "unmatched_expected": ["Sunsilk", "Dove", "Haldiram"]
+  },
+  "shelf_04.jpg": {
+    "path": "docs/design/assets/photos/shelves/shelf_04.jpg",
+    "counts": {},
+    "maybe": {},
+    "unmatched_expected": ["Lays", "Kurkure", "Bisleri", "Coca-Cola"]
+  },
+  "shelf_05.jpg": {
+    "path": "docs/design/assets/photos/shelves/shelf_05.jpg",
+    "counts": {},
+    "maybe": {},
+    "unmatched_expected": ["Eastern", "Double Horse", "Amulya", "Mallar"]
+  },
+  "shelf_06.jpg": {
+    "path": "docs/design/assets/photos/shelves/shelf_06.jpg",
+    "counts": {"Britannia Good Day": {"count": 1, "tol": 1}},
+    "maybe": {},
+    "unmatched_expected": ["Milk Bikis", "Nutri Choice", "Britannia bread"]
+  },
+  "shelf_07.jpg": {
+    "path": "docs/design/assets/photos/shelves/shelf_07.jpg",
+    "counts": {"Parle-G": {"count": 1, "tol": 1}},
+    "maybe": {},
+    "unmatched_expected": ["Krack Jack", "Marie Gold", "Monaco", "50-50", "Mad Angles", "Doritos", "Cadbury", "Stayfree"]
+  },
+  "shelf_08.jpg": {
+    "path": "docs/design/assets/photos/shelves/shelf_08.jpg",
+    "counts": {},
+    "maybe": {},
+    "unmatched_expected": ["Bisleri", "Kurkure"]
+  }
+}
