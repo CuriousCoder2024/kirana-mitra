@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 
-from fastapi import FastAPI, File, Form, Request, UploadFile
+from fastapi import FastAPI, File, Form, Header, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -12,11 +12,25 @@ from starlette.concurrency import run_in_threadpool
 
 from app.config import Settings, get_settings
 from app.gemini import Extractor, GeminiFailed, make_extractor
+from app.feedback import FeedbackSink, make_feedback_sink
 from app.forecast import ForecastSource, make_forecast_source, shape_forecast
+from app.languages import LANGUAGES, detect_script, DEFAULT_LANGUAGE_FOR_SCRIPT
 from app.models import (
+    AutoRestockReply,
+    AutoRestockSkip,
+    BotMessage,
     ChatRequest,
     ExtractionReply,
+    FeedbackCreate,
+    FeedbackReply,
     ForecastReply,
+    LanguageEntry,
+    LanguagesReply,
+    MessagesReply,
+    Order,
+    OrdersReply,
+    ShopPatch,
+    TopItemsReply,
     ReorderLine,
     ReorderReply,
     SummaryReply,
@@ -30,9 +44,11 @@ from app.models import (
     StockReply,
     UndoReply,
 )
-from app.service import (NotFound, UndoExpired, build_reply, build_shelf_reply, confirm,
-                         reorder_text, summary_facts, summary_template, today_ist, undo)
-from app.store import InMemoryRepository, Repository, new_id, now_iso
+from app.service import (NotFound, UndoExpired, auto_order_today, build_reply, build_shelf_reply,
+                         confirm, create_order, feedback_thanks, order_lines_from_forecast,
+                         post_auto_order_message, summary_facts, summary_template, today_ist,
+                         top_items, undo)
+from app.store import FeedbackRecord, InMemoryRepository, Repository, new_id, now_iso
 
 ALLOWED_AUDIO = {"audio/m4a", "audio/mp4", "audio/x-m4a", "audio/wav", "audio/x-wav",
                  "audio/webm", "audio/ogg", "audio/mpeg", "audio/aac"}
@@ -48,7 +64,8 @@ class ApiError(Exception):
 
 def create_app(settings: Settings | None = None, repo: Repository | None = None,
                extractor: Extractor | None = None,
-               forecast_source: ForecastSource | None = None) -> FastAPI:
+               forecast_source: ForecastSource | None = None,
+               feedback_sink: FeedbackSink | None = None) -> FastAPI:
     settings = settings or get_settings()
     repo = repo or InMemoryRepository(undo_window=settings.undo_window)
     app = FastAPI(title="Kirana Mitra API", version="1.0.0")
@@ -60,6 +77,12 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
     app.state.repo = repo
     app.state.extractor = extractor  # built lazily so /healthz works without creds
     app.state.forecast_source = forecast_source
+    app.state.feedback_sink = feedback_sink
+
+    def get_feedback_sink() -> FeedbackSink:
+        if app.state.feedback_sink is None:
+            app.state.feedback_sink = make_feedback_sink(settings)
+        return app.state.feedback_sink
 
     def get_forecast_source() -> ForecastSource:
         if app.state.forecast_source is None:
@@ -110,7 +133,31 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
     @app.post("/shops", status_code=201, response_model=Shop)
     def create_shop(body: ShopCreate):
         shop = repo.create_shop(body.shop_name, body.owner_name, body.language)
+        if body.auto_restock or body.distributor_phone:
+            shop = repo.update_shop(shop.shop_id, auto_restock=body.auto_restock,
+                                    distributor_phone=body.distributor_phone)
         return Shop(**shop.__dict__)
+
+    @app.get("/shops/{shop_id}", response_model=Shop)
+    def get_shop_route(shop_id: str):
+        return Shop(**get_shop(shop_id).__dict__)
+
+    @app.patch("/shops/{shop_id}", response_model=Shop)
+    def patch_shop(shop_id: str, body: ShopPatch):
+        """Per-shop settings: auto_restock (default false), distributor_phone, language."""
+        shop = get_shop(shop_id)
+        fields = body.model_dump(exclude_unset=True)
+        if "distributor_phone" in fields and fields["distributor_phone"] is not None:
+            phone = fields["distributor_phone"].strip()
+            if not (phone.startswith("+") and phone[1:].replace(" ", "").isdigit() and len(phone) >= 8):
+                raise ApiError(400, "invalid", "distributor_phone must look like +91XXXXXXXXXX")
+            fields["distributor_phone"] = phone.replace(" ", "")
+        shop = repo.update_shop(shop.shop_id, **fields)
+        return Shop(**shop.__dict__)
+
+    @app.get("/languages", response_model=LanguagesReply)
+    def languages():
+        return LanguagesReply(languages=[LanguageEntry(**l.__dict__) for l in LANGUAGES])
 
     # ---- chat / voice -----------------------------------------------------------
 
@@ -269,28 +316,128 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
     @app.post("/reorder/{shop_id}", response_model=ReorderReply)
     async def reorder(shop_id: str):
         """Reorder list from the forecast (items with reorder_qty > 0), as text and a
-        wa.me share link. Nothing is sent."""
-        from urllib.parse import quote
-
+        wa.me share link; recorded as an Order with source "manual". Nothing is sent."""
         shop = get_shop(shop_id)
         try:
             _, _, items = await _forecast(shop)
         except Exception as exc:
             raise ApiError(502, "gemini_failed", f"forecast source failed: {exc}")
-        catalogue = {i.item_id: i for i in repo.list_items(shop.shop_id)}
-        lines = []
-        for it in items:
-            if it.reorder_qty <= 0:
+        lines = order_lines_from_forecast(repo, shop, items)
+        order = create_order(repo, shop, lines, source="manual")
+        return ReorderReply(order_id=order.order_id,
+                            lines=[ReorderLine(**l) for l in lines],
+                            text=order.text, whatsapp_url=order.whatsapp_url)
+
+    # ---- Phase 7: top items, orders, auto-restock, messages, feedback -------------------
+
+    @app.get("/top-items/{shop_id}", response_model=TopItemsReply)
+    async def top_items_route(shop_id: str, weeks: int = 2, limit: int = 10):
+        """Items ranked by forecast demand over the next `weeks` weeks (default 2, max 4),
+        with the same-length window of history, trend, cover days and the 2-week reorder."""
+        shop = get_shop(shop_id)
+        if not 1 <= weeks <= 4 or not 1 <= limit <= 50:
+            raise ApiError(400, "invalid", "weeks must be 1-4 and limit 1-50")
+        try:
+            _, _, items = await _forecast(shop)
+        except Exception as exc:
+            raise ApiError(502, "gemini_failed", f"forecast source failed: {exc}")
+        return TopItemsReply(generated_at=now_iso(), weeks=weeks,
+                             items=top_items(items, weeks, limit))
+
+    @app.get("/orders/{shop_id}", response_model=OrdersReply)
+    def orders(shop_id: str):
+        shop = get_shop(shop_id)
+        return OrdersReply(orders=[Order(**o.__dict__) for o in repo.list_orders(shop.shop_id)])
+
+    @app.get("/messages/{shop_id}", response_model=MessagesReply)
+    def messages(shop_id: str, since: str | None = None):
+        """Bot messages created server-side (auto-order notices), newest first, last 50,
+        optionally only those created after ?since=<ISO-8601>."""
+        shop = get_shop(shop_id)
+        if since:
+            since = since.strip().replace(" ", "+")  # an unencoded "+05:30" arrives as a space
+        return MessagesReply(messages=[
+            BotMessage(**m.__dict__) for m in repo.list_bot_messages(shop.shop_id, since, 50)])
+
+    @app.post("/auto-restock/run", response_model=AutoRestockReply)
+    async def auto_restock_run(shop_id: str | None = None,
+                               x_scheduler_token: str | None = Header(default=None)):
+        """Cloud Scheduler entry point (header X-Scheduler-Token = env SCHEDULER_TOKEN).
+        For every shop with auto_restock on (or just ?shop_id=), place today's auto order
+        if there is anything to order and none was placed today; posts an undoable bot
+        message into the shop's chat. Idempotent per shop per day."""
+        if not settings.scheduler_token or x_scheduler_token != settings.scheduler_token:
+            raise ApiError(401, "unauthorized", "missing or wrong X-Scheduler-Token")
+        shops = [get_shop(shop_id)] if shop_id else repo.list_shops()
+        today = today_ist()
+        placed: list[Order] = []
+        skipped: list[AutoRestockSkip] = []
+        for shop in shops:
+            if not shop.auto_restock:
+                skipped.append(AutoRestockSkip(shop_id=shop.shop_id, reason="auto_restock_off"))
                 continue
-            pack = catalogue[it.item_id].pack_size if it.item_id in catalogue else None
-            lines.append((f"{it.name} {pack}".strip() if pack else it.name, it.reorder_qty, it.unit))
-        text = reorder_text(shop, lines)
-        return ReorderReply(
-            order_id=new_id("ord"),
-            lines=[ReorderLine(name=n, qty=q, unit=u) for n, q, u in lines],
-            text=text,
-            whatsapp_url="https://wa.me/?text=" + quote(text, safe=""),
-        )
+            if auto_order_today(repo, shop.shop_id, today) is not None:
+                skipped.append(AutoRestockSkip(shop_id=shop.shop_id, reason="already_ran_today"))
+                continue
+            try:
+                _, _, items = await _forecast(shop)
+            except Exception as exc:
+                logging.getLogger("kirana.restock").warning("forecast failed for %s: %s",
+                                                            shop.shop_id, exc)
+                skipped.append(AutoRestockSkip(shop_id=shop.shop_id, reason="forecast_failed"))
+                continue
+            lines = order_lines_from_forecast(repo, shop, items)
+            if not lines:
+                skipped.append(AutoRestockSkip(shop_id=shop.shop_id, reason="nothing_to_order"))
+                continue
+            order = create_order(repo, shop, lines, source="auto")
+            post_auto_order_message(repo, shop, order)
+            placed.append(Order(**order.__dict__))
+        return AutoRestockReply(ran_at=now_iso(), shops_checked=len(shops), orders=placed,
+                                skipped=skipped)
+
+    def _store_feedback(shop, screen: str, rating: str, comment: str | None,
+                        app_version: str | None, platform: str | None) -> FeedbackReply:
+        script = detect_script(comment or "")
+        language = (DEFAULT_LANGUAGE_FOR_SCRIPT.get(script, shop.language)
+                    if script and script != "Latin" else shop.language)
+        fb = FeedbackRecord(feedback_id=new_id("fb"), shop_id=shop.shop_id, screen=screen,
+                            rating=rating, comment=comment, language=language,
+                            app_version=app_version, platform=platform, created_at=now_iso())
+        repo.add_feedback(fb)
+        get_feedback_sink().send(fb)  # BigQuery when configured; never fails the request
+        return FeedbackReply(feedback_id=fb.feedback_id, reply_text=feedback_thanks(shop.language))
+
+    @app.post("/feedback", status_code=201, response_model=FeedbackReply)
+    def feedback(body: FeedbackCreate):
+        shop = get_shop(body.shop_id)
+        if not body.screen.strip():
+            raise ApiError(400, "invalid", "screen is required")
+        return _store_feedback(shop, body.screen.strip(), body.rating, body.comment,
+                               body.app_version, body.platform)
+
+    @app.post("/feedback-voice", status_code=201, response_model=FeedbackReply)
+    async def feedback_voice(shop_id: str = Form(...), screen: str = Form(...),
+                             rating: str = Form(...), audio: UploadFile = File(...),
+                             app_version: str | None = Form(default=None),
+                             platform: str | None = Form(default=None)):
+        """Same as /feedback but the comment is transcribed from a voice note by Gemini."""
+        shop = get_shop(shop_id)
+        if rating not in ("up", "down"):
+            raise ApiError(400, "invalid", "rating must be up or down")
+        mime = (audio.content_type or "").split(";")[0].strip().lower()
+        if mime not in ALLOWED_AUDIO:
+            raise ApiError(400, "invalid", f"unsupported audio type {mime!r}")
+        data = await audio.read()
+        if not data or len(data) > MAX_AUDIO_BYTES:
+            raise ApiError(400, "invalid", "audio empty or too large (max 10 MB)")
+        if mime in {"audio/m4a", "audio/x-m4a"}:
+            mime = "audio/mp4"
+        try:
+            comment = await run_in_threadpool(get_extractor().transcribe, (data, mime), shop.language)
+        except GeminiFailed as exc:
+            raise ApiError(502, "gemini_failed", str(exc))
+        return _store_feedback(shop, screen.strip(), rating, comment or None, app_version, platform)
 
     return app
 

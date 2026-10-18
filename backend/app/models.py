@@ -6,10 +6,13 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from app.languages import LANGUAGE_CODES
+
 Intent = Literal["stock_in", "sale", "udhaar_given", "udhaar_paid", "question", "unclear"]
-Language = Literal["hi", "en", "hi-Latn"]
+Language = Literal[LANGUAGE_CODES]  # type: ignore[valid-type]  # the 22 scheduled + en + hi-Latn
 Unit = Literal["carton", "piece", "kg", "litre", "packet", "box"]
-QuickActionKind = Literal["undo", "confirm", "open_stock", "open_udhaar", "open_forecast", "send_order"]
+QuickActionKind = Literal["undo", "confirm", "open_stock", "open_udhaar", "open_forecast", "send_order",
+                          "open_orders"]
 
 
 # ---- requests -------------------------------------------------------------
@@ -19,6 +22,14 @@ class ShopCreate(BaseModel):
     shop_name: str
     owner_name: str
     language: Language = "hi-Latn"
+    auto_restock: bool = False
+    distributor_phone: str | None = None
+
+
+class ShopPatch(BaseModel):
+    auto_restock: bool | None = None
+    distributor_phone: str | None = None
+    language: Language | None = None
 
 
 class ChatRequest(BaseModel):
@@ -69,6 +80,8 @@ class Shop(BaseModel):
     owner_name: str
     language: Language
     created_at: str
+    auto_restock: bool = False
+    distributor_phone: str | None = None
 
 
 class QuickAction(BaseModel):
@@ -203,8 +216,98 @@ class ReorderReply(BaseModel):
     whatsapp_url: str
 
 
+# ---- top items / orders / messages / feedback / languages --------------------------
+
+
+class TopItem(BaseModel):
+    item_id: str
+    name: str
+    unit: Unit
+    forecast_units: int
+    history_units: int
+    trend_pct: int | None
+    on_hand: int
+    cover_days: int
+    reorder_qty: int
+    reorder_reason: str
+
+
+class TopItemsReply(BaseModel):
+    generated_at: str
+    weeks: int
+    items: list[TopItem]
+
+
+class Order(BaseModel):
+    order_id: str
+    shop_id: str
+    created_at: str
+    status: Literal["placed", "cancelled"]
+    source: Literal["auto", "manual"]
+    lines: list[ReorderLine]
+    text: str
+    whatsapp_url: str
+
+
+class OrdersReply(BaseModel):
+    orders: list[Order]
+
+
+class BotMessage(BaseModel):
+    message_id: str
+    shop_id: str
+    created_at: str
+    kind: Literal["auto_order"]
+    reply_text: str
+    quick_actions: list[QuickAction] = Field(default_factory=list)
+    order_id: str | None = None
+
+
+class MessagesReply(BaseModel):
+    messages: list[BotMessage]
+
+
+class AutoRestockSkip(BaseModel):
+    shop_id: str
+    reason: Literal["auto_restock_off", "already_ran_today", "nothing_to_order", "forecast_failed"]
+
+
+class AutoRestockReply(BaseModel):
+    ran_at: str
+    shops_checked: int
+    orders: list[Order]
+    skipped: list[AutoRestockSkip]
+
+
+class FeedbackCreate(BaseModel):
+    shop_id: str
+    screen: str
+    rating: Literal["up", "down"]
+    comment: str | None = None
+    app_version: str | None = None
+    platform: str | None = None
+
+
+class FeedbackReply(BaseModel):
+    feedback_id: str
+    reply_text: str
+
+
+class LanguageEntry(BaseModel):
+    code: str
+    name: str
+    native_name: str
+    script: str
+    rtl: bool
+
+
+class LanguagesReply(BaseModel):
+    languages: list[LanguageEntry]
+
+
 class ErrorBody(BaseModel):
-    code: Literal["not_found", "invalid", "gemini_failed", "undo_expired", "not_implemented"]
+    code: Literal["not_found", "invalid", "gemini_failed", "undo_expired", "not_implemented",
+                  "unauthorized"]
     message: str
 
 

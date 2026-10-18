@@ -19,6 +19,8 @@ from pydantic import ValidationError
 
 from app.config import Settings
 from app.models import Entities, ExtractedItem, Extraction, ShelfItem, ShelfScan
+from app.languages import (DEFAULT_LANGUAGE_FOR_SCRIPT, LANGUAGE_CODES, detect_script,
+                           normalise_code, reply_instruction)
 from app.store import ItemRecord
 
 
@@ -40,20 +42,26 @@ Return JSON matching the schema with these fields:
   * unclear      : cannot tell, or essential info is missing; never writes
 - confidence: 0.0-1.0. Use >= 0.8 only when intent AND the key entities are unambiguous.
   Use < 0.7 when the item, quantity, customer or amount is uncertain or could be read two ways.
-- language: "hi" (Devanagari script), "hi-Latn" (Hinglish in Roman script) or "en".
-  If the text mixes Hindi words in Roman script with English, it is "hi-Latn".
+- language: the language the USER wrote or spoke in, as one of these codes:
+  as bn brx doi gu hi kn ks kok mai ml mni mr ne or pa sa sat sd ta te ur en hi-Latn.
+  "hi" = Hindi in Devanagari; "hi-Latn" = Hindi/Hinglish in Roman letters (also when mixed with
+  English); "en" = English only. Other languages use their ISO code whatever the script.
 - transcript: for audio input, exactly what you heard in the speaker's own script; null for text.
 - entities:
-  * items: list of {{name, pack_size, quantity, unit, unit_price}}. Keep the brand name as spoken
-    (e.g. "Parle G", "Maggi"); the backend matches it to the catalogue. unit is one of
+  * items: list of {{name, pack_size, quantity, unit, unit_price}}. Write the brand name in Latin
+    letters as printed on the pack (e.g. "Parle G", "Maggi"), even when it was spoken or written in
+    another script; the backend matches it to the catalogue. unit is one of
     carton | piece | kg | litre | packet | box. unit_price in integer rupees or null.
   * customer_name: as spoken, keep honorifics ("Gupta ji", "Sharma aunty"); null if none.
   * amount: integer rupees for udhaar/sale amounts; null otherwise.
   * date: ISO date if the user said one ("kal" = yesterday relative to today); else null.
   Fields not relevant to the intent are null (items is []).
-- reply_text: one short sentence, in the SAME language and script mix as the user, that
-  confirms what will be recorded: start with "Samjha:" / "समझा:" / "Got it:". Do not invent
-  running totals; the backend appends them. For question: answer briefly if you can from
+- reply_text: one short sentence that confirms what will be recorded, starting with the
+  language's word for "Understood:" ("Samjha:" / "समझा:" / "Got it:" / "বুঝেছি:" / "புரிந்தது:" ...).
+  Language of reply_text: {reply_rule} If the user's message is clearly in a different
+  language or script mix than that, mirror the user's instead. Never transliterate a
+  non-Latin language into Roman letters, except Hinglish. Do not invent running totals; the
+  backend appends them. For question: answer briefly if you can from
   the catalogue below, else say what you need. For unclear: ask one short clarifying question.
 
 Catalogue of this shop (name | pack | unit | on hand):
@@ -116,7 +124,7 @@ Rules:
 
 Catalogue (name | pack | unit | aliases):
 {catalogue}
-Shop's preferred language: {language}
+reply_text language: {reply_rule}
 """
 
 
@@ -125,7 +133,7 @@ def build_shelf_prompt(catalogue: list[ItemRecord], language: str) -> str:
         f"- {i.name} | {i.pack_size or '-'} | {i.unit} | {', '.join(i.aliases[:3]) or '-'}"
         for i in catalogue
     ) or "- (empty)"
-    return SHELF_PROMPT.format(catalogue=lines, language=language)
+    return SHELF_PROMPT.format(catalogue=lines, reply_rule=reply_instruction(normalise_code(language)))
 
 
 class Extractor(Protocol):
@@ -137,6 +145,10 @@ class Extractor(Protocol):
 
     def summarize(self, facts: dict, shop_language: str) -> str:
         """One-paragraph evening 'hisaab' from the day's numbers. May raise GeminiFailed."""
+        ...
+
+    def transcribe(self, audio: tuple[bytes, str], shop_language: str) -> str:
+        """Plain transcript of a short voice note in the speaker's own script."""
         ...
 
     def extract(
@@ -154,7 +166,7 @@ def _catalogue_lines(items: list[ItemRecord]) -> str:
     ) or "- (empty)"
 
 
-def build_system_prompt(catalogue: list[ItemRecord]) -> str:
+def build_system_prompt(catalogue: list[ItemRecord], shop_language: str = "hi-Latn") -> str:
     from datetime import date, timedelta
 
     today = date.today()
@@ -162,6 +174,7 @@ def build_system_prompt(catalogue: list[ItemRecord]) -> str:
         catalogue=_catalogue_lines(catalogue),
         today=today.isoformat(),
         yesterday=(today - timedelta(days=1)).isoformat(),
+        reply_rule=reply_instruction(normalise_code(shop_language)),
     )
 
 
@@ -222,7 +235,7 @@ class GeminiExtractor:
         if not parts:
             raise GeminiFailed("Nothing to extract: no text and no audio")
 
-        system = build_system_prompt(catalogue) + f"\nShop's preferred language: {shop_language}."
+        system = build_system_prompt(catalogue, shop_language)
         return self._generate(parts, system, Extraction)
 
     def scan_shelf(
@@ -245,11 +258,10 @@ class GeminiExtractor:
     def summarize(self, facts: dict, shop_language: str) -> str:
         from google.genai import types
 
-        lang = {"hi": "Hindi in Devanagari script", "en": "English",
-                "hi-Latn": "Hinglish (Hindi in Roman script)"}.get(shop_language, "Hinglish")
         prompt = (
-            "Write the evening 'hisaab' (day summary) for a kirana shopkeeper in "
-            f"{lang}: 2 to 3 short sentences, warm and plain, no bullet points, no emojis. "
+            "Write the evening 'hisaab' (day summary) for a kirana shopkeeper. "
+            f"{reply_instruction(normalise_code(shop_language))} "
+            "2 to 3 short sentences, warm and plain, no bullet points, no emojis. "
             "Mention today's sales total, how many entries were recorded, udhaar given and "
             "received, total outstanding udhaar, and name the low-stock items (say 'none' if "
             "empty). Use ₹ with Indian digit grouping. Facts (JSON):\n" + json.dumps(facts, ensure_ascii=False)
@@ -268,6 +280,28 @@ class GeminiExtractor:
         if not text:
             raise GeminiFailed("empty summary")
         return text
+
+    def transcribe(self, audio: tuple[bytes, str], shop_language: str) -> str:
+        from google.genai import types
+
+        data, mime = audio
+        config = types.GenerateContentConfig(
+            temperature=0.0,
+            thinking_config=types.ThinkingConfig(thinking_level=types.ThinkingLevel.LOW),
+            http_options=types.HttpOptions(timeout=30_000),
+        )
+        try:
+            response = self._client.models.generate_content(
+                model=self.model,
+                contents=[types.Content(role="user", parts=[
+                    types.Part.from_bytes(data=data, mime_type=mime),
+                    types.Part.from_text(text=(
+                        "Transcribe this voice note exactly, in the speaker's own language and "
+                        "script (Hinglish in Roman letters). Return only the transcript."))])],
+                config=config)
+        except Exception as exc:
+            raise GeminiFailed(f"{type(exc).__name__}: {exc}") from exc
+        return (response.text or "").strip()
 
     def _generate(self, parts, system_instruction: str, schema, timeout_ms: int | None = None):
         """One structured-output call with the shared timeout / retry / thinking settings."""
@@ -359,9 +393,13 @@ class MockExtractor:
             text = transcript
         text = (text or "").strip()
         low = text.lower()
-        language = (
-            "hi" if _DEVANAGARI.search(text) else "hi-Latn" if _HINDI_HINTS.search(low) else "en"
-        )
+        script = detect_script(text)
+        if script == "Devanagari":
+            language = "hi"
+        elif script in (None, "Latin"):
+            language = "hi-Latn" if _HINDI_HINTS.search(low) else "en"
+        else:
+            language = DEFAULT_LANGUAGE_FOR_SCRIPT.get(script, "en")
 
         if re.search(r"\?|kitna|kitne|कितना|कितने|how much|how many|balance|baaki hai|kya hai", low):
             intent = "question"
@@ -435,7 +473,7 @@ class MockExtractor:
         items = [ShelfItem(name=n, pack_size=by_name[n].pack_size if n in by_name else None,
                            count=k, confidence=conf) for n, k, conf in canned]
         head = {"hi": "शेल्फ पर दिखा:", "en": "On the shelf:", "hi-Latn": "Shelf pe dikha:"}.get(
-            shop_language, "Shelf pe dikha:")
+            shop_language, "On the shelf:")
         return ShelfScan(items=items,
                          reply_text=f"{head} " + ", ".join(f"{i.name} {i.count}" for i in items) + ".")
 
@@ -444,8 +482,13 @@ class MockExtractor:
 
         return summary_template(facts, shop_language)
 
+    def transcribe(self, audio: tuple[bytes, str], shop_language: str) -> str:
+        return "Stock screen bahut useful hai, par forecast thoda slow khulta hai."
+
     @staticmethod
     def _reply(intent, language, items, customer, amount, catalogue) -> str:
+        if language not in ("hi", "en", "hi-Latn"):
+            language = "en"  # the mock only has three reply templates; unknown codes use English
         head = {"hi": "समझा:", "en": "Got it:", "hi-Latn": "Samjha:"}[language]
         item_txt = ", ".join(
             f"{i.name}{' ' + i.pack_size if i.pack_size else ''}"

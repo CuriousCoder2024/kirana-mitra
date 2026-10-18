@@ -18,6 +18,8 @@ from pathlib import Path
 
 import httpx
 
+from app.languages import script_matches
+
 HERE = Path(__file__).parent
 
 
@@ -46,7 +48,9 @@ def score(sample: dict, reply: dict) -> dict:
         checks["held"] = (reply.get("confidence", 1.0) < exp["max_confidence"]
                           and reply.get("applied") is False)
     lang_ok = reply.get("language") == exp.get("language", reply.get("language"))
-    return {"intent": intent_ok, "language": lang_ok, "checks": checks,
+    # Did Gemini answer in the expected language's own script (Hinglish/English: Latin)?
+    script_ok = script_matches(reply.get("reply_text") or "", exp.get("language", "en"))
+    return {"intent": intent_ok, "language": lang_ok, "script": script_ok, "checks": checks,
             "entities": all(checks.values()) if checks else True}
 
 
@@ -105,12 +109,28 @@ def main(argv: list[str] | None = None) -> int:
     p95 = lat_sorted[min(len(lat_sorted) - 1, int(round(0.95 * len(lat_sorted))) - 1)]
 
     print(f"\nmodel={model}  base={args.base}  samples={n}\n")
-    print(f"{'id':12} {'expected':13} {'got':13} {'int':3} {'ent':3} {'ms':>7}  detail")
+    print(f"{'id':12} {'expected':13} {'got':13} {'int':3} {'ent':3} {'lng':3} {'scr':3} {'ms':>7}  detail")
     for r in rows:
         detail = " ".join(f"{k}={'✓' if v else '✗'}" for k, v in r[6].items())
-        print(f"{r[0]:12} {r[1]:13} {r[2]:13} {r[3]:3} {r[4]:3} {r[5]:7.0f}  {detail}")
+        print(f"{r[0]:12} {r[1]:13} {r[2]:13} {r[3]:3} {r[4]:3} "
+              f"{'✓' if r[8] else '✗':3} {'✓' if r[9] else '✗':3} {r[5]:7.0f}  {detail}")
     print()
+    # per-language table
+    by_lang: dict[str, list] = {}
+    for r in rows:
+        by_lang.setdefault(r[7], []).append(r)
+    print(f"{'lang':8} {'n':>2} {'intent':>7} {'entity':>7} {'lang':>6} {'script':>7}  bad-script reply (first)")
+    for lang, rs in sorted(by_lang.items()):
+        k = len(rs)
+        bad = next((r[10] for r in rs if r[2] != "HTTP" and not r[9]), "")
+        print(f"{lang:8} {k:2} {sum(r[3] == '✓' for r in rs) / k:7.0%} {sum(r[4] == '✓' for r in rs) / k:7.0%} "
+              f"{sum(bool(r[8]) for r in rs) / k:6.0%} {sum(bool(r[9]) for r in rs) / k:7.0%}  {bad[:60]}")
+    print()
+    script_acc = sum(1 for r in rows if r[9]) / n
+    lang_acc = sum(1 for r in rows if r[8]) / n
     print(f"intent accuracy : {intent_acc:6.1%}")
+    print(f"language detect : {lang_acc:6.1%}")
+    print(f"reply in script : {script_acc:6.1%}")
     print(f"entity accuracy : {entity_acc:6.1%}   "
           + "  ".join(f"{k} {a}/{b}" for k, (a, b) in field_hits.items()))
     print(f"latency p50     : {p50:6.0f} ms")
@@ -123,9 +143,10 @@ def main(argv: list[str] | None = None) -> int:
         w = csv.writer(fh)
         if new:
             w.writerow(["date", "model", "samples", "intent_acc", "entity_acc",
-                        "p50_ms", "p95_ms", "http_failures"])
+                        "p50_ms", "p95_ms", "http_failures", "language_acc", "script_acc"])
         w.writerow([datetime.now().isoformat(timespec="seconds"), model, n,
-                    f"{intent_acc:.3f}", f"{entity_acc:.3f}", f"{p50:.0f}", f"{p95:.0f}", failures])
+                    f"{intent_acc:.3f}", f"{entity_acc:.3f}", f"{p50:.0f}", f"{p95:.0f}", failures,
+                    f"{lang_acc:.3f}", f"{script_acc:.3f}"])
     print(f"\nappended to {results}")
     return 0
 

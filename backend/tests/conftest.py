@@ -59,6 +59,22 @@ class ScriptedExtractor:
             raise GeminiFailed("scripted failure")
         return self.summary_text
 
+    transcript: str = "Forecast screen thoda slow hai"
+
+    def transcribe(self, audio, shop_language):
+        self.calls.append(("transcribe", audio[0]))
+        return self.transcript
+
+
+class RecordingSink:
+    name = "recording"
+
+    def __init__(self) -> None:
+        self.sent = []
+
+    def send(self, fb):
+        self.sent.append(fb)
+
 
 @pytest.fixture
 def repo():
@@ -74,9 +90,10 @@ def scripted():
 def client(repo, scripted):
     from app.forecast import LocalForecastSource
 
-    settings = Settings(mock_gemini=True, forecast_source="local")
+    settings = Settings(mock_gemini=True, forecast_source="local", scheduler_token="test-token")
     app = create_app(settings, repo=repo, extractor=scripted,
-                     forecast_source=LocalForecastSource(settings.data_dir))
+                     forecast_source=LocalForecastSource(settings.data_dir),
+                     feedback_sink=RecordingSink())
     return TestClient(app)
 
 

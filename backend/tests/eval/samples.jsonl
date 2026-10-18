@@ -24,3 +24,21 @@
 {"id": "amb-01", "text": "shayad 5 maggi aaye, ya 6", "expected": {"intent": "stock_in", "language": "hi-Latn", "item": "Maggi", "max_confidence": 0.7}}
 {"id": "amb-02", "text": "wo wala do", "expected": {"intent": "unclear", "language": "hi-Latn"}}
 {"id": "amb-03", "text": "Gupta ji wala hisaab", "expected": {"intent": "question", "language": "hi-Latn", "customer": "Gupta ji", "alt_intent": "unclear"}}
+{"id": "bn-01", "text": "গতকাল পার্লে-জি এর ৩ কার্টন এসেছে", "expected": {"intent": "stock_in", "language": "bn", "item": "Parle-G", "quantity": 3}}
+{"id": "bn-02", "text": "গুপ্তা জি ৩৫০ টাকা ধার নিলেন", "expected": {"intent": "udhaar_given", "language": "bn", "customer": "গুপ্তা", "amount": 350}}
+{"id": "ta-01", "text": "நேற்று மேகி 5 பாக்கெட் வந்தது", "expected": {"intent": "stock_in", "language": "ta", "item": "Maggi", "quantity": 5}}
+{"id": "ta-02", "text": "குப்தா ஜி 350 ரூபாய் கடன் வாங்கினார்", "expected": {"intent": "udhaar_given", "language": "ta", "customer": "குப்தா", "amount": 350}}
+{"id": "te-01", "text": "నిన్న టాటా సాల్ట్ 10 ప్యాకెట్లు వచ్చాయి", "expected": {"intent": "stock_in", "language": "te", "item": "Tata Salt", "quantity": 10}}
+{"id": "te-02", "text": "శర్మ గారు 200 రూపాయలు అప్పు తీసుకున్నారు", "expected": {"intent": "udhaar_given", "language": "te", "customer": "శర్మ", "amount": 200}}
+{"id": "mr-01", "text": "काल सर्फ एक्सेलचे 6 पॅकेट आले", "expected": {"intent": "stock_in", "language": "mr", "item": "Surf Excel", "quantity": 6}}
+{"id": "mr-02", "text": "पाटील काकांनी 500 रुपये उधार घेतले", "expected": {"intent": "udhaar_given", "language": "mr", "customer": "पाटील", "amount": 500}}
+{"id": "gu-01", "text": "ગઈકાલે અમૂલ બટરના 4 પીસ આવ્યા", "expected": {"intent": "stock_in", "language": "gu", "item": "Amul Butter", "quantity": 4}}
+{"id": "gu-02", "text": "પટેલ ભાઈએ 300 રૂપિયા ઉધાર લીધા", "expected": {"intent": "udhaar_given", "language": "gu", "customer": "પટેલ", "amount": 300}}
+{"id": "kn-01", "text": "ನಿನ್ನೆ ಕೋಲ್ಗೇಟ್ 12 ಪೀಸ್ ಬಂದಿದೆ", "expected": {"intent": "stock_in", "language": "kn", "item": "Colgate", "quantity": 12}}
+{"id": "kn-02", "text": "ರಾವ್ ಅವರು 450 ರೂಪಾಯಿ ಸಾಲ ತೆಗೆದುಕೊಂಡರು", "expected": {"intent": "udhaar_given", "language": "kn", "customer": "ರಾವ್", "amount": 450}}
+{"id": "ml-01", "text": "ഇന്നലെ ലൈഫ്ബോയ് 8 എണ്ണം വന്നു", "expected": {"intent": "stock_in", "language": "ml", "item": "Lifebuoy", "quantity": 8}}
+{"id": "ml-02", "text": "നായർ സാർ 250 രൂപ കടം വാങ്ങി", "expected": {"intent": "udhaar_given", "language": "ml", "customer": "നായർ", "amount": 250}}
+{"id": "pa-01", "text": "ਕੱਲ੍ਹ ਰੈੱਡ ਲੇਬਲ ਦੇ 5 ਪੈਕੇਟ ਆਏ", "expected": {"intent": "stock_in", "language": "pa", "item": "Red Label", "quantity": 5}}
+{"id": "pa-02", "text": "ਸਿੰਘ ਸਾਹਬ ਨੇ 600 ਰੁਪਏ ਉਧਾਰ ਲਏ", "expected": {"intent": "udhaar_given", "language": "pa", "customer": "ਸਿੰਘ", "amount": 600}}
+{"id": "ur-01", "text": "کل ڈیٹول کے 6 پیس آئے", "expected": {"intent": "stock_in", "language": "ur", "item": "Dettol", "quantity": 6}}
+{"id": "ur-02", "text": "خان صاحب نے 400 روپے ادھار لیے", "expected": {"intent": "udhaar_given", "language": "ur", "customer": "خان", "amount": 400}}

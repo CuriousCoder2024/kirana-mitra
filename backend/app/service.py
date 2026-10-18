@@ -13,7 +13,8 @@ from __future__ import annotations
 from app.matching import match_customer, match_item
 from app.models import (Entities, ExtractedItem, Extraction, ExtractionReply, QuickAction,
                         ShelfItem, ShelfLowStock, ShelfScan, ShelfScanReply)
-from app.store import IST, AppliedMessage, Repository, ShopRecord, StockMove, new_id
+from app.store import (IST, AppliedMessage, BotMessageRecord, OrderRecord, Repository,
+                       ShopRecord, StockMove, new_id, now_iso)
 
 WRITE_INTENTS = {"stock_in", "sale", "udhaar_given", "udhaar_paid"}
 
@@ -56,7 +57,8 @@ def resolve_items(repo: Repository, shop_id: str, entities: Entities) -> Entitie
 
 
 def _localized(language: str, hi: str, en: str, hinglish: str) -> str:
-    return {"hi": hi, "en": en}.get(language, hinglish)
+    """Python-side strings exist for hi, en and hi-Latn; every other code gets English."""
+    return {"hi": hi, "hi-Latn": hinglish}.get(language, en)
 
 
 def apply_extraction(
@@ -321,6 +323,10 @@ def undo(repo: Repository, shop: ShopRecord, message_id: str) -> str:
         balance = repo.customer_balance(shop.shop_id, entry.customer_name)
         customer_totals.append(f"{entry.customer_name} {_rupees(abs(entry.delta))} → "
                                f"{_localized(lang, 'कुल', 'total', 'Total')} {_rupees(balance)}")
+    if applied.order_id:
+        repo.set_order_status(shop.shop_id, applied.order_id, "cancelled")
+        return _localized(lang, "ठीक है, ऑर्डर रद्द कर दिया।", "Okay, the order is cancelled.",
+                          "Theek hai, order cancel kar diya.")
     head = _localized(lang, "ठीक है, हटा दिया.", "Okay, removed.", "Theek hai, hata diya.")
     detail = "; ".join(parts + customer_totals)
     return f"{head} {detail}.".strip() if detail else head
@@ -375,13 +381,14 @@ def summary_template(facts: dict, language: str) -> str:
         low_txt = f"कम स्टॉक: {low_names}।" if low else "कोई सामान कम नहीं है।"
         return (f"आज का हिसाब: बिक्री {s}, {e} एंट्री। उधार दिया {g}, वापस आया {r}; "
                 f"कुल बकाया {o}। {low_txt}")
-    if language == "en":
-        low_txt = f"Low stock: {low_names}." if low else "No items are low on stock."
-        return (f"Today's summary: sales {s} across {e} entries. Udhaar given {g}, received {r}; "
-                f"total outstanding {o}. {low_txt}")
-    low_txt = f"Kam stock: {low_names}." if low else "Koi item kam nahi hai."
-    return (f"Aaj ka hisaab: bikri {s}, {e} entries. Udhaar diya {g}, wapas aaya {r}; "
-            f"total baaki {o}. {low_txt}")
+    if language == "hi-Latn":
+        low_txt = f"Kam stock: {low_names}." if low else "Koi item kam nahi hai."
+        return (f"Aaj ka hisaab: bikri {s}, {e} entries. Udhaar diya {g}, wapas aaya {r}; "
+                f"total baaki {o}. {low_txt}")
+    # English for "en" and for every other language the Python templates do not cover
+    low_txt = f"Low stock: {low_names}." if low else "No items are low on stock."
+    return (f"Today's summary: sales {s} across {e} entries. Udhaar given {g}, received {r}; "
+            f"total outstanding {o}. {low_txt}")
 
 
 def today_ist() -> str:
@@ -404,3 +411,96 @@ def reorder_text(shop: ShopRecord, lines: list[tuple[str, int, str]]) -> str:
     tail = _localized(lang, "कृपया कल तक भेज दें। धन्यवाद!", "Please deliver by tomorrow. Thanks!",
                       "Please kal tak bhej dein. Dhanyavaad!")
     return f"{head}\n{body}\n{tail}"
+
+
+# ---- top items (Phase 7) ---------------------------------------------------------------
+
+
+def top_items(forecast_items, weeks: int, limit: int):
+    """Rank shaped forecast items by expected demand over the next `weeks` weeks."""
+    from app.models import TopItem
+
+    out = []
+    for it in forecast_items:
+        weeks_n = max(1, min(weeks, len(it.forecast_weekly)))
+        forecast_units = sum(it.forecast_weekly[:weeks_n])
+        history_units = sum(it.history_weekly[-weeks_n:])
+        trend = (round((forecast_units - history_units) * 100 / history_units)
+                 if history_units > 0 else None)
+        per_day = forecast_units / (7 * weeks_n)
+        cover_days = min(999, int(it.on_hand / per_day)) if per_day > 0 else 999
+        out.append(TopItem(item_id=it.item_id, name=it.name, unit=it.unit,
+                           forecast_units=forecast_units, history_units=history_units,
+                           trend_pct=trend, on_hand=it.on_hand, cover_days=cover_days,
+                           reorder_qty=it.reorder_qty, reorder_reason=it.reorder_reason))
+    out.sort(key=lambda t: (-t.forecast_units, t.name))
+    return out[:limit]
+
+
+# ---- orders and auto-restock (Phase 7) ---------------------------------------------------
+
+
+def order_lines_from_forecast(repo: Repository, shop: ShopRecord, forecast_items) -> list[dict]:
+    catalogue = {i.item_id: i for i in repo.list_items(shop.shop_id)}
+    lines = []
+    for it in forecast_items:
+        if it.reorder_qty <= 0:
+            continue
+        pack = catalogue[it.item_id].pack_size if it.item_id in catalogue else None
+        lines.append({"name": f"{it.name} {pack}".strip() if pack else it.name,
+                      "qty": it.reorder_qty, "unit": it.unit})
+    return lines
+
+
+def create_order(repo: Repository, shop: ShopRecord, lines: list[dict], source: str) -> OrderRecord:
+    from urllib.parse import quote
+
+    text = reorder_text(shop, [(l["name"], l["qty"], l["unit"]) for l in lines])
+    phone = (shop.distributor_phone or "").lstrip("+").replace(" ", "")
+    url = f"https://wa.me/{phone}?text=" if phone else "https://wa.me/?text="
+    order = OrderRecord(order_id=new_id("ord"), shop_id=shop.shop_id, created_at=now_iso(),
+                        status="placed", source=source, lines=lines, text=text,
+                        whatsapp_url=url + quote(text, safe=""))
+    repo.add_order(order)
+    return order
+
+
+def auto_order_today(repo: Repository, shop_id: str, day: str) -> OrderRecord | None:
+    """The auto order already placed (or cancelled) today, if any: the run is idempotent."""
+    return next((o for o in repo.list_orders(shop_id)
+                 if o.source == "auto" and o.created_at[:10] == day), None)
+
+
+def post_auto_order_message(repo: Repository, shop: ShopRecord, order: OrderRecord) -> BotMessageRecord:
+    """Bot message in the shop's chat announcing the auto order, undoable like any write."""
+    lang = shop.language
+    import re
+
+    def short(name: str) -> str:  # "Britannia Good Day 100g" -> "Britannia Good Day"
+        return re.sub(r"\s+\S*\d\S*$", "", name)
+
+    summary = ", ".join(f"{short(l['name'])} {l['qty']} {l['unit']}" for l in order.lines)
+    head = _localized(lang, "ऑटो-ऑर्डर भेजा:", "Auto-order sent:", "Auto-order bheja:")
+    tail = _localized(lang, "रद्द करें?", "Undo?", "Undo?")
+    message_id = new_id("msg")
+    repo.record_applied(AppliedMessage(message_id=message_id, shop_id=shop.shop_id,
+                                       intent="auto_order", order_id=order.order_id))
+    msg = BotMessageRecord(
+        message_id=message_id, shop_id=shop.shop_id, created_at=order.created_at,
+        kind="auto_order", reply_text=f"{head} {summary}. {tail}",
+        quick_actions=[
+            {"label": "Undo", "action": "undo", "payload": {"message_id": message_id}},
+            {"label": _localized(lang, "ऑर्डर देखो", "View orders", "Orders dekho"),
+             "action": "open_orders", "payload": {}},
+        ],
+        order_id=order.order_id)
+    repo.add_bot_message(msg)
+    return msg
+
+
+# ---- feedback (Phase 7) ----------------------------------------------------------------
+
+
+def feedback_thanks(language: str) -> str:
+    return _localized(language, "शुक्रिया! आपका फ़ीडबैक मिल गया।", "Thank you! Your feedback is in.",
+                      "Shukriya! Aapka feedback mil gaya.")

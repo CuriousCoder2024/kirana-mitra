@@ -35,6 +35,8 @@ class ShopRecord:
     owner_name: str
     language: str
     created_at: str
+    auto_restock: bool = False
+    distributor_phone: str | None = None
 
 
 @dataclass
@@ -83,7 +85,46 @@ class AppliedMessage:
     stock_moves: list[StockMove] = field(default_factory=list)
     ledger_entry_ids: list[str] = field(default_factory=list)
     sale_amount: int | None = None  # rupees the user quoted for a sale, if any
+    order_id: str | None = None  # auto-order to cancel on undo
     at: str = field(default_factory=now_iso)
+
+
+@dataclass
+class OrderRecord:
+    order_id: str
+    shop_id: str
+    created_at: str
+    status: str  # placed | cancelled
+    source: str  # auto | manual
+    lines: list[dict]  # [{name, qty, unit}]
+    text: str
+    whatsapp_url: str
+
+
+@dataclass
+class BotMessageRecord:
+    """A message the server posted into the shop's chat (auto-order notices)."""
+
+    message_id: str
+    shop_id: str
+    created_at: str
+    kind: str
+    reply_text: str
+    quick_actions: list[dict]
+    order_id: str | None = None
+
+
+@dataclass
+class FeedbackRecord:
+    feedback_id: str
+    shop_id: str
+    screen: str
+    rating: str
+    comment: str | None
+    language: str
+    app_version: str | None
+    platform: str | None
+    created_at: str
 
 
 # ---- seed catalogue ---------------------------------------------------------
@@ -119,6 +160,12 @@ class Repository(ABC):
 
     @abstractmethod
     def get_shop(self, shop_id: str) -> ShopRecord | None: ...
+
+    @abstractmethod
+    def list_shops(self) -> list[ShopRecord]: ...
+
+    @abstractmethod
+    def update_shop(self, shop_id: str, **fields) -> ShopRecord: ...
 
     # items
     @abstractmethod
@@ -171,6 +218,36 @@ class Repository(ABC):
     @abstractmethod
     def pop_pending(self, shop_id: str, message_id: str) -> dict | None: ...
 
+    # orders
+    @abstractmethod
+    def add_order(self, order: OrderRecord) -> None: ...
+
+    @abstractmethod
+    def get_order(self, shop_id: str, order_id: str) -> OrderRecord | None: ...
+
+    @abstractmethod
+    def list_orders(self, shop_id: str) -> list[OrderRecord]:
+        """Newest first."""
+
+    @abstractmethod
+    def set_order_status(self, shop_id: str, order_id: str, status: str) -> OrderRecord: ...
+
+    # server-side bot messages
+    @abstractmethod
+    def add_bot_message(self, msg: BotMessageRecord) -> None: ...
+
+    @abstractmethod
+    def list_bot_messages(self, shop_id: str, since: str | None = None,
+                          limit: int = 50) -> list[BotMessageRecord]:
+        """Newest first, created after `since` (ISO) when given."""
+
+    # feedback
+    @abstractmethod
+    def add_feedback(self, fb: FeedbackRecord) -> None: ...
+
+    @abstractmethod
+    def list_feedback(self, shop_id: str) -> list[FeedbackRecord]: ...
+
 
 # ---- in-memory implementation ------------------------------------------------------
 
@@ -185,6 +262,9 @@ class InMemoryRepository(Repository):
         self._applied: dict[str, deque[AppliedMessage]] = {}
         self._journal: dict[str, list[AppliedMessage]] = {}  # all applied, for /summary
         self._pending: dict[str, dict[str, dict]] = {}
+        self._orders: dict[str, list[OrderRecord]] = {}
+        self._bot_messages: dict[str, list[BotMessageRecord]] = {}
+        self._feedback: dict[str, list[FeedbackRecord]] = {}
 
     # shops
     def create_shop(self, shop_name: str, owner_name: str, language: str) -> ShopRecord:
@@ -195,6 +275,9 @@ class InMemoryRepository(Repository):
         self._applied[shop.shop_id] = deque(maxlen=self.undo_window)
         self._journal[shop.shop_id] = []
         self._pending[shop.shop_id] = {}
+        self._orders[shop.shop_id] = []
+        self._bot_messages[shop.shop_id] = []
+        self._feedback[shop.shop_id] = []
         if self.seed:
             for name, pack, unit, qty, reorder, aliases, carton, price in SEED_ITEMS:
                 item = self.add_item(shop.shop_id, name, pack, unit, reorder)
@@ -206,6 +289,15 @@ class InMemoryRepository(Repository):
 
     def get_shop(self, shop_id: str) -> ShopRecord | None:
         return self._shops.get(shop_id)
+
+    def list_shops(self) -> list[ShopRecord]:
+        return list(self._shops.values())
+
+    def update_shop(self, shop_id: str, **fields) -> ShopRecord:
+        shop = self._shops[shop_id]
+        for k, v in fields.items():
+            setattr(shop, k, v)
+        return shop
 
     # items
     def list_items(self, shop_id: str) -> list[ItemRecord]:
@@ -280,3 +372,39 @@ class InMemoryRepository(Repository):
 
     def pop_pending(self, shop_id: str, message_id: str) -> dict | None:
         return self._pending.get(shop_id, {}).pop(message_id, None)
+
+    # orders
+    def add_order(self, order: OrderRecord) -> None:
+        self._orders[order.shop_id].append(order)
+
+    def get_order(self, shop_id: str, order_id: str) -> OrderRecord | None:
+        return next((o for o in self._orders.get(shop_id, []) if o.order_id == order_id), None)
+
+    def list_orders(self, shop_id: str) -> list[OrderRecord]:
+        # newest first; insertion order breaks ties within the same second
+        return sorted(reversed(self._orders.get(shop_id, [])), key=lambda o: o.created_at, reverse=True)
+
+    def set_order_status(self, shop_id: str, order_id: str, status: str) -> OrderRecord:
+        order = self.get_order(shop_id, order_id)
+        if order is None:
+            raise KeyError(order_id)
+        order.status = status
+        return order
+
+    # bot messages
+    def add_bot_message(self, msg: BotMessageRecord) -> None:
+        self._bot_messages[msg.shop_id].append(msg)
+
+    def list_bot_messages(self, shop_id: str, since: str | None = None,
+                          limit: int = 50) -> list[BotMessageRecord]:
+        msgs = self._bot_messages.get(shop_id, [])
+        if since:
+            msgs = [m for m in msgs if m.created_at > since]
+        return sorted(reversed(list(msgs)), key=lambda m: m.created_at, reverse=True)[:limit]
+
+    # feedback
+    def add_feedback(self, fb: FeedbackRecord) -> None:
+        self._feedback.setdefault(fb.shop_id, []).append(fb)
+
+    def list_feedback(self, shop_id: str) -> list[FeedbackRecord]:
+        return list(self._feedback.get(shop_id, []))

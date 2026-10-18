@@ -7,7 +7,9 @@ SDK with structured JSON output. Implements [`docs/api-contract.md`](../docs/api
 Phase 1 ships `/shops`, `/chat`, `/voice-note`, `/confirm`, `/undo`, `/stock`, `/ledger`,
 `/health` (alias `/healthz`). Phase 3 adds `/shelf-scan` (Gemini vision counts units on a shelf photo). Phase 5
 adds `/forecast` (BigQuery ML ARIMA_PLUS, festival-aware), `/summary` (evening hisaab) and
-`/reorder` (order text plus WhatsApp link). Storage is an in-memory repository seeded with 15 common
+`/reorder` (order text plus WhatsApp link). Phase 7 adds `/top-items`, per-shop settings
+(`PATCH /shops/{id}`), `/auto-restock/run` for Cloud Scheduler, `/orders`, `/messages`,
+`/feedback` and `/feedback-voice`, `/languages`, and replies in all 22 scheduled languages. Storage is an in-memory repository seeded with 15 common
 kirana items; Phase 4 swaps in Cloud SQL behind the same `Repository` interface.
 
 ## Run locally
@@ -46,6 +48,7 @@ for Phase 1.
 | `BQ_DATASET` | `kirana` (created by `data/load_bigquery.sh`) |
 | `BQ_LOCATION` | `asia-south1`, the dataset's location |
 | `DATA_DIR` | folder with `catalogue.csv`, `sales_history.csv`, `festivals.csv`, `festival_uplift.csv` for the local source; default `../data` |
+| `SCHEDULER_TOKEN` | shared secret; `POST /auto-restock/run` requires header `X-Scheduler-Token` equal to it, else 401. Unset = always 401 |
 
 Mock mode:
 
@@ -106,6 +109,39 @@ curl -s -X POST localhost:8080/reorder/shp_...
 Health: `GET /health` (canonical; `/healthz` is an alias). On Cloud Run the run.app edge answers the
 exact path `/healthz` with its own 404 before the container sees it, so clients must probe `/health`.
 
+Top sellers, orders, auto-restock and feedback:
+
+```bash
+curl -s "localhost:8080/top-items/shp_...?weeks=2"
+```
+
+```bash
+curl -s -X PATCH localhost:8080/shops/shp_... -H 'content-type: application/json' \
+  -d '{"auto_restock":true,"distributor_phone":"+919876543210"}'
+```
+
+```bash
+curl -s -X POST "localhost:8080/auto-restock/run?shop_id=shp_..." -H 'X-Scheduler-Token: change-me'
+```
+
+```bash
+curl -s localhost:8080/orders/shp_...
+curl -s "localhost:8080/messages/shp_...?since=2026-10-18T00:00:00+05:30"
+```
+
+```bash
+curl -s -X POST localhost:8080/feedback -H 'content-type: application/json' \
+  -d '{"shop_id":"shp_...","screen":"forecast","rating":"up","comment":"badhiya","app_version":"1.0.0","platform":"android"}'
+```
+
+```bash
+curl -s -X POST localhost:8080/feedback-voice -F shop_id=shp_... -F screen=stock -F rating=down -F audio=@note.m4a
+```
+
+```bash
+curl -s localhost:8080/languages
+```
+
 Interactive docs: http://localhost:8080/docs
 
 ## How a message is handled
@@ -161,6 +197,45 @@ are copied to `tests/eval/forecast_results.csv`: over 40 items the 14-day volume
 11.0%, the median per-item MAPE is 43.9% and the median per-item WAPE 50.9% (daily demand of
 0 to 20 units is noisy, so per-item daily errors are high while totals over two weeks are close).
 
+## Top items, auto-restock, orders, messages
+
+- `GET /top-items/{shop_id}?weeks=2&limit=10` ranks the shop's items by forecast demand over the
+  next `weeks` weeks (1 to 4), with the same-length window of history, `trend_pct`, `cover_days`
+  (on_hand divided by forecast demand per day) and the same 2-week `reorder_qty` as `/forecast`.
+- `PATCH /shops/{shop_id}` sets `auto_restock` (default false), `distributor_phone` (`+91...`,
+  used as the `wa.me` number) and `language`. Both settings are in the Shop object.
+- `POST /auto-restock/run[?shop_id=]` is the Cloud Scheduler entry point and needs the
+  `X-Scheduler-Token` header. For each shop with `auto_restock` on it computes the reorder lines;
+  if there are any and no auto order exists for today, it records an Order (`source: auto`,
+  `status: placed`) and posts a bot message into the shop's chat ("Auto-order bheja: ... Undo?")
+  with `undo` and `open_orders` quick actions. `POST /undo` with that message id sets the order to
+  `cancelled`. The run is idempotent per shop per day, cancelled orders included.
+- `GET /orders/{shop_id}` lists orders newest first; `POST /reorder` records one with
+  `source: manual`. `GET /messages/{shop_id}?since=` returns the last 50 server-side bot messages
+  so the app can show them when it opens.
+
+## Feedback
+
+`POST /feedback` (JSON: shop_id, screen, rating up|down, comment, app_version, platform) and
+`POST /feedback-voice` (multipart, the comment is transcribed from the audio by Gemini) store the
+feedback in the repository and, when BigQuery is configured (`FORECAST_SOURCE=bigquery`), stream
+it into `kirana.feedback` (feedback_id, shop_id, screen, rating, comment, language, app_version,
+platform, created_at) from a background thread. A BigQuery failure is logged and never fails the
+request. `language` is detected from the comment's script, else the shop's language.
+
+## Languages
+
+`app/languages.py` lists the 22 scheduled languages plus `en` and `hi-Latn` with English name,
+native name, script and an `rtl` flag (`ks`, `sd`, `ur`); `GET /languages` returns the table. Every
+`language` field accepts those codes. The extraction, shelf and summary prompts tell Gemini to
+reply in the shop's language in its native script (Hinglish stays Roman) unless the user's message
+is in a different language or script mix, in which case it mirrors the user; brand names in
+`entities.items` are always written in Latin letters so the catalogue match works in every script.
+Python-side strings (running totals, quick-action labels, the summary fallback) exist for `hi`,
+`hi-Latn` and `en`; every other code gets English. The mock extractor detects the script
+(Bengali, Tamil, Perso-Arabic, ...) to fill `language` and replies in English for codes it has
+no template for.
+
 ## Tests and eval
 
 Fast unit tests (Gemini scripted, no network):
@@ -176,10 +251,12 @@ and the dataset and model exist:
 uv run pytest -q -m slow
 ```
 
-Eval harness: 26 utterances in `tests/eval/samples.jsonl` (Hindi script, Hinglish, English,
-all five intents plus deliberately ambiguous ones). It calls the running server's `/chat`,
-prints intent accuracy, entity accuracy (item, quantity, customer, amount), p50/p95 latency,
-and appends a row to `tests/eval/results.csv` with the date and model id.
+Eval harness: 44 utterances in `tests/eval/samples.jsonl` (Hindi script, Hinglish, English,
+all five intents, deliberately ambiguous ones, and two each in Bengali, Tamil, Telugu, Marathi,
+Gujarati, Kannada, Malayalam, Punjabi and Urdu). It creates one shop per language, calls `/chat`,
+prints intent accuracy, entity accuracy (item, quantity, customer, amount), language detection,
+whether the reply came back in the language's own script, p50/p95 latency and a per-language
+table, and appends a row to `tests/eval/results.csv` with the date and model id.
 
 ```bash
 uv run python -m tests.eval.run            # against http://localhost:8080

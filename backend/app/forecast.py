@@ -130,7 +130,8 @@ def round_up_to_pack(qty: int, pack: int) -> int:
 
 
 def _localized(language: str, hi: str, en: str, hinglish: str) -> str:
-    return {"hi": hi, "en": en}.get(language, hinglish)
+    """Python-side strings exist for hi, en and hi-Latn; every other code gets English."""
+    return {"hi": hi, "hi-Latn": hinglish}.get(language, en)
 
 
 def reorder_reason(language: str, festival: str | None, peak_mult: float, need_qty: int,
