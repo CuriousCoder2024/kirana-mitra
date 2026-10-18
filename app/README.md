@@ -97,3 +97,31 @@ the ARB files. Known gaps against the handoff:
   loaded from an SVG asset.
 
 After editing an `.arb` file run `flutter gen-l10n` (also runs on `flutter run`).
+
+## v1.1 features
+
+- **Feedback** on every screen: the app-bar action opens a sheet with thumbs up/down,
+  an optional comment and a hold-to-talk spoken comment. JSON goes to `POST /feedback`,
+  audio to `POST /feedback-voice`; the reply shows as a top toast.
+- **22 scheduled languages** plus English and Hinglish. The table lives in
+  `lib/l10n/languages.dart` (fallback for `GET /languages`). Onboarding and the language
+  chip use a searchable grid. `app_en.arb` and `app_hi.arb` are hand-written; the other
+  22 files are machine-translated with Gemini and marked `@@x-machine-translated`:
+
+  ```bash
+  cd app && uv run --with google-genai python tool/translate_arb.py            # all
+  cd app && uv run --with google-genai python tool/translate_arb.py --only ta  # one
+  ```
+
+  Reads Vertex AI settings from the environment or `../backend/.env`, retries on 429,
+  skips existing files unless `--force`. Run `flutter gen-l10n` afterwards.
+  Scripts: Latin and Devanagari use the bundled fonts; Bengali (bn, as, mni), Gurmukhi,
+  Gujarati, Odia, Tamil, Telugu, Kannada, Malayalam, Ol Chiki and Nastaliq (ur, ks, sd)
+  are fetched on demand through `google_fonts`, and the app waits for the face before the
+  first frame. Urdu, Kashmiri and Sindhi lay out right-to-left; locales Flutter itself does
+  not ship (brx, doi, kok, ks, mai, mni, sa, sat, sd) fall back to English framework
+  strings through `lib/l10n/fallback_delegates.dart`.
+- **Top sellers and auto-restock** on the Forecast tab: ranked `GET /top-items` list, a
+  settings card that PATCHes `auto_restock` and `distributor_phone`, an Orders screen from
+  `GET /orders` with WhatsApp share and Undo on placed auto orders, and server-side
+  auto-order notices pulled from `GET /messages` when the chat opens.
