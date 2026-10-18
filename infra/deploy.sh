@@ -7,9 +7,13 @@
 # BQ_DATASET are passed to the service as environment variables; the Cloud SQL
 # attachment and DB_* variables are only added with --with-cloudsql (on hold).
 #
-# Cost: Cloud Run with min-instances 0 bills only while requests run (free
-# tier: 2 million requests/month); Cloud Build has 120 free build-minutes/day.
-# Each deploy is a 2-4 minute build.
+# Instances: min 1 / max 1 by default (owner's decision 2026-10-18) so the
+# backend's in-memory shops survive idle periods and every request lands on
+# the same instance. One idle 1 vCPU / 1 GiB instance bills roughly $5-10 a
+# month; override with CLOUD_RUN_MIN_INSTANCES / CLOUD_RUN_MAX_INSTANCES.
+# Every deploy still replaces the instance and wipes the shops, so deploy
+# only on the owner's go. Cloud Build has 120 free build-minutes/day; each
+# deploy is a 2-4 minute build.
 set -euo pipefail
 # shellcheck source=infra/common.sh
 . "$(dirname "${BASH_SOURCE[0]}")/common.sh"
@@ -64,8 +68,8 @@ run gcloud run deploy "$CLOUD_RUN_SERVICE" \
   --image "$IMAGE" \
   --service-account "$SA_EMAIL" \
   --allow-unauthenticated \
-  --min-instances 0 \
-  --max-instances 2 \
+  --min-instances "${CLOUD_RUN_MIN_INSTANCES:-1}" \
+  --max-instances "${CLOUD_RUN_MAX_INSTANCES:-1}" \
   --concurrency 20 \
   --cpu 1 \
   --memory 1Gi \

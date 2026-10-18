@@ -58,8 +58,8 @@ Each step is idempotent: it checks `describe` first and skips what exists.
 
 `gcloud run deploy` from `backend/` source (Cloud Build, image pushed to the
 Artifact Registry repo), region asia-south1, service account
-`kirana-mitra-api`, `--allow-unauthenticated --min-instances 0
---max-instances 2 --concurrency 20 --cpu 1 --memory 1Gi --timeout 120`, and
+`kirana-mitra-api`, `--allow-unauthenticated --min-instances 1
+--max-instances 1 --concurrency 20 --cpu 1 --memory 1Gi --timeout 120`, and
 these env vars on the service: `GOOGLE_CLOUD_PROJECT,
 GOOGLE_GENAI_USE_VERTEXAI=true, GOOGLE_CLOUD_LOCATION=global` (where Gemini
 3.x Flash is served), `GEMINI_MODEL, MOCK_GEMINI, CONFIRM_THRESHOLD,
@@ -101,6 +101,14 @@ CLOUDSDK_ACTIVE_CONFIG_NAME=kirana gcloud scheduler jobs run kirana-auto-restock
 ```bash
 CLOUDSDK_ACTIVE_CONFIG_NAME=kirana gcloud logging read 'resource.type="cloud_run_revision" AND httpRequest.requestUrl:"auto-restock"' --project kirana-mitra-app --limit 3 --format='value(timestamp,httpRequest.status,httpRequest.userAgent)'
 ```
+
+**Instances and cost.** Min 1 / max 1 is the owner's decision (2026-10-18):
+the backend keeps shops in memory, so one always-warm instance keeps them
+alive between requests and the 06:00 scheduler run sees them. An idle
+1 vCPU / 1 GiB instance bills roughly $5-10 per month on top of the free
+tier. Every deploy still replaces that instance and wipes the shops, so
+redeploy only on the owner's go. Override per run with
+`CLOUD_RUN_MIN_INSTANCES` / `CLOUD_RUN_MAX_INSTANCES` in `infra/.env`.
 
 ## deploy_web.sh
 
