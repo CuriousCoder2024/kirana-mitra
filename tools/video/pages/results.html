@@ -1,0 +1,51 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Results</title><link rel="stylesheet" href="common.css">
+<style>
+h1.t { position: absolute; left: 60px; top: 40px; font-size: 54px; } h1.t span { color: var(--saffron); }
+.sub { position: absolute; left: 62px; top: 104px; font-size: 22px; color: var(--ink-soft); font-weight: 600; }
+.tiles { position: absolute; left: 60px; top: 160px; width: 1160px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.tile { padding: 24px 26px; min-height: 170px; }
+.tile .big { font-family: "Baloo 2"; font-weight: 800; font-size: 72px; line-height: 1; color: var(--saffron); }
+.tile .big small { font-size: 30px; color: var(--ink-soft); font-weight: 700; }
+.tile .lb { font-size: 24px; font-weight: 700; margin-top: 6px; }
+.tile .nt { font-size: 17px; color: var(--ink-soft); margin-top: 4px; }
+.caveat { position: absolute; left: 60px; bottom: 34px; width: 1160px; font-size: 19px; color: var(--ink-soft); line-height: 1.35; }
+.close { position: absolute; inset: 0; background: var(--cream); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+.close .logo { width: 120px; height: 120px; }
+.close h1 { font-size: 86px; } .close h1 span { color: var(--saffron); }
+.close .tag { font-size: 32px; color: var(--ink-soft); font-weight: 600; }
+.close .team { margin-top: 26px; font-size: 24px; font-weight: 700; color: var(--ink2); }
+.close .links { font-size: 21px; color: var(--ink-soft); line-height: 1.6; text-align: center; }
+.close .links b { color: var(--saffron); }
+</style></head><body><div class="stage">
+<h1 class="t a" style="--d:.3s">On our <span>test sets</span></h1>
+<div class="sub a" style="--d:.7s">gemini-3.8-flash on Vertex AI · BigQuery ML · measured 2026-10-18 · docs/submission/performance-report.md</div>
+<div class="tiles">
+  <div class="tile card a" style="--d:1.2s"><div class="big"><span data-count="96.2" data-dec="1"></span><small>%</small></div><div class="lb">Intent accuracy</div><div class="nt">25 of 26 typed utterances · Hindi, Hinglish, English</div></div>
+  <div class="tile card a" style="--d:2.0s"><div class="big"><span data-count="100"></span><small>%</small></div><div class="lb">Entity extraction</div><div class="nt">item, quantity, customer, amount · 26 of 26</div></div>
+  <div class="tile card a" style="--d:2.8s"><div class="big"><span data-count="25"></span><small>/26</small></div><div class="lb">Shelf counts exact</div><div class="nt">5 shelf images, 144 units · recall 100%</div></div>
+  <div class="tile card a" style="--d:3.6s"><div class="big"><span data-count="11.0" data-dec="1"></span><small>% WAPE</small></div><div class="lb">Forecast error</div><div class="nt">19.6% without the festival uplift · 14-day holdout, 40 items</div></div>
+  <div class="tile card a" style="--d:4.4s"><div class="big"><span data-count="2.5" data-dec="1"></span><small>s p50</small></div><div class="lb">Reply time, text entry</div><div class="nt">shelf scan p50 9 s · long tail on the global endpoint</div></div>
+  <div class="tile card a" style="--d:5.2s;background:var(--saffron-tint);border-color:var(--saffron-tint)"><div class="big" style="font-size:40px;line-height:1.15;color:var(--ink2)">Voice · photo · forecast · hisaab</div><div class="nt" style="margin-top:10px">all live on Cloud Run today</div></div>
+</div>
+<div class="caveat a" style="--d:6.4s"><b>Honest caveat:</b> synthetic sales history and synthetic shelf images, small samples (26 utterances, 5 images, one 14-day window), and 6 of the 26 utterances are also few-shot examples. Real shops will score lower; the report says so.</div>
+
+<div class="close a fadein" style="--d:11.0s">
+  <div class="logo a pop" style="--d:11.2s"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F08A2C"/><stop offset="1" stop-color="#BE520B"/></linearGradient></defs><rect width="100" height="100" rx="25" fill="url(#lg)"/><rect x="12" y="14" width="76" height="16" fill="#FBF1E2"/><g fill="#FBF1E2"><path d="M12 30a9.5 9.5 0 0 0 19 0z"/><path d="M31 30a9.5 9.5 0 0 0 19 0z"/><path d="M50 30a9.5 9.5 0 0 0 19 0z"/><path d="M69 30a9.5 9.5 0 0 0 19 0z"/></g><rect x="22" y="40" width="56" height="38" rx="14" fill="#FFFCF7"/><path d="M32 76 26 90 46 78z" fill="#FFFCF7"/><rect x="44" y="46" width="12" height="18" rx="6" fill="#2A1A10"/><path d="M40 61a10 10 0 0 0 20 0" fill="none" stroke="#2A1A10" stroke-width="3.5" stroke-linecap="round"/><path d="M50 71v4" stroke="#2A1A10" stroke-width="3.5" stroke-linecap="round"/></svg></div>
+  <h1 class="a" style="--d:11.5s">Kirana <span>Mitra</span></h1>
+  <div class="tag a" style="--d:11.9s">Bolo, ho jayega.</div>
+  <div class="team a" style="--d:12.5s">Team singapuria_innovators · Google Cloud AI Builder Cup · Retail &amp; Commerce</div>
+  <div class="links a" style="--d:13.0s"><b>Web app</b> storage.googleapis.com/kirana-mitra-app-web/index.html<br><b>API</b> kirana-mitra-api-396621755403.asia-south1.run.app &nbsp;·&nbsp; <b>Code</b> github.com/vipindev-shambu/kirana-mitra</div>
+</div>
+<script>
+// Count-up numbers are driven by the renderer through window.seek(t).
+window.seek = function (t) {
+  document.querySelectorAll('[data-count]').forEach(function (el) {
+    var tile = el.closest('.tile'); var d = parseFloat(getComputedStyle(tile).getPropertyValue('--d')) || 0;
+    var p = Math.max(0, Math.min(1, (t - d) / 1.4)); p = 1 - Math.pow(1 - p, 3);
+    var v = parseFloat(el.dataset.count) * p; var dec = parseInt(el.dataset.dec || '0');
+    el.textContent = v.toFixed(dec);
+  });
+};
+window.seek(0);
+</script>
+</div></body></html>

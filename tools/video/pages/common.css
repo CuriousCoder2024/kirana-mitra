@@ -1,0 +1,37 @@
+/* Kirana Mitra video pages: palette from docs/design/handoff.md, fonts from app/fonts (OFL). */
+@font-face { font-family: "Baloo 2"; src: url("/app/fonts/Baloo2[wght].ttf") format("truetype"); font-weight: 400 800; }
+@font-face { font-family: "Noto Sans"; src: url("/app/fonts/NotoSans[wdth,wght].ttf") format("truetype"); font-weight: 100 900; }
+@font-face { font-family: "Noto Sans Devanagari"; src: url("/app/fonts/NotoSansDevanagari[wdth,wght].ttf") format("truetype"); font-weight: 100 900; }
+:root {
+  --saffron: #C85A0E; --saffron-bright: #F08A2C; --saffron-tint: #FFE6CC; --brand: #E8742B;
+  --terracotta: #A83E12; --cream: #FBF1E2; --paper: #FFFCF7; --sand: #EBDAC1;
+  --ink: #1A1A1A; --ink2: #2A1A10; --ink-soft: #6E5240; --ink-faint: #A58B77;
+  --leaf: #2F7A4B; --leaf-tint: #DDF0E2; --mirchi: #B3261E; --mirchi-tint: #FBE1DE;
+  --haldi: #E9A826; --haldi-tint: #FFF1CF; --haldi-text: #8A5A00; --whatsapp: #1FA855;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1280px; height: 720px; overflow: hidden; background: var(--cream); color: var(--ink2);
+  font-family: "Noto Sans", "Noto Sans Devanagari", sans-serif; }
+.stage { position: relative; width: 1280px; height: 720px; overflow: hidden; }
+h1, h2, h3, .baloo { font-family: "Baloo 2", "Noto Sans Devanagari", sans-serif; font-weight: 800; line-height: 1.05; }
+.abs { position: absolute; }
+.badge { display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border-radius: 999px; font-weight: 700; font-size: 20px; }
+.badge.live { background: var(--mirchi-tint); color: var(--mirchi); }
+.badge.live::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--mirchi); }
+.badge.api { background: var(--haldi-tint); color: var(--haldi-text); }
+.card { background: var(--paper); border: 1.5px solid var(--sand); border-radius: 22px; box-shadow: 0 6px 24px rgba(42,26,16,.08); }
+.mono { font-family: "SF Mono", Menlo, Consolas, monospace; }
+/* Animation helpers: every element with class .a animates once; --d sets its start time (s). */
+.a { animation: fadeup .6s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--d, 0s); }
+.a.pop { animation-name: pop; }
+.a.fadein { animation-name: fadein; }
+.a.slideleft { animation-name: slideleft; }
+.a.out { animation: fadeout .5s ease both; animation-delay: var(--d, 0s); }
+@keyframes fadeup { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeout { from { opacity: 1; } to { opacity: 0; } }
+@keyframes pop { 0% { opacity: 0; transform: scale(.6); } 70% { transform: scale(1.06); } 100% { opacity: 1; transform: none; } }
+@keyframes slideleft { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
+/* a group that appears, then disappears: --d start, --o end */
+/* a scene group: enters at --d, leaves at --o (exit uses fill-mode forwards only, so it is inert before --o) */
+.scene { animation: fadein .6s ease both var(--d, 0s), fadeout .5s ease forwards var(--o, 9999s); }

@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Backdrop</title><link rel="stylesheet" href="common.css">
+<style>
+.frame { position: absolute; left: 136px; top: 20px; width: 328px; height: 680px; border-radius: 44px; background: #1A1A1A; box-shadow: 0 18px 50px rgba(42,26,16,.28); }
+.frame::after { content: ""; position: absolute; left: 122px; top: 8px; width: 84px; height: 8px; border-radius: 4px; background: #333; }
+.screen { position: absolute; left: 150px; top: 36px; width: 300px; height: 649px; border-radius: 30px; background: #FBF1E2; }
+.panel { position: absolute; left: 520px; top: 96px; width: 700px; }
+.panel h1 { font-size: 46px; margin-top: 16px; line-height: 1.1; } .panel h1 span { color: var(--saffron); }
+.panel ul { list-style: none; margin-top: 22px; }
+.panel li { font-size: 24px; line-height: 1.35; padding: 8px 0 8px 36px; position: relative; color: var(--ink2); font-weight: 600; }
+.panel li::before { content: ""; position: absolute; left: 6px; top: 18px; width: 14px; height: 14px; border-radius: 50%; background: var(--saffron); }
+.url { position: absolute; left: 520px; bottom: 26px; font-size: 16px; color: var(--ink-faint); font-weight: 600; }
+.step { position: absolute; left: 520px; top: 44px; display: flex; gap: 12px; align-items: center; }
+.step .n { font-size: 15px; font-weight: 700; color: var(--ink-faint); letter-spacing: 1px; text-transform: uppercase; }
+</style></head><body><div class="stage">
+<div class="frame"></div><div class="screen"></div>
+<div class="step"><span class="badge live">LIVE · recorded from the web app</span><span class="n" id="step"></span></div>
+<div class="panel"><h1 id="title"></h1><ul id="bullets"></ul></div>
+<div class="url">storage.googleapis.com/kirana-mitra-app-web · Cloud Run asia-south1 · gemini-3.8-flash</div>
+<script>
+(function () { var D = window.DATA || {};
+  document.getElementById('title').innerHTML = D.title || '';
+  document.getElementById('step').textContent = D.step || '';
+  var ul = document.getElementById('bullets'); (D.bullets || []).forEach(function (b) { var li = document.createElement('li'); li.innerHTML = b; ul.appendChild(li); });
+})();
+</script>
+</div></body></html>

@@ -1,0 +1,68 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Shelf scan</title><link rel="stylesheet" href="common.css">
+<style>
+h1.t { position: absolute; left: 60px; top: 34px; font-size: 50px; } h1.t span { color: var(--saffron); }
+.photo { position: absolute; left: 60px; top: 150px; width: 520px; height: 390px; border-radius: 24px; overflow: hidden; border: 2px solid var(--sand); }
+.photo img { width: 100%; height: 100%; object-fit: cover; }
+.photo .cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 16px; font-size: 15px; color: #fff; background: linear-gradient(transparent, rgba(0,0,0,.75)); }
+.scan { position: absolute; left: 0; right: 0; height: 6px; background: var(--saffron-bright); box-shadow: 0 0 24px 8px rgba(240,138,44,.6); animation: sweep 2.4s ease-in-out infinite; animation-delay: var(--d); opacity: 0; }
+@keyframes sweep { 0% { top: 0; opacity: 1 } 50% { top: 384px; opacity: 1 } 100% { top: 0; opacity: 1 } }
+.req { position: absolute; left: 60px; top: 572px; width: 520px; padding: 14px 20px; background: var(--ink2); color: #FFE6CC; border-radius: 16px; font-size: 18px; line-height: 1.45; }
+.req b { color: var(--saffron-bright); }
+.spin { position: absolute; left: 640px; top: 150px; width: 580px; padding: 20px 24px; display: flex; gap: 16px; align-items: center; font-size: 22px; font-weight: 700; color: var(--ink-soft); }
+.dots i { display: inline-block; width: 12px; height: 12px; margin-right: 6px; border-radius: 50%; background: var(--saffron); animation: blink 1s infinite; }
+.dots i:nth-child(2) { animation-delay: .2s } .dots i:nth-child(3) { animation-delay: .4s }
+@keyframes blink { 0%,100% { opacity: .25 } 50% { opacity: 1 } }
+.seen { position: absolute; left: 640px; top: 150px; width: 580px; padding: 18px 22px; }
+.seen .h { font-family: "Baloo 2"; font-weight: 800; font-size: 26px; color: var(--ink2); }
+.row { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-top: 1px solid var(--sand); font-size: 22px; font-weight: 700; }
+.row:first-of-type { border-top: 0 }
+.row .n { flex: 1 } .row .c { font-family: "Baloo 2"; font-weight: 800; font-size: 32px; color: var(--ink2) }
+.row .kam { padding: 3px 10px; border-radius: 999px; background: var(--mirchi); color: #fff; font-size: 15px; }
+.row .conf { font-size: 15px; color: var(--ink-faint); font-weight: 600 }
+.q { font-size: 20px; color: var(--ink-soft); margin-top: 10px; font-weight: 600; }
+.btns { display: flex; gap: 12px; margin-top: 12px; }
+.btn { padding: 10px 20px; border-radius: 999px; font-weight: 800; font-size: 19px; border: 2px solid var(--sand); color: var(--ink-soft); }
+.btn.haan { background: var(--leaf); border-color: var(--leaf); color: #fff; animation: press .5s ease both; animation-delay: var(--d); }
+@keyframes press { 0% { transform: scale(1) } 50% { transform: scale(.92); filter: brightness(.85) } 100% { transform: scale(1) } }
+.done { position: absolute; left: 640px; top: 520px; width: 580px; padding: 16px 22px; border-left: 8px solid var(--leaf); }
+.done .h { color: var(--leaf); font-weight: 800; font-size: 22px; font-family: "Baloo 2"; } .done .tx { font-size: 19px; line-height: 1.4; margin-top: 4px; }
+.lat { position: absolute; right: 60px; bottom: 30px; font-size: 20px; font-weight: 700; color: var(--ink-soft); } .lat b { color: var(--leaf); }
+.unm { font-size: 15px; color: var(--ink-faint); margin-top: 8px; }
+</style></head><body><div class="stage">
+<h1 class="t a" style="--d:.2s">Shelf photo → <span>live API</span></h1>
+<div class="badge api abs a" style="--d:.6s;left:62px;top:102px;font-size:17px">the app's Sample shelf sheet does not open in headless Chromium, so the same photo is sent to POST /shelf-scan</div>
+<div class="photo a" style="--d:.9s"><img id="img"><div class="cap" id="cap"></div><div class="scan" style="--d:2.6s"></div><div class="abs a fadein" style="--d:var(--reply);inset:0;background:rgba(251,241,226,.0)"></div></div>
+<div class="req a" style="--d:2.4s"><b>POST</b> /shelf-scan · multipart: shop_id, image=<span id="file"></span> (image/jpeg)<br><span style="color:#A58B77">Gemini vision counts packs it can match to the shop's catalogue</span></div>
+<div class="spin card a" style="--d:2.8s"><span class="dots"><i></i><i></i><i></i></span>Gemini gin raha hai… (this is the slowest call)</div>
+<div class="abs a fadein" style="--d:var(--reply);left:640px;top:150px;width:580px;height:100px;background:var(--cream)"></div>
+<div class="seen card a" style="--d:var(--reply)"><div class="h">Shelf dekha · <span id="count"></span> cheezein mili</div><div id="rows"></div>
+  <div class="unm" id="unm"></div>
+  <div class="q a" style="--d:calc(var(--reply) + 1.2s)">Stock yahi set kar doon? (nothing is written until Ramesh says yes)</div>
+  <div class="btns a" style="--d:calc(var(--reply) + 1.6s)"><span class="btn haan" style="--d:calc(var(--reply) + 3.4s)">Haan, update karo</span><span class="btn">Nahi</span></div></div>
+<div class="done card a" style="--d:calc(var(--reply) + 4.4s)"><div class="h">Samjha · stock update ho gaya &nbsp;<span style="font-size:15px;color:var(--ink-faint);font-family:'Noto Sans'">POST /confirm</span></div><div class="tx" id="done"></div></div>
+<div class="lat a" style="--d:calc(var(--reply) + 5.2s)">Live scan reply in <b id="lat"></b></div>
+<script>
+(function () {
+  var D = window.DATA || {}; var r = D.reply || {};
+  document.getElementById('img').src = D.image_url || '';
+  document.getElementById('cap').textContent = D.caption || '';
+  document.getElementById('file').textContent = (D.shelf || 'shelf') + '.jpg';
+  var items = r.items || []; document.getElementById('count').textContent = items.length;
+  var low = {}; (r.low_stock || []).forEach(function (l) { low[l.name] = l.reorder_level; });
+  var rows = document.getElementById('rows');
+  items.forEach(function (it, i) {
+    var d = document.createElement('div'); d.className = 'row a'; d.style.setProperty('--d', 'calc(var(--reply) + ' + (0.3 + i * 0.4) + 's)');
+    d.innerHTML = '<span class="n">' + it.name + ' <span style="color:var(--ink-faint);font-weight:600;font-size:17px">' + (it.pack_size || '') + '</span></span>' +
+      (low[it.name] != null ? '<span class="kam">Kam hai · reorder ' + Math.round(low[it.name]) + '</span>' : '') +
+      '<span class="conf">' + Math.round((it.confidence || 0) * 100) + '%</span><span class="c">' + it.count + '</span>';
+    rows.appendChild(d);
+  });
+  var un = (r.unmatched || []).map(function (u) { return u.name + ' ×' + u.count; });
+  document.getElementById('unm').textContent = un.length ? 'Also seen, not in the catalogue: ' + un.slice(0, 3).join(', ') : '';
+  var c = (D.confirm && D.confirm.reply) || {};
+  document.getElementById('done').textContent = c.reply_text || '';
+  document.getElementById('lat').textContent = (D.seconds || 0).toFixed(1) + ' s';
+  document.documentElement.style.setProperty('--reply', (D.reply_at || 8) + 's');
+})();
+</script>
+</div></body></html>
