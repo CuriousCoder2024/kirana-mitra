@@ -115,4 +115,8 @@ Undo is allowed for the last 10 applied messages of the shop; older → 409.
 → 200 `{ "order_id": "ord_...", "lines": [ { "name": "Parle-G 70g", "qty": 120, "unit": "packet" } ], "text": "Order for Gupta General Store ...", "whatsapp_url": "https://wa.me/?text=..." }`
 
 ## Health
-`GET /healthz` → 200 `{ "ok": true, "model": "<gemini model id in use>" }`
+`GET /health` → 200 `{ "ok": true, "model": "<gemini model id in use>" }`
+
+`/healthz` is kept as an alias for local tooling, but clients must call
+`/health`: on Cloud Run the `*.run.app` edge answers `/healthz` itself with an
+HTML 404 and the request never reaches the service (observed 2026-10-18).
