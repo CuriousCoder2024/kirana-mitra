@@ -18,7 +18,7 @@ from typing import Protocol
 from pydantic import ValidationError
 
 from app.config import Settings
-from app.models import Entities, ExtractedItem, Extraction
+from app.models import Entities, ExtractedItem, Extraction, ShelfItem, ShelfScan
 from app.store import ItemRecord
 
 
@@ -96,8 +96,44 @@ User: "wo wala do"
 """
 
 
+SHELF_PROMPT = """You are Kirana Mitra, counting stock on a shelf photo from a small Indian grocery
+shop (kirana). Identify every packaged product you can see and count the units.
+
+Rules:
+- Count UNITS, not product types. Every visible front-facing packet, box, bottle, sachet or pouch
+  is one unit (each "facing" on the shelf counts as one). If a product is stacked and you can see
+  the stack, count each visible unit in the stack. Do not guess units hidden behind the front row.
+- Match each product to the shop catalogue below when it is clearly the same product, and use the
+  catalogue's exact name and pack_size. If the pack size is not readable, use the catalogue's.
+  Products that are not in the catalogue get their brand name as printed on the pack.
+- Group all units of the same product into ONE entry.
+- confidence: 0.0-1.0 that both the identification and the count are right. Blurry, partly hidden
+  or far-away products get a lower confidence.
+- Ignore shelves, price tags, posters, people and empty space.
+- reply_text: one short line in the shop's language listing what you saw, e.g.
+  "Shelf pe dikha: Maggi 6, Parle-G 12, Tata Salt 3." / "शेल्फ पर दिखा: मैगी 6, पारले-जी 12." /
+  "On the shelf: Maggi 6, Parle-G 12." Do not mention reorder levels; the backend adds them.
+
+Catalogue (name | pack | unit | aliases):
+{catalogue}
+Shop's preferred language: {language}
+"""
+
+
+def build_shelf_prompt(catalogue: list[ItemRecord], language: str) -> str:
+    lines = "\n".join(
+        f"- {i.name} | {i.pack_size or '-'} | {i.unit} | {', '.join(i.aliases[:3]) or '-'}"
+        for i in catalogue
+    ) or "- (empty)"
+    return SHELF_PROMPT.format(catalogue=lines, language=language)
+
+
 class Extractor(Protocol):
     model: str
+
+    def scan_shelf(
+        self, image: tuple[bytes, str], catalogue: list[ItemRecord], shop_language: str
+    ) -> ShelfScan: ...
 
     def extract(
         self,
@@ -182,15 +218,39 @@ class GeminiExtractor:
         if not parts:
             raise GeminiFailed("Nothing to extract: no text and no audio")
 
+        system = build_system_prompt(catalogue) + f"\nShop's preferred language: {shop_language}."
+        return self._generate(parts, system, Extraction)
+
+    def scan_shelf(
+        self, image: tuple[bytes, str], catalogue: list[ItemRecord], shop_language: str
+    ) -> ShelfScan:
+        from google.genai import types
+
+        data, mime = image
+        parts = [
+            types.Part.from_bytes(data=data, mime_type=mime),
+            types.Part.from_text(
+                text="Count the units of each product visible on this shelf and return the JSON."
+            ),
+        ]
+        # Vision over a full shelf takes longer than a one-line extraction; the 40 s
+        # chat deadline produced 504 DEADLINE_EXCEEDED on busier images.
+        return self._generate(parts, build_shelf_prompt(catalogue, shop_language), ShelfScan,
+                              timeout_ms=90_000)
+
+    def _generate(self, parts, system_instruction: str, schema, timeout_ms: int | None = None):
+        """One structured-output call with the shared timeout / retry / thinking settings."""
+        from google.genai import types
+
         config = types.GenerateContentConfig(
-            system_instruction=build_system_prompt(catalogue)
-            + f"\nShop's preferred language: {shop_language}.",
+            system_instruction=system_instruction,
             response_mime_type="application/json",
-            response_schema=Extraction,
+            response_schema=schema,
             temperature=0.1,
             # Extraction needs no deliberation; the default thinking budget pushed
             # p95 past 40 s and caused 504 DEADLINE_EXCEEDED on the global endpoint.
             thinking_config=types.ThinkingConfig(thinking_level=types.ThinkingLevel.LOW),
+            http_options=types.HttpOptions(timeout=timeout_ms) if timeout_ms else None,
         )
         response = None
         last_exc: Exception | None = None
@@ -212,11 +272,11 @@ class GeminiExtractor:
         if response is None:
             raise GeminiFailed(f"{type(last_exc).__name__}: {last_exc}") from last_exc
         parsed = getattr(response, "parsed", None)
-        if isinstance(parsed, Extraction):
+        if isinstance(parsed, schema):
             return parsed
         raw = response.text or ""
         try:
-            return Extraction.model_validate_json(raw)
+            return schema.model_validate_json(raw)
         except ValidationError as exc:
             raise GeminiFailed(f"Gemini returned invalid JSON: {exc}") from exc
 
@@ -334,6 +394,19 @@ class MockExtractor:
             entities=Entities(items=items, customer_name=customer, amount=amount, date=None),
             reply_text=reply,
         )
+
+    def scan_shelf(
+        self, image: tuple[bytes, str], catalogue: list[ItemRecord], shop_language: str
+    ) -> ShelfScan:
+        """Canned shelf: Maggi 6, Parle-G 12, Tata Salt 3 (Maggi sits below its reorder level)."""
+        canned = [("Maggi", 6, 0.9), ("Parle-G", 12, 0.85), ("Tata Salt", 3, 0.8)]
+        by_name = {c.name: c for c in catalogue}
+        items = [ShelfItem(name=n, pack_size=by_name[n].pack_size if n in by_name else None,
+                           count=k, confidence=conf) for n, k, conf in canned]
+        head = {"hi": "शेल्फ पर दिखा:", "en": "On the shelf:", "hi-Latn": "Shelf pe dikha:"}.get(
+            shop_language, "Shelf pe dikha:")
+        return ShelfScan(items=items,
+                         reply_text=f"{head} " + ", ".join(f"{i.name} {i.count}" for i in items) + ".")
 
     @staticmethod
     def _reply(intent, language, items, customer, amount, catalogue) -> str:

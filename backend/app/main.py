@@ -16,17 +16,20 @@ from app.models import (
     LedgerReply,
     MessageRef,
     Shop,
+    ShelfScanReply,
     ShopCreate,
     StockItem,
     StockReply,
     UndoReply,
 )
-from app.service import NotFound, UndoExpired, build_reply, confirm, undo
+from app.service import NotFound, UndoExpired, build_reply, build_shelf_reply, confirm, undo
 from app.store import InMemoryRepository, Repository
 
 ALLOWED_AUDIO = {"audio/m4a", "audio/mp4", "audio/x-m4a", "audio/wav", "audio/x-wav",
                  "audio/webm", "audio/ogg", "audio/mpeg", "audio/aac"}
 MAX_AUDIO_BYTES = 10 * 1024 * 1024
+ALLOWED_IMAGE = {"image/jpeg", "image/jpg", "image/png"}
+MAX_IMAGE_BYTES = 8 * 1024 * 1024
 
 
 class ApiError(Exception):
@@ -175,18 +178,28 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
     def _not_implemented(phase: str):
         raise ApiError(501, "not_implemented", f"{phase}; see docs/api-contract.md for the shape")
 
-    @app.post("/shelf-scan", status_code=501)
+    @app.post("/shelf-scan", response_model=ShelfScanReply)
     async def shelf_scan(shop_id: str = Form(...), image: UploadFile = File(...)):
-        """Phase 3. multipart: shop_id, image (jpeg/png ≤ 8 MB).
-
-        200 → { "message_id": "msg_...",
-                "items": [ { "name": "Maggi", "pack_size": "70g", "count": 6, "confidence": 0.8 } ],
-                "low_stock": [ { "name": "Maggi", "count": 6, "reorder_level": 12 } ],
-                "reply_text": "...",
-                "quick_actions": [ { "label": "Haan, update karo", "action": "confirm",
-                                     "payload": { "message_id": "msg_..." } } ] }
-        """
-        _not_implemented("shelf-scan lands in Phase 3")
+        """Phase 3. multipart: shop_id, image (jpeg/png ≤ 8 MB). Image bytes go to Gemini
+        inline; the counts are held (applied=false) until POST /confirm sets the stock
+        to the counted quantities. POST /undo restores the previous quantities."""
+        shop = get_shop(shop_id)
+        mime = (image.content_type or "").split(";")[0].strip().lower()
+        if mime not in ALLOWED_IMAGE:
+            raise ApiError(400, "invalid", f"unsupported image type {mime!r} (jpeg/png only)")
+        data = await image.read()
+        if not data:
+            raise ApiError(400, "invalid", "empty image")
+        if len(data) > MAX_IMAGE_BYTES:
+            raise ApiError(400, "invalid", "image too large (max 8 MB)")
+        if mime == "image/jpg":
+            mime = "image/jpeg"
+        try:
+            scan = get_extractor().scan_shelf((data, mime), repo.list_items(shop.shop_id),
+                                              shop.language)
+        except GeminiFailed as exc:
+            raise ApiError(502, "gemini_failed", str(exc))
+        return build_shelf_reply(repo, shop, scan)
 
     @app.get("/forecast/{shop_id}", status_code=501)
     def forecast(shop_id: str):

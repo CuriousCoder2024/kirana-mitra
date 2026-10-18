@@ -120,6 +120,37 @@ class LedgerReply(BaseModel):
     total_outstanding: int
 
 
+# ---- shelf scan (Phase 3) --------------------------------------------------
+
+
+class ShelfItem(BaseModel):
+    name: str
+    pack_size: str | None = None
+    count: int = Field(ge=0)
+    confidence: float = Field(ge=0.0, le=1.0)
+
+
+class ShelfScan(BaseModel):
+    """What Gemini vision returns for a shelf photo. Used as the response_schema."""
+
+    items: list[ShelfItem] = Field(default_factory=list)
+    reply_text: str
+
+
+class ShelfLowStock(BaseModel):
+    name: str
+    count: int
+    reorder_level: float
+
+
+class ShelfScanReply(BaseModel):
+    message_id: str
+    items: list[ShelfItem]
+    low_stock: list[ShelfLowStock]
+    reply_text: str
+    quick_actions: list[QuickAction] = Field(default_factory=list)
+
+
 class ErrorBody(BaseModel):
     code: Literal["not_found", "invalid", "gemini_failed", "undo_expired", "not_implemented"]
     message: str

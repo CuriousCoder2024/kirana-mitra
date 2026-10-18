@@ -1,0 +1,58 @@
+{
+  "shelf_01_easy.jpg": {
+    "counts": {
+      "Maggi": 6,
+      "Parle-G": 12,
+      "Tata Salt": 3
+    },
+    "source": "synthetic (Pillow)",
+    "hardness": 0.0
+  },
+  "shelf_02_mixed.jpg": {
+    "counts": {
+      "Parle-G": 7,
+      "Red Label": 4,
+      "Surf Excel": 5,
+      "Dettol": 6,
+      "Colgate": 4,
+      "Lifebuoy": 8
+    },
+    "source": "synthetic (Pillow)",
+    "hardness": 0.1
+  },
+  "shelf_03_crowded.jpg": {
+    "counts": {
+      "Maggi": 11,
+      "Nescafe": 5,
+      "Parle-G": 14,
+      "Amul Butter": 4,
+      "Tata Salt": 6,
+      "Surf Excel": 3,
+      "Dettol": 4
+    },
+    "source": "synthetic (Pillow)",
+    "hardness": 0.2
+  },
+  "shelf_04_sparse.jpg": {
+    "counts": {
+      "Red Label": 2,
+      "Colgate": 1,
+      "Nescafe": 2,
+      "Lifebuoy": 3
+    },
+    "source": "synthetic (Pillow)",
+    "hardness": 0.05
+  },
+  "shelf_05_noisy.jpg": {
+    "counts": {
+      "Parle-G": 9,
+      "Maggi": 5,
+      "Tata Salt": 4,
+      "Lifebuoy": 7,
+      "Dettol": 3,
+      "Surf Excel": 6
+    },
+    "source": "synthetic (Pillow)",
+    "hardness": 0.35
+  }
+}

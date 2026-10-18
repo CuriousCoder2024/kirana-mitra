@@ -11,7 +11,8 @@ Rules (docs/api-contract.md):
 from __future__ import annotations
 
 from app.matching import match_customer, match_item
-from app.models import Entities, ExtractedItem, Extraction, ExtractionReply, QuickAction
+from app.models import (Entities, ExtractedItem, Extraction, ExtractionReply, QuickAction,
+                        ShelfItem, ShelfLowStock, ShelfScan, ShelfScanReply)
 from app.store import AppliedMessage, Repository, ShopRecord, StockMove, new_id
 
 WRITE_INTENTS = {"stock_in", "sale", "udhaar_given", "udhaar_paid"}
@@ -198,8 +199,105 @@ def confirm(repo: Repository, shop: ShopRecord, message_id: str, threshold: floa
     pending = repo.pop_pending(shop.shop_id, message_id)
     if pending is None:
         raise NotFound("No pending message with that id")
+    if pending.get("kind") == "shelf_scan":
+        return apply_shelf_scan(repo, shop, message_id, ShelfScan.model_validate(pending["scan"]))
     extraction = Extraction.model_validate(pending)
     return build_reply(repo, shop, extraction, threshold, message_id=message_id, force_apply=True)
+
+
+# ---- shelf scan (Phase 3) ------------------------------------------------------
+
+
+def resolve_shelf_items(repo: Repository, shop_id: str, scan: ShelfScan) -> ShelfScan:
+    """Snap Gemini's product names onto the catalogue and merge duplicates."""
+    catalogue = repo.list_items(shop_id)
+    merged: dict[str, ShelfItem] = {}
+    for raw in scan.items:
+        hit = match_item(raw.name, catalogue)
+        name = hit.name if hit else raw.name.strip()
+        pack = raw.pack_size or (hit.pack_size if hit else None)
+        if name in merged:
+            prev = merged[name]
+            merged[name] = prev.model_copy(update={
+                "count": prev.count + raw.count,
+                "confidence": min(prev.confidence, raw.confidence)})
+        else:
+            merged[name] = raw.model_copy(update={"name": name, "pack_size": pack})
+    return scan.model_copy(update={"items": list(merged.values())})
+
+
+def build_shelf_reply(repo: Repository, shop: ShopRecord, scan: ShelfScan,
+                      message_id: str | None = None) -> ShelfScanReply:
+    """Hold the counted stock under message_id (applied=false) and offer a confirm chip."""
+    message_id = message_id or new_id("msg")
+    scan = resolve_shelf_items(repo, shop.shop_id, scan)
+    lang = shop.language
+    catalogue = {i.name: i for i in repo.list_items(shop.shop_id)}
+    low: list[ShelfLowStock] = []
+    for it in scan.items:
+        rec = catalogue.get(it.name)
+        if rec and it.count <= rec.reorder_level:
+            low.append(ShelfLowStock(name=it.name, count=it.count, reorder_level=rec.reorder_level))
+
+    reply = scan.reply_text.strip()
+    if not scan.items:
+        reply = reply or _localized(lang, "शेल्फ पर कोई सामान नहीं दिखा।",
+                                    "Nothing recognisable on the shelf.",
+                                    "Shelf pe koi item nahi dikha.")
+        return ShelfScanReply(message_id=message_id, items=[], low_stock=[], reply_text=reply,
+                              quick_actions=[])
+    if low:
+        kam = "; ".join(
+            _localized(lang, f"{x.name} कम है (reorder {_fmt_qty(x.reorder_level)})",
+                       f"{x.name} is low (reorder {_fmt_qty(x.reorder_level)})",
+                       f"{x.name} kam hai (reorder {_fmt_qty(x.reorder_level)})")
+            for x in low)
+        reply = f"{reply} {kam}."
+    reply = f"{reply} {_localized(lang, 'स्टॉक अपडेट करूँ?', 'Update stock?', 'Update karoon?')}"
+
+    repo.put_pending(shop.shop_id, message_id, {"kind": "shelf_scan", "scan": scan.model_dump()})
+    return ShelfScanReply(
+        message_id=message_id, items=scan.items, low_stock=low, reply_text=reply,
+        quick_actions=[QuickAction(
+            label=_localized(lang, "हाँ, अपडेट करो", "Yes, update", "Haan, update karo"),
+            action="confirm", payload={"message_id": message_id})],
+    )
+
+
+def apply_shelf_scan(repo: Repository, shop: ShopRecord, message_id: str,
+                     scan: ShelfScan) -> ExtractionReply:
+    """Set each counted item's stock to the counted quantity (absolute), undoably."""
+    lang = shop.language
+    applied = AppliedMessage(message_id=message_id, shop_id=shop.shop_id, intent="stock_in")
+    catalogue = {i.name: i for i in repo.list_items(shop.shop_id)}
+    items: list[ExtractedItem] = []
+    totals: list[str] = []
+    for it in scan.items:
+        rec = catalogue.get(it.name)
+        if rec is None:
+            rec = repo.add_item(shop.shop_id, it.name, it.pack_size, "piece", reorder_level=5)
+            catalogue[rec.name] = rec
+        delta = it.count - rec.quantity  # previous quantity = count - delta, restored by undo
+        if delta:
+            repo.adjust_stock(shop.shop_id, rec.item_id, delta)
+            applied.stock_moves.append(StockMove(rec.item_id, delta))
+        items.append(ExtractedItem(name=rec.name, pack_size=rec.pack_size, quantity=it.count,
+                                   unit=rec.unit))
+        totals.append(f"{rec.name} {_fmt_qty(rec.quantity)} {rec.unit}")
+    repo.record_applied(applied)
+    head = _localized(lang, "स्टॉक अपडेट किया:", "Stock updated:", "Stock update kiya:")
+    return ExtractionReply(
+        message_id=message_id, intent="stock_in", confidence=min((i.confidence for i in scan.items),
+                                                                  default=1.0),
+        transcript=None, language=lang,
+        entities=Entities(items=items), applied=True,
+        reply_text=f"{head} {', '.join(totals)}.",
+        quick_actions=[
+            QuickAction(label="Undo", action="undo", payload={"message_id": message_id}),
+            QuickAction(label=_localized(lang, "स्टॉक देखो", "View stock", "Stock dekho"),
+                        action="open_stock"),
+        ],
+    )
 
 
 def undo(repo: Repository, shop: ShopRecord, message_id: str) -> str:

@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 from app.config import Settings
 from app.gemini import MockExtractor
 from app.main import create_app
-from app.models import Entities, ExtractedItem, Extraction
+from app.models import Entities, ExtractedItem, Extraction, ShelfItem, ShelfScan
 from app.store import InMemoryRepository
 
 
@@ -37,6 +37,16 @@ class ScriptedExtractor:
 
     def extract(self, text, audio, catalogue, shop_language):
         self.calls.append((text, audio[0] if audio else None))
+        return self.queue.pop(0)
+
+    def push_scan(self, items: list[tuple[str, int, float]], reply_text="Shelf pe dikha: ...") -> ShelfScan:
+        scan = ShelfScan(items=[ShelfItem(name=n, count=c, confidence=cf) for n, c, cf in items],
+                         reply_text=reply_text)
+        self.queue.append(scan)
+        return scan
+
+    def scan_shelf(self, image, catalogue, shop_language):
+        self.calls.append((None, image[0]))
         return self.queue.pop(0)
 
 

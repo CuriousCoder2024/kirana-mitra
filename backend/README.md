@@ -5,8 +5,8 @@ stock or udhaar (credit) entry, using Gemini on Vertex AI through the official `
 SDK with structured JSON output. Implements [`docs/api-contract.md`](../docs/api-contract.md) v1.
 
 Phase 1 ships `/shops`, `/chat`, `/voice-note`, `/confirm`, `/undo`, `/stock`, `/ledger`,
-`/healthz`, and 501 stubs (with the final shapes in their docstrings) for `/shelf-scan`,
-`/forecast`, `/summary`, `/reorder`. Storage is an in-memory repository seeded with 15 common
+`/healthz`. Phase 3 adds `/shelf-scan` (Gemini vision counts units on a shelf photo). 501 stubs
+with the final shapes in their docstrings remain for `/forecast`, `/summary`, `/reorder`. Storage is an in-memory repository seeded with 15 common
 kirana items; Phase 4 swaps in Cloud SQL behind the same `Repository` interface.
 
 ## Run locally
@@ -66,6 +66,17 @@ curl -s -X POST localhost:8080/chat -H 'content-type: application/json' \
 curl -s -X POST localhost:8080/voice-note -F shop_id=shp_... -F audio=@note.m4a;type=audio/m4a
 ```
 
+Shelf photo (jpeg/png, ≤ 8 MB). The counts come back held; confirm to set the stock:
+
+```bash
+curl -s -X POST localhost:8080/shelf-scan -F shop_id=shp_... -F image=@shelf.jpg
+```
+
+```bash
+curl -s -X POST localhost:8080/confirm -H 'content-type: application/json' \
+  -d '{"shop_id":"shp_...","message_id":"msg_..."}'
+```
+
 ```bash
 curl -s localhost:8080/stock/shp_...
 curl -s localhost:8080/ledger/shp_...
@@ -86,6 +97,11 @@ Interactive docs: http://localhost:8080/docs
    otherwise parks it by `message_id` and offers "Haan, add karo". `question` / `unclear`
    never write. Cartons/boxes are converted to the item's base unit using `carton_size`.
    The last 10 applied messages per shop can be undone.
+4. `/shelf-scan` sends the image bytes inline with a second prompt and `response_schema=ShelfScan`
+   (items with name, pack_size, count, confidence; each visible facing is one unit). Names are
+   snapped to the catalogue, counts at or below `reorder_level` go into `low_stock`, and the
+   result is held under `message_id`. `/confirm` then sets each item's stock to the counted
+   quantity (an absolute set, not an add); `/undo` restores the previous quantities.
 
 ## Tests and eval
 
@@ -103,6 +119,15 @@ and appends a row to `tests/eval/results.csv` with the date and model id.
 ```bash
 uv run python -m tests.eval.run            # against http://localhost:8080
 uv run python -m tests.eval.run --base https://your-cloud-run-url
+```
+
+Shelf-scan eval: five synthetic shelf images with exact per-brand counts in
+`tests/eval/shelf/` (see its README for why synthetic). Reports detection recall, precision,
+exact-count rate, mean absolute count error and latency, appending to
+`tests/eval/shelf/results.csv`.
+
+```bash
+uv run python -m tests.eval.shelf.run --base http://localhost:8090
 ```
 
 ## Docker (Cloud Run, Phase 6)
