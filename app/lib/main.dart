@@ -5,7 +5,8 @@ import 'api/api_provider.dart';
 import 'l10n/app_localizations.dart';
 import 'router.dart';
 import 'state/shop_prefs.dart';
-import 'theme.dart';
+import 'theme/theme.dart';
+import 'widgets/logo_mark.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,13 +55,9 @@ class _Splash extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(
-              radius: 44,
-              backgroundColor: KmColors.saffron,
-              child: Icon(Icons.storefront_rounded, size: 48, color: Colors.white),
-            ),
+            LogoMark(size: 84),
             SizedBox(height: 20),
-            Text('Kirana Mitra', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: KmColors.brown)),
+            Text('Kirana Mitra', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: KmColors.ink)),
             SizedBox(height: 24),
             SizedBox(width: 28, height: 28, child: CircularProgressIndicator(color: KmColors.saffron, strokeWidth: 3)),
           ],
