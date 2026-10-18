@@ -162,9 +162,9 @@ and a saffron stripe; body is the count list in 4.8; confirm label "Haan, update
 
 ### 4.7 List row (`KmRow`)
 Min height 72, padding 12 × 16, paper, 1 dp sand bottom border; rows live inside a radius-18
-container with a sand border. Left: 44 dp tile (radius 12 for items with the first letter in
-Baloo 2 20/800 on a tinted background cycling saffronTint, leafTint, haldiTint, sand; radius
-full for customers with initials in white on terracotta/saffron/haldiText/inkSoft/leaf).
+container with a sand border. Left: 44 dp tile (radius 12). For stock items the tile is an
+`ItemTile` (4.19); for customers it is a full-round avatar with initials in white on
+terracotta/saffron/haldiText/inkSoft/leaf.
 Middle: title 18/700, caption 15 inkSoft. Right: Number M (26/800 tabular) with a 14 sp unit or
 state caption below.
 Low-stock row: background `lowRowWash`, number in mirchi, `KmBadge.low` under the number.
@@ -259,6 +259,38 @@ stripe (not red: nothing in the shop is wrong), 22 dp wifi-off icon, title 17/70
 15 inkSoft, `KmButton.outline small` "Phir try karo". Stays until resolved or dismissed by swipe.
 Voice notes and photos that failed to send are queued locally and resent when connectivity
 returns; the card then becomes a 3 s leaf toast "Bhej diya".
+
+### 4.19 Item tile (`ItemTile`) — v2.1
+44 dp, radius 12, three sources in order of preference:
+
+1. **Photo tile.** The shopkeeper's own photo of the pack: a crop from the last shelf scan that
+   matched this item, or a photo taken by tapping the tile on the Stock row ("Photo lo"). Cover-fit,
+   1 dp sand border. Stored locally per item; never fetched from the network.
+2. **Illustrated tile.** A brand-colour pack illustration from `docs/design/assets/items/<slug>.svg`
+   (copy the folder to `app/assets/items/`). 64 × 64 viewBox with its own cream `#FFF4E6`
+   background, so render with `SvgPicture.asset` at 44 dp and no extra container colour. Match by
+   catalogue item name, lower-cased, spaces to hyphens:
+
+   | Item | File | Item | File |
+   |---|---|---|---|
+   | Parle-G 70g | `parle-g.svg` | Colgate 100g | `colgate.svg` |
+   | Maggi 70g | `maggi.svg` | Lifebuoy 100g | `lifebuoy.svg` |
+   | Tata Salt 1kg | `tata-salt.svg` | Fortune Oil 1L | `fortune-oil.svg` |
+   | Aashirvaad Atta 5kg | `aashirvaad-atta.svg` | Red Label 250g | `red-label.svg` |
+   | Surf Excel 1kg | `surf-excel.svg` | Nescafe 50g | `nescafe.svg` |
+   | Amul Milk 500ml | `amul-milk.svg` | Haldiram Namkeen 200g | `haldiram-namkeen.svg` |
+   | Amul Butter 100g | `amul-butter.svg` | Dettol 125g | `dettol.svg` |
+   | Britannia Good Day 100g | `britannia-good-day.svg` | | |
+
+   The illustrations use colour and pack shape only (pouch, box, jar, bottle, one or two colour
+   bands), no logos, wordmarks or text, so nothing trademarked ships in the bundle. Items added
+   by voice that are not in the catalogue fall through to 3.
+3. **Letter tile.** First letter in Baloo 2 20/800 on a tinted background cycling saffronTint,
+   leafTint, haldiTint, sand.
+
+The same tile appears in shelf-scan count rows (4.8) at 36 dp and in the Mangao item chips at
+24 dp as a leading icon. If real pack photographs are licensed later, they drop into source 2
+as PNGs at 128 × 128 with the same file names; nothing else changes.
 
 ### 4.15 App bar
 56 dp, cream (same as scaffold), no elevation, no solid saffron. Title in Baloo 2 22/700 ink,
@@ -573,7 +605,7 @@ Dates: "Sat 18 Oct", times "7:41 pm", relative "Aaj" / "Kal" for today and yeste
    text in a bottom sheet with WhatsApp / Copy / Share.
 9. **Evening hisaab card** (new) pushed into chat and reachable from the app bar.
 10. **Palette deepened** (saffron `#C85A0E`, ink `#2A1A10`) and three semantic colours added.
-11. **v2.1:** Barni logo, "Suno" read-aloud on every bot card, "Mangao" tab, first-run welcome
+11. **v2.1:** Barni logo, pack tiles for all 15 catalogue items (4.19), "Suno" read-aloud on every bot card, "Mangao" tab, first-run welcome
     with example chips and mic coach, designed empty states, persistent error card with offline
     queue, hisaab day-over-day badge, camera guide, festival greeting, 56 dp app bar, gradient
     on the mic and FAB.
