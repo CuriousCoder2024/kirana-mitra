@@ -73,5 +73,5 @@ else
          --region "$REGION" --format 'value(status.url)')"
   echo
   echo "deployed: $URL"
-  echo "set API_BASE_URL=$URL in infra/.env and in the app's env, then: curl $URL/healthz"
+  echo "set API_BASE_URL=$URL in infra/.env and in the app's env, then: curl $URL/health"
 fi

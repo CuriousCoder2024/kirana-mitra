@@ -73,8 +73,9 @@ Verified on the first deploy: `POST /shops`, `POST /chat` (live Gemini,
 4.1 s) and `GET /forecast` (BigQuery, with the Diwali bump) all work.
 **Known quirk:** `GET /healthz` returns a Google 404 page without reaching
 the container, while `GET /healthz/` reaches FastAPI; the exact path
-`/healthz` appears to be intercepted by the run.app frontend. The backend
-should expose `/health` (or the app should call `/healthz/`).
+`/healthz` is intercepted by the run.app frontend. The backend exposes
+`GET /health` with the same JSON (verified on revision 00002); use that for
+uptime checks and the app.
 
 ## deploy_web.sh
 
