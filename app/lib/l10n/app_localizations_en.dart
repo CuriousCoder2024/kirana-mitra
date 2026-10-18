@@ -124,6 +124,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get comingSoon => 'Jaldi aa raha hai! Shelf scan is coming soon.';
 
   @override
+  String get scanFailed => 'Photo samajh nahi aayi, phir se try karo.';
+
+  @override
+  String get imageTooLarge =>
+      'Photo is too big (over 8 MB). Try a smaller one.';
+
+  @override
+  String get scanColItem => 'Item';
+
+  @override
+  String get scanColPack => 'Pack';
+
+  @override
+  String get scanColCount => 'Count';
+
+  @override
+  String get pickPhoto => 'Scan shelf photo';
+
+  @override
   String get stockTitle => 'Stock';
 
   @override

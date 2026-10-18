@@ -314,6 +314,42 @@ abstract class AppLocalizations {
   /// **'Jaldi aa raha hai! Shelf scan is coming soon.'**
   String get comingSoon;
 
+  /// No description provided for @scanFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo samajh nahi aayi, phir se try karo.'**
+  String get scanFailed;
+
+  /// No description provided for @imageTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo is too big (over 8 MB). Try a smaller one.'**
+  String get imageTooLarge;
+
+  /// No description provided for @scanColItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Item'**
+  String get scanColItem;
+
+  /// No description provided for @scanColPack.
+  ///
+  /// In en, this message translates to:
+  /// **'Pack'**
+  String get scanColPack;
+
+  /// No description provided for @scanColCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Count'**
+  String get scanColCount;
+
+  /// No description provided for @pickPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan shelf photo'**
+  String get pickPhoto;
+
   /// No description provided for @stockTitle.
   ///
   /// In en, this message translates to:

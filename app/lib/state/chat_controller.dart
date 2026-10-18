@@ -20,6 +20,8 @@ class ChatMessage {
     this.isError = false,
     this.isVoice = false,
     this.imageBytes,
+    this.scanItems = const [],
+    this.scanLowStock = const {},
     required this.at,
   });
 
@@ -33,6 +35,10 @@ class ChatMessage {
   final bool isError;
   final bool isVoice;
   final Uint8List? imageBytes;
+
+  /// Shelf-scan replies: detected items and the names flagged low.
+  final List<ScannedItem> scanItems;
+  final Set<String> scanLowStock;
   final DateTime at;
 
   ChatMessage copyWith({List<QuickAction>? quickActions}) => ChatMessage(
@@ -44,6 +50,8 @@ class ChatMessage {
         isError: isError,
         isVoice: isVoice,
         imageBytes: imageBytes,
+        scanItems: scanItems,
+        scanLowStock: scanLowStock,
         at: at,
       );
 }
@@ -86,6 +94,7 @@ class ChatController extends Notifier<ChatState> {
   /// passes them in so the controller stays locale-agnostic.
   String networkErrorText = 'Server se baat nahi ho paayi. Phir se try karo.';
   String comingSoonText = 'Shelf scan jaldi aa raha hai!';
+  String scanFailedText = 'Photo samajh nahi aayi, phir se try karo.';
 
   String _nextId() => 'local_${_seq++}';
 
@@ -105,8 +114,9 @@ class ChatController extends Notifier<ChatState> {
 
   void _setBusy(bool b) => state = state.copyWith(busy: b);
 
-  void _botError(Object e) {
+  void _botError(Object e, {String? fallback}) {
     final text = switch (e) {
+      ApiException(status: 501 || 502) when fallback != null => fallback,
       ApiException(isNotImplemented: true) => comingSoonText,
       ApiException(isNetwork: true) => networkErrorText,
       ApiException(:final message) => message,
@@ -188,10 +198,12 @@ class ChatController extends Notifier<ChatState> {
         role: ChatRole.bot,
         text: r.replyText,
         quickActions: r.quickActions,
+        scanItems: r.items,
+        scanLowStock: {for (final l in r.lowStock) l.name},
         at: DateTime.now(),
       ));
     } catch (e) {
-      _botError(e);
+      _botError(e, fallback: scanFailedText);
     } finally {
       _setBusy(false);
     }

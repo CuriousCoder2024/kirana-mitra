@@ -485,23 +485,70 @@ class MockApiClient implements ApiClient {
   }) async {
     await Future<void>.delayed(latency * 2);
     final messageId = _id('msg');
+    const scanned = [
+      ScannedItem(name: 'Maggi', packSize: '70g', count: 6, confidence: 0.82),
+      ScannedItem(name: 'Parle-G', packSize: '70g', count: 12, confidence: 0.78),
+      ScannedItem(name: 'Tata Salt', packSize: '1kg', count: 3, confidence: 0.71),
+    ];
+    const low = [ScanLowStock(name: 'Maggi', count: 6, reorderLevel: 12)];
+    const replyText =
+        'Shelf mein dikha: Maggi 6, Parle-G 12, Tata Salt 3. '
+        'Maggi kam hai, reorder kar lo. Stock yahi counts se update karun?';
+
+    void apply() {
+      for (final sc in scanned) {
+        final idx = _stock.indexWhere((s) => s.name == sc.name);
+        if (idx >= 0) {
+          final s = _stock[idx];
+          _stock[idx] = s.copyWith(
+            quantity: sc.count,
+            lowStock: sc.count <= s.reorderLevel,
+            updatedAt: _now(),
+          );
+        } else {
+          _stock.insert(
+            0,
+            StockItem(
+              itemId: _id('itm'),
+              name: sc.name,
+              packSize: sc.packSize,
+              quantity: sc.count,
+              unit: 'packet',
+              reorderLevel: 10,
+              lowStock: sc.count <= 10,
+              updatedAt: _now(),
+            ),
+          );
+        }
+      }
+    }
+
+    _pending[messageId] = ExtractionReply(
+      messageId: messageId,
+      intent: 'stock_in',
+      confidence: 0.78,
+      language: 'hi-Latn',
+      entities: Entities(
+        items: [
+          for (final sc in scanned)
+            EntityItem(name: sc.name, packSize: sc.packSize, quantity: sc.count, unit: 'packet'),
+        ],
+        date: _today(),
+      ),
+      applied: false,
+      replyText: 'Pakka? Stock update kiya: Maggi 6, Parle-G 12, Tata Salt 3 packet.',
+      quickActions: const [QuickAction(label: 'Stock dekho', action: 'open_stock')],
+    );
+    _pendingApply[messageId] = (apply, 'Theek hai, shelf scan wala update hata diya.');
+
     return ShelfScanResponse(
       messageId: messageId,
-      items: const [
-        ScannedItem(name: 'Maggi', packSize: '70g', count: 6, confidence: 0.8),
-        ScannedItem(name: 'Parle-G', packSize: '70g', count: 18, confidence: 0.75),
-        ScannedItem(name: 'Surf Excel', packSize: '500g', count: 4, confidence: 0.7),
-      ],
-      lowStock: const [
-        ScanLowStock(name: 'Maggi', count: 6, reorderLevel: 12),
-        ScanLowStock(name: 'Surf Excel', count: 4, reorderLevel: 6),
-      ],
-      replyText:
-          'Shelf mein dikha: Maggi 6, Parle-G 18, Surf Excel 4. '
-          'Maggi aur Surf Excel kam hain. Stock update karun?',
+      items: scanned,
+      lowStock: low,
+      replyText: replyText,
       quickActions: [
         QuickAction(label: 'Haan, update karo', action: 'confirm', payload: {'message_id': messageId}),
-        const QuickAction(label: 'Order bhejo', action: 'open_forecast'),
+        const QuickAction(label: 'Stock dekho', action: 'open_stock'),
       ],
     );
   }

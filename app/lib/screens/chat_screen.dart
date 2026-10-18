@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -39,7 +40,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       final name = prefs.ownerName.isEmpty ? 'ji' : prefs.ownerName.split(' ').first;
       final ctrl = ref.read(chatControllerProvider.notifier)
         ..networkErrorText = l.networkError
-        ..comingSoonText = l.comingSoon;
+        ..comingSoonText = l.comingSoon
+        ..scanFailedText = l.scanFailed;
       ctrl.addWelcome(
         prefs.language == 'hi-Latn' ? l.welcomeMessageHinglish(name) : l.welcomeMessage(name),
       );
@@ -105,18 +107,38 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     _snack(l.recordingCancelled);
   }
 
+  /// Contract limit for POST /shelf-scan.
+  static const int _maxImageBytes = 8 * 1024 * 1024;
+
+  bool get _hasCamera =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS);
+
   Future<void> _pickPhoto() async {
     final l = AppLocalizations.of(context);
-    final XFile? file = await _picker.pickImage(
-      source: ImageSource.camera,
-      maxWidth: 1600,
-      imageQuality: 80,
-    );
+    final XFile? file;
+    try {
+      file = await _picker.pickImage(
+        source: _hasCamera ? ImageSource.camera : ImageSource.gallery,
+        maxWidth: 1600,
+        imageQuality: 70,
+      );
+    } catch (_) {
+      _snack(l.scanFailed);
+      return;
+    }
     if (file == null) return;
     final bytes = await file.readAsBytes();
-    final mime = file.mimeType ?? (file.name.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg');
+    if (bytes.length > _maxImageBytes) {
+      _snack(l.imageTooLarge);
+      return;
+    }
+    final lowerName = file.name.toLowerCase();
+    final mime = file.mimeType ?? (lowerName.endsWith('.png') ? 'image/png' : 'image/jpeg');
+    final filename = file.name.isEmpty ? 'shelf.jpg' : file.name;
     await ref.read(chatControllerProvider.notifier).sendImage(
-          UploadBlob(bytes: bytes, filename: file.name.isEmpty ? 'shelf.jpg' : file.name, mimeType: mime),
+          UploadBlob(bytes: bytes, filename: filename, mimeType: mime),
           placeholder: l.photoSent,
         );
   }
@@ -189,7 +211,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                 if (state.busy && i == 0) return TypingIndicator(label: l.thinking);
                 final idx = state.messages.length - 1 - (state.busy ? i - 1 : i);
                 final m = state.messages[idx];
-                return MessageBubble(message: m, onAction: (a) => _onAction(m, a));
+                return MessageBubble(
+                  message: m,
+                  onAction: (a) => _onAction(m, a),
+                  lowLabel: l.lowStockBadge,
+                  colItem: l.scanColItem,
+                  colPack: l.scanColPack,
+                  colCount: l.scanColCount,
+                );
               },
             ),
           ),
@@ -200,6 +229,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             busy: state.busy,
             onSend: _sendText,
             onPhoto: _pickPhoto,
+            photoLabel: l.pickPhoto,
             mic: MicButton(
               enabled: !state.busy,
               onStart: _startRecording,
@@ -224,6 +254,7 @@ class _Composer extends StatelessWidget {
     required this.busy,
     required this.onSend,
     required this.onPhoto,
+    required this.photoLabel,
     required this.mic,
   });
 
@@ -233,6 +264,7 @@ class _Composer extends StatelessWidget {
   final bool busy;
   final VoidCallback onSend;
   final VoidCallback onPhoto;
+  final String photoLabel;
   final Widget mic;
 
   @override
@@ -254,6 +286,7 @@ class _Composer extends StatelessWidget {
                     onPressed: busy ? null : onPhoto,
                     iconSize: 30,
                     color: KmColors.terracotta,
+                    tooltip: photoLabel,
                     constraints: const BoxConstraints(minWidth: 56, minHeight: 56),
                     icon: const Icon(Icons.photo_camera_outlined),
                   ),

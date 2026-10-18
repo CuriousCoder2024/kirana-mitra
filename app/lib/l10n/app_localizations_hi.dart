@@ -122,6 +122,25 @@ class AppLocalizationsHi extends AppLocalizations {
   String get comingSoon => 'जल्दी आ रहा है! शेल्फ स्कैन अभी तैयार हो रहा है।';
 
   @override
+  String get scanFailed => 'फोटो समझ नहीं आई, फिर से कोशिश करें।';
+
+  @override
+  String get imageTooLarge =>
+      'फोटो बहुत बड़ी है (8 MB से ज़्यादा)। छोटी फोटो लें।';
+
+  @override
+  String get scanColItem => 'सामान';
+
+  @override
+  String get scanColPack => 'पैक';
+
+  @override
+  String get scanColCount => 'गिनती';
+
+  @override
+  String get pickPhoto => 'शेल्फ की फोटो स्कैन करें';
+
+  @override
   String get stockTitle => 'स्टॉक';
 
   @override

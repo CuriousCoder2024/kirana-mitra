@@ -9,10 +9,18 @@ class MessageBubble extends StatelessWidget {
     super.key,
     required this.message,
     required this.onAction,
+    required this.lowLabel,
+    required this.colItem,
+    required this.colPack,
+    required this.colCount,
   });
 
   final ChatMessage message;
   final void Function(QuickAction action) onAction;
+  final String lowLabel;
+  final String colItem;
+  final String colPack;
+  final String colCount;
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +82,17 @@ class MessageBubble extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                   ],
+                  if (message.scanItems.isNotEmpty) ...[
+                    _ScanTable(
+                      items: message.scanItems,
+                      low: message.scanLowStock,
+                      lowLabel: lowLabel,
+                      colItem: colItem,
+                      colPack: colPack,
+                      colCount: colCount,
+                    ),
+                    const SizedBox(height: 10),
+                  ],
                   Text(
                     message.text,
                     style: TextStyle(
@@ -116,4 +135,87 @@ class MessageBubble extends StatelessWidget {
         'send_order' => Icons.send_rounded,
         _ => Icons.touch_app_outlined,
       };
+}
+
+/// Compact table of what the shelf scan saw.
+class _ScanTable extends StatelessWidget {
+  const _ScanTable({
+    required this.items,
+    required this.low,
+    required this.lowLabel,
+    required this.colItem,
+    required this.colPack,
+    required this.colCount,
+  });
+
+  final List<ScannedItem> items;
+  final Set<String> low;
+  final String lowLabel;
+  final String colItem;
+  final String colPack;
+  final String colCount;
+
+  @override
+  Widget build(BuildContext context) {
+    const head = TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: KmColors.brownSoft);
+    const cell = TextStyle(fontSize: 16, color: KmColors.brown);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: KmColors.cream,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: KmColors.creamDark),
+      ),
+      child: Table(
+        columnWidths: const {
+          0: FlexColumnWidth(2.2),
+          1: FlexColumnWidth(1),
+          2: FlexColumnWidth(1.6),
+        },
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        children: [
+          TableRow(children: [
+            Padding(padding: const EdgeInsets.symmetric(vertical: 4), child: Text(colItem, style: head)),
+            Text(colPack, style: head),
+            Text(colCount, style: head, textAlign: TextAlign.right),
+          ]),
+          for (final it in items)
+            TableRow(children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(it.name, style: cell.copyWith(fontWeight: FontWeight.w600)),
+              ),
+              Text(it.packSize ?? '-', style: cell),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (low.contains(it.name))
+                    Container(
+                      margin: const EdgeInsets.only(right: 6),
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: KmColors.alert,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        lowLabel,
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
+                      ),
+                    ),
+                  Text(
+                    _n(it.count),
+                    style: cell.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: low.contains(it.name) ? KmColors.alert : KmColors.brown,
+                    ),
+                  ),
+                ],
+              ),
+            ]),
+        ],
+      ),
+    );
+  }
+
+  static String _n(num v) => v % 1 == 0 ? v.toInt().toString() : v.toString();
 }
