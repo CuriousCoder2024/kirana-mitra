@@ -7,6 +7,7 @@ import pytest
 
 from app.config import Settings
 from app.forecast import (
+    REORDER_COVER_WEEKS,
     CatalogueRow,
     DailyPoint,
     Festival,
@@ -83,9 +84,41 @@ def test_shape_forecast_buckets_reorder_and_reason():
     assert it.forecast_weekly[2] > 70 and it.forecast_weekly[3] > 70  # Diwali ramp + peak
     assert it.lower[0] == 56 and it.upper[0] == 84
     assert it.on_hand == 42
-    need = sum(it.forecast_weekly) - 42
-    assert it.reorder_qty == round_up_to_pack(need, 24) and it.reorder_qty % 24 == 0
-    assert it.reorder_reason == "Diwali week demand ~2.0x"
+    assert REORDER_COVER_WEEKS == 2
+    need = sum(it.forecast_weekly[:2]) - 42  # 140 - 42 = 98 -> 120 (5 cartons of 24)
+    assert it.reorder_qty == round_up_to_pack(need, 24) == 120
+    # Diwali sits in weeks 3-4, outside the 2-week cover window, so it is not the reason
+    assert it.reorder_reason == "Next 2 weeks need ~140, only 42 on hand"
+
+
+def test_festival_inside_cover_window_drives_reason_and_quantity():
+    repo, shop, items = shop_items()
+    cat = [CatalogueRow("itm_001", "Parle-G", "70g", "packet", "biscuits", 48, 10, [])]
+    start = date(2026, 10, 19)
+    points = [DailyPoint(date.fromordinal(start.toordinal() + k), 10, 8, 12) for k in range(28)]
+    raw = RawForecast("shp_demo", date(2026, 10, 18), cat, {"itm_001": points}, {},
+                      [Festival("Dussehra", date(2026, 10, 20), 3, 1, "dussehra")],
+                      {("dussehra", "*"): 1.3, ("dussehra", "biscuits"): 2.0})
+    _, _, out = shape_forecast(raw, items, "hi-Latn", today=start)
+    it = out[0]
+    assert it.forecast_weekly[0] > 70 and it.forecast_weekly[1] == 70
+    assert it.reorder_reason == "Dussehra week demand ~2.0x"
+    assert it.reorder_qty == round_up_to_pack(sum(it.forecast_weekly[:2]) - 42, 24)
+
+
+def test_stock_above_two_week_need_gives_zero_reorder_and_no_order_line(client, scripted, shop_id):
+    # Push Parle-G stock far above anything 2 weeks can need, then check both endpoints.
+    scripted.push(intent="stock_in", entities={"items": [{"name": "Parle-G", "quantity": 5000,
+                                                           "unit": "packet"}]})
+    client.post("/chat", json={"shop_id": shop_id, "text": "x"})
+    items = client.get(f"/forecast/{shop_id}").json()["items"]
+    parle = next(i for i in items if i["name"] == "Parle-G")
+    assert parle["on_hand"] == 5042 and parle["reorder_qty"] == 0
+    assert parle["reorder_reason"].startswith("Steady;")
+    assert sum(parle["forecast_weekly"][:2]) < parle["on_hand"]
+    lines = client.post(f"/reorder/{shop_id}").json()["lines"]
+    assert all(not l["name"].startswith("Parle-G") for l in lines)
+    assert all(l["qty"] > 0 for l in lines)
 
 
 def test_shape_forecast_steady_reason_when_stock_covers():

@@ -41,6 +41,7 @@ logger = logging.getLogger("kirana.forecast")
 
 DEMO_SERIES = "shp_demo"
 HORIZON_DAYS = 35  # enough to cover 4 Monday-start weeks from any start day
+REORDER_COVER_WEEKS = 2  # reorder_qty covers this many of the 4 forecast weeks (owner decision)
 CACHE_TTL_S = 600
 
 
@@ -132,20 +133,22 @@ def _localized(language: str, hi: str, en: str, hinglish: str) -> str:
     return {"hi": hi, "en": en}.get(language, hinglish)
 
 
-def reorder_reason(language: str, festival: str | None, peak_mult: float, forecast_28d: int,
-                   on_hand: int, weekly: list[int]) -> str:
-    if festival and peak_mult >= 1.3:
+def reorder_reason(language: str, festival: str | None, peak_mult: float, need_qty: int,
+                   on_hand: int, weekly: list[int], cover_weeks: int = REORDER_COVER_WEEKS) -> str:
+    """`festival`/`peak_mult` describe the strongest uplift inside the cover window;
+    `need_qty` is the forecast demand over that window."""
+    avg_week = max(1.0, sum(weekly) / max(1, len(weekly)))
+    cover = int(on_hand / avg_week)
+    if need_qty > on_hand and festival and peak_mult >= 1.3:
         return _localized(language,
                           f"{festival} के हफ़्ते में माँग ~{peak_mult:.1f}x",
                           f"{festival} week demand ~{peak_mult:.1f}x",
                           f"{festival} week demand ~{peak_mult:.1f}x")
-    avg_week = max(1.0, sum(weekly) / max(1, len(weekly)))
-    cover = int(on_hand / avg_week)
-    if forecast_28d > on_hand:
+    if need_qty > on_hand:
         return _localized(language,
-                          f"4 हफ़्ते में ~{forecast_28d} चाहिए, सिर्फ़ {on_hand} हैं",
-                          f"Next 4 weeks need ~{forecast_28d}, only {on_hand} on hand",
-                          f"4 hafte mein ~{forecast_28d} chahiye, sirf {on_hand} hain")
+                          f"{cover_weeks} हफ़्ते में ~{need_qty} चाहिए, सिर्फ़ {on_hand} हैं",
+                          f"Next {cover_weeks} weeks need ~{need_qty}, only {on_hand} on hand",
+                          f"{cover_weeks} hafte mein ~{need_qty} chahiye, sirf {on_hand} hain")
     return _localized(language,
                       f"ठीक है; {cover} हफ़्ते का स्टॉक",
                       f"Steady; {cover} weeks cover",
@@ -179,8 +182,10 @@ def shape_forecast(raw: RawForecast, shop_items: list[ItemRecord], language: str
                    today: date | None = None) -> tuple[list[date], list[FestivalRef], list[ForecastItem]]:
     """Bucket daily points into the contract's 4 weeks for the items this shop stocks.
 
-    Items in the data catalogue that the shop does not carry are left out:
-    on_hand and reorder_qty are only meaningful against the shop's own stock.
+    All 4 weeks are returned for the chart; reorder_qty only covers the first
+    REORDER_COVER_WEEKS weeks. Items in the data catalogue that the shop does
+    not carry are left out: on_hand and reorder_qty are only meaningful against
+    the shop's own stock.
     """
     start = max(raw.last_date + timedelta(days=1), today or raw.last_date + timedelta(days=1))
     weeks = week_starts(start)
@@ -204,15 +209,16 @@ def shape_forecast(raw: RawForecast, shop_items: list[ItemRecord], language: str
             fc[k] += max(0.0, pt.fc) * m
             lo[k] += max(0.0, pt.lo) * m
             hi[k] += max(0.0, pt.hi) * m
-            if m > peak_mult:
+            if k < REORDER_COVER_WEEKS and m > peak_mult:  # reason only for the cover window
                 peak_mult, peak_name = m, name
         history = raw.history.get(row.item_id, {})
         hist = [sum(q for d, q in history.items() if ws <= d < ws + timedelta(days=7))
                 for ws in hist_weeks]
         forecast_weekly = [int(round(x)) for x in fc]
         on_hand = int(round(shop_item.quantity))
-        forecast_28d = int(round(sum(fc)))
-        need = max(0, forecast_28d - on_hand)
+        # Order enough to cover the next REORDER_COVER_WEEKS weeks, not the whole chart.
+        cover_demand = int(round(sum(fc[:REORDER_COVER_WEEKS])))
+        need = max(0, cover_demand - on_hand)
         out.append(ForecastItem(
             item_id=shop_item.item_id,
             name=shop_item.name,
@@ -223,8 +229,8 @@ def shape_forecast(raw: RawForecast, shop_items: list[ItemRecord], language: str
             upper=[int(round(x)) for x in hi],
             on_hand=on_hand,
             reorder_qty=round_up_to_pack(need, shop_item.carton_size),
-            reorder_reason=reorder_reason(language, peak_name, peak_mult, forecast_28d, on_hand,
-                                          forecast_weekly),
+            reorder_reason=reorder_reason(language, peak_name, peak_mult, cover_demand, on_hand,
+                                          forecast_weekly[:REORDER_COVER_WEEKS]),
         ))
     out.sort(key=lambda i: (-i.reorder_qty, i.name))
     return weeks, festivals_in_window(raw.festivals, weeks), out
