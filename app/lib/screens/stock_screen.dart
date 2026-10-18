@@ -31,6 +31,7 @@ class _StockScreenState extends ConsumerState<StockScreen> {
     setState(() => _ordering = true);
     try {
       final order = await ref.read(apiClientProvider).reorder(ref.read(shopPrefsProvider).shopId ?? '');
+      ref.invalidate(ordersProvider);
       if (mounted) await showOrderSheet(context, order);
     } catch (_) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.networkError)));

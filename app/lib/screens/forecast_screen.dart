@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../api/api_provider.dart';
 import '../l10n/app_localizations.dart';
@@ -9,12 +10,14 @@ import '../state/shop_prefs.dart';
 import '../theme/theme.dart';
 import '../util/format.dart';
 import '../widgets/async_body.dart';
+import '../widgets/auto_restock_card.dart';
 import '../widgets/demand_chart.dart';
 import '../widgets/km_app_bar.dart';
 import '../widgets/km_button.dart';
 import '../widgets/km_chip.dart';
 import '../widgets/order_sheet.dart';
 import '../widgets/tab_scaffold.dart';
+import '../widgets/top_sellers.dart';
 
 class ForecastScreen extends ConsumerStatefulWidget {
   const ForecastScreen({super.key});
@@ -32,6 +35,7 @@ class _ForecastScreenState extends ConsumerState<ForecastScreen> {
     setState(() => _ordering = true);
     try {
       final order = await ref.read(apiClientProvider).reorder(ref.read(shopPrefsProvider).shopId ?? '');
+      ref.invalidate(ordersProvider);
       if (mounted) await showOrderSheet(context, order);
     } on ApiException catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.isNetwork ? l.networkError : e.message)));
@@ -47,6 +51,7 @@ class _ForecastScreenState extends ConsumerState<ForecastScreen> {
     final l = AppLocalizations.of(context);
     final forecast = ref.watch(forecastProvider);
     final data = forecast.value;
+    final top = ref.watch(topItemsProvider);
     final festival = data?.festivals.firstOrNull;
     final festivalDate = festival == null ? null : Fmt.parse(festival.date);
     final subtitle = data == null
@@ -67,6 +72,34 @@ class _ForecastScreenState extends ConsumerState<ForecastScreen> {
           return ListView(
             padding: const EdgeInsets.fromLTRB(KmSpace.gutter, 12, KmSpace.gutter, 24),
             children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(l.topSellersTitle, style: KmText.bodyBold),
+                        Text(l.topSellersSubtitle, style: KmText.caption14),
+                      ],
+                    ),
+                  ),
+                  KmChip(
+                    label: l.viewOrders,
+                    icon: Icons.receipt_long_outlined,
+                    quiet: true,
+                    onTap: () => context.go('/forecast/orders'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              top.when(
+                loading: () => const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator())),
+                error: (_, _) => Text(l.errorLoading, style: KmText.caption),
+                data: (t) => TopSellersList(items: t.items.take(5).toList()),
+              ),
+              const SizedBox(height: KmSpace.cardGap),
+              const AutoRestockCard(),
+              const SizedBox(height: KmSpace.section),
               SizedBox(
                 height: KmSize.chip,
                 child: ListView.separated(

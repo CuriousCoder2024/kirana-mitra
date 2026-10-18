@@ -19,6 +19,8 @@ import '../theme/theme.dart';
 import '../util/format.dart';
 import '../widgets/day_chip.dart';
 import '../widgets/hisaab_card.dart';
+import '../widgets/km_button.dart';
+import '../widgets/km_chip.dart';
 import '../widgets/km_app_bar.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/mic.dart';
@@ -63,6 +65,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ref.read(demoNoticePendingProvider.notifier).set(false);
         ctrl.addBotNote(l.demoNotice);
       }
+      ctrl.syncServerMessages();
     });
   }
 
@@ -133,6 +136,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     setState(() => _ordering = true);
     try {
       final order = await ref.read(apiClientProvider).reorder(ref.read(shopPrefsProvider).shopId ?? '');
+      ref.invalidate(ordersProvider);
       if (mounted) await showOrderSheet(context, order);
     } catch (_) {
       if (mounted) _snack(l.networkError);
@@ -244,7 +248,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       case ChatKind.reply:
       case ChatKind.scan:
         return Align(
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 360),
             child: ReplyCard(
@@ -259,7 +263,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         );
       case ChatKind.hisaab:
         return Align(
-          alignment: Alignment.centerLeft,
+          alignment: AlignmentDirectional.centerStart,
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 360),
             child: HisaabCard(
@@ -274,7 +278,30 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       case ChatKind.text:
       case ChatKind.voice:
       case ChatKind.photo:
-        return MessageBubble(message: m, voiceLabel: l.voiceNoteLabel);
+        final bubble = MessageBubble(message: m, voiceLabel: l.voiceNoteLabel);
+        if (m.quickActions.isEmpty) return bubble;
+        // Server notices (auto orders) carry chips: Undo as a button, the rest navigate.
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            bubble,
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final a in m.quickActions)
+                  if (a.action == 'undo')
+                    KmButton.undo(
+                      label: l.undo,
+                      onPressed: busy ? null : () => ctrl.undo(a.messageId ?? m.id),
+                    )
+                  else
+                    KmChip(label: a.label, icon: KmChip.iconFor(a.action), onTap: () => _chip(a)),
+              ],
+            ),
+          ],
+        );
     }
   }
 }

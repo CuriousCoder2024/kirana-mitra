@@ -7,8 +7,10 @@ import 'screens/chat_screen.dart';
 import 'screens/customer_screen.dart';
 import 'screens/forecast_screen.dart';
 import 'screens/onboarding_screen.dart';
+import 'screens/orders_screen.dart';
 import 'screens/stock_screen.dart';
 import 'screens/udhaar_screen.dart';
+import 'state/chat_controller.dart';
 import 'state/shop_prefs.dart';
 import 'widgets/km_nav_bar.dart';
 
@@ -41,26 +43,36 @@ final routerProvider = Provider<GoRouter>((ref) {
               ],
             ),
           ]),
-          StatefulShellBranch(routes: [GoRoute(path: '/forecast', builder: (_, _) => const ForecastScreen())]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/forecast',
+              builder: (_, _) => const ForecastScreen(),
+              routes: [GoRoute(path: 'orders', builder: (_, _) => const OrdersScreen())],
+            ),
+          ]),
         ],
       ),
     ],
   );
 });
 
-class _Shell extends StatelessWidget {
+class _Shell extends ConsumerWidget {
   const _Shell({required this.shell});
 
   final StatefulNavigationShell shell;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     return Scaffold(
       body: shell,
       bottomNavigationBar: KmNavBar(
         selectedIndex: shell.currentIndex,
-        onSelected: (i) => shell.goBranch(i, initialLocation: i == shell.currentIndex),
+        onSelected: (i) {
+          shell.goBranch(i, initialLocation: i == shell.currentIndex);
+          // Opening the chat pulls any server-side notices (auto orders).
+          if (i == 0) ref.read(chatControllerProvider.notifier).syncServerMessages();
+        },
         items: [
           KmNavItem(icon: Icons.mic_none_rounded, selectedIcon: Icons.mic_rounded, label: l.navChat),
           KmNavItem(icon: Icons.inventory_2_outlined, selectedIcon: Icons.inventory_2_rounded, label: l.navStock),

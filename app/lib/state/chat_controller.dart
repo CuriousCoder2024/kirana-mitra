@@ -276,11 +276,41 @@ class ChatController extends Notifier<ChatState> {
     }
   }
 
+  /// Appends server-generated bot messages (auto-order notices) created
+  /// since the last sync. Called when the chat opens.
+  Future<void> syncServerMessages() async {
+    final prefs = await ref.read(sharedPreferencesProvider.future);
+    final key = 'messages_seen_$_shopId';
+    final since = DateTime.tryParse(prefs.getString(key) ?? '');
+    final MessagesResponse res;
+    try {
+      res = await _api.messages(_shopId, since: since);
+    } catch (_) {
+      return; // Older backends have no /messages; nothing to show.
+    }
+    final known = state.messages.map((m) => m.id).toSet();
+    DateTime? newest = since;
+    for (final m in res.messages.reversed) {
+      if (known.contains(m.messageId)) continue;
+      final at = DateTime.tryParse(m.createdAt)?.toLocal() ?? DateTime.now();
+      _append(ChatMessage(
+        id: m.messageId.isEmpty ? _nextId() : m.messageId,
+        role: ChatRole.bot,
+        text: m.replyText,
+        quickActions: m.quickActions,
+        at: at,
+      ));
+      if (newest == null || at.isAfter(newest)) newest = at;
+    }
+    if (newest != null) await prefs.setString(key, newest.toUtc().toIso8601String());
+  }
+
   /// Handles a navigation chip. Returns an effect the screen must perform.
   ChatEffect? chipEffect(QuickAction action) => switch (action.action) {
         'open_stock' => const NavigateEffect('/stock'),
         'open_udhaar' => const NavigateEffect('/udhaar'),
         'open_forecast' => const NavigateEffect('/forecast'),
+        'open_orders' => const NavigateEffect('/forecast/orders'),
         'send_order' => action.whatsappUrl == null
             ? const NavigateEffect('/forecast')
             : OpenUrlEffect(action.whatsappUrl!),
@@ -324,11 +354,18 @@ class ChatController extends Notifier<ChatState> {
       final r = await _api.undo(shopId: _shopId, messageId: messageId);
       if (r.undone) {
         invalidateShopData(ref);
+        ref.invalidate(ordersProvider);
         ref.read(historyStoreProvider.notifier).markUndone(messageId);
       }
       final hasCard = state.messages.any((m) => m.id == messageId);
       if (hasCard) {
         _replace(messageId, (m) => m.copyWith(status: CardStatus.undone, quickActions: const []));
+      }
+      // A plain notice whose Undo chip carried this message_id.
+      for (final m in state.messages) {
+        if (m.quickActions.any((a) => a.action == 'undo' && a.messageId == messageId)) {
+          _replace(m.id, (x) => x.copyWith(quickActions: const []));
+        }
       }
       _append(ChatMessage(id: _nextId(), role: ChatRole.bot, text: r.replyText, at: DateTime.now()));
     } catch (e) {

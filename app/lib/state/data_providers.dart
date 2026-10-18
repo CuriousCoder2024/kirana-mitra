@@ -24,3 +24,13 @@ void invalidateShopData(Ref ref) {
   ref.invalidate(stockProvider);
   ref.invalidate(ledgerProvider);
 }
+
+final topItemsProvider = FutureProvider<TopItemsResponse>((ref) {
+  final shopId = ref.watch(shopPrefsProvider.select((p) => p.shopId)) ?? '';
+  return ref.watch(apiClientProvider).topItems(shopId, weeks: 2);
+});
+
+final ordersProvider = FutureProvider<OrdersResponse>((ref) {
+  final shopId = ref.watch(shopPrefsProvider.select((p) => p.shopId)) ?? '';
+  return ref.watch(apiClientProvider).orders(shopId);
+});

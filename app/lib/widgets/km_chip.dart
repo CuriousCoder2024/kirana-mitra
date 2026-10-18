@@ -73,6 +73,7 @@ class KmChip extends StatelessWidget {
         'open_stock' => Icons.inventory_2_outlined,
         'open_udhaar' => Icons.account_balance_wallet_outlined,
         'open_forecast' => Icons.trending_up_rounded,
+        'open_orders' => Icons.receipt_long_outlined,
         'send_order' => Icons.send_rounded,
         _ => Icons.arrow_forward_rounded,
       };
