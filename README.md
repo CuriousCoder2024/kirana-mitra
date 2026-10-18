@@ -15,7 +15,7 @@ Measured numbers are in [`docs/submission/performance-report.md`](docs/submissio
 
 | | |
 |---|---|
-| Cloud Run API | `<CLOUD_RUN_URL>` (set after `infra/deploy.sh`; `curl <CLOUD_RUN_URL>/health` should return `{"ok":true,...}`) |
+| Cloud Run API | `https://kirana-mitra-api-396621755403.asia-south1.run.app` (revision from `infra/deploy.sh`; `curl https://kirana-mitra-api-396621755403.asia-south1.run.app/health` returns `{"ok":true,...}`) |
 | Web demo | `<WEB_DEMO_URL>` (set after `infra/deploy_web.sh`, which prints `https://storage.googleapis.com/<bucket>/index.html`) |
 | Android APK | not built or hosted; see [Android](#android) |
 | Project / region | `kirana-mitra-app` / `asia-south1` (Gemini is called through the `global` endpoint) |
@@ -88,7 +88,7 @@ flutter run -d chrome --dart-define API_BASE_URL=http://localhost:8080
 
 - At startup the app calls the backend's health route with a 6 s timeout (`app/lib/api/dio_api_client.dart`). If that fails it switches to the built-in mock client and shows a "Demo" badge; the whole flow still works offline.
 - Force the mock: `flutter run -d chrome --dart-define USE_MOCK=true`.
-- Point at Cloud Run: `--dart-define API_BASE_URL=<CLOUD_RUN_URL>`.
+- Point at Cloud Run: `--dart-define API_BASE_URL=https://kirana-mitra-api-396621755403.asia-south1.run.app`.
 - On the web, voice is recorded as `audio/webm` (Opus) because Chrome cannot encode AAC; the API accepts it.
 
 #### Android
@@ -97,14 +97,14 @@ Emulator: `flutter run` with no flags works, the app defaults to `http://10.0.2.
 
 ```bash
 cd app
-flutter run -d <device-id> --dart-define API_BASE_URL=http://192.168.1.23:8080
+flutter run -d <device-id> --dart-define API_BASE_URL=http://<your-mac-lan-ip>:8080
 ```
 
 Release APK (cleartext HTTP is allowed in the manifest for local development; point `API_BASE_URL` at the Cloud Run HTTPS URL for a shareable build). The APK has not been built or published as part of this submission, so no download link exists:
 
 ```bash
 cd app
-flutter build apk --release --dart-define API_BASE_URL=<CLOUD_RUN_URL>
+flutter build apk --release --dart-define API_BASE_URL=https://kirana-mitra-api-396621755403.asia-south1.run.app
 ```
 
 The file lands in `app/build/app/outputs/flutter-apk/`. Grant the microphone prompt on first use (`RECORD_AUDIO` is declared in the manifest).
@@ -157,7 +157,7 @@ infra/deploy_web.sh --dry-run
 infra/deploy_web.sh
 ```
 
-- Cloud Run API: `<CLOUD_RUN_URL>`
+- Cloud Run API: `https://kirana-mitra-api-396621755403.asia-south1.run.app`
 - Web demo: `<WEB_DEMO_URL>`
 
 Teardown: `infra/teardown.sh` (add `--all` to also remove Cloud Run, Artifact Registry and the BigQuery dataset). Cloud SQL is not created by any default path; see [what is deferred](#what-is-mocked-or-deferred). Order, cost per step and known quirks: [`infra/README.md`](infra/README.md).
@@ -222,7 +222,7 @@ Forecast holdout: `data/load_bigquery.sh evaluate` (results copied into `backend
 
 ## Known issue at the time of writing
 
-The API contract and Cloud Run use `GET /health`: the `*.run.app` edge answers the exact path `/healthz` with its own 404 before the container sees it. The app's startup check in `app/lib/api/dio_api_client.dart` still calls `/healthz`, so against the Cloud Run URL it will treat the backend as down and start in mock mode ("Demo" badge) until that path is changed to `/health`. Locally both paths work.
+The API contract and Cloud Run use `GET /health`: the `*.run.app` edge answers the exact path `/healthz` with its own 404 before the container sees it. The app's startup check in `app/lib/api/dio_api_client.dart` calls `/health` (since commit 6e3665f), so against the Cloud Run URL it correctly starts in live mode. Locally both paths work.
 
 ## Documents
 
