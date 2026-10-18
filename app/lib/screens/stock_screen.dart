@@ -1,21 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../api/api_provider.dart';
 import '../l10n/app_localizations.dart';
 import '../models/models.dart';
 import '../state/data_providers.dart';
-import '../theme.dart';
+import '../state/shop_prefs.dart';
+import '../theme/theme.dart';
+import '../util/format.dart';
 import '../widgets/async_body.dart';
+import '../widgets/km_app_bar.dart';
+import '../widgets/km_badge.dart';
+import '../widgets/km_button.dart';
+import '../widgets/km_row.dart';
+import '../widgets/order_sheet.dart';
+import '../widgets/tab_scaffold.dart';
 
-class StockScreen extends ConsumerWidget {
+class StockScreen extends ConsumerStatefulWidget {
   const StockScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<StockScreen> createState() => _StockScreenState();
+}
+
+class _StockScreenState extends ConsumerState<StockScreen> {
+  bool _ordering = false;
+
+  Future<void> _order() async {
+    final l = AppLocalizations.of(context);
+    setState(() => _ordering = true);
+    try {
+      final order = await ref.read(apiClientProvider).reorder(ref.read(shopPrefsProvider).shopId ?? '');
+      if (mounted) await showOrderSheet(context, order);
+    } catch (_) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.networkError)));
+    } finally {
+      if (mounted) setState(() => _ordering = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final stock = ref.watch(stockProvider);
-    return Scaffold(
-      appBar: AppBar(title: Text(l.stockTitle)),
+    final data = stock.value;
+    final latest = data?.items.map((i) => Fmt.parse(i.updatedAt)).whereType<DateTime>().fold<DateTime?>(
+          null,
+          (a, b) => a == null || b.isAfter(a) ? b : a,
+        );
+
+    return TabScaffold(
+      appBar: KmAppBar(
+        title: l.stockTitle,
+        subtitle: data == null ? null : l.stockSubtitle(data.items.length, latest == null ? '—' : Fmt.time(latest)),
+      ),
       body: AsyncBody<StockResponse>(
         value: stock,
         onRefresh: () => ref.refresh(stockProvider.future),
@@ -25,30 +63,40 @@ class StockScreen extends ConsumerWidget {
               if (a.lowStock != b.lowStock) return a.lowStock ? -1 : 1;
               return a.name.compareTo(b.name);
             });
-          final low = items.where((i) => i.lowStock).length;
           if (items.isEmpty) return EmptyHint(text: l.emptyStock, icon: Icons.inventory_2_outlined);
-          return ListView.separated(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-            itemCount: items.length + 1,
-            separatorBuilder: (_, _) => const SizedBox(height: 10),
-            itemBuilder: (context, i) {
-              if (i == 0) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Row(
-                    children: [
-                      Icon(
-                        low > 0 ? Icons.warning_amber_rounded : Icons.check_circle_outline,
-                        color: low > 0 ? KmColors.alert : KmColors.leaf,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(l.lowStockCount(low), style: Theme.of(context).textTheme.titleMedium),
-                    ],
-                  ),
-                );
-              }
-              return _StockTile(item: items[i - 1], lowLabel: l.lowStockBadge, reorderAt: l.reorderAt);
-            },
+          final low = items.where((i) => i.lowStock).toList();
+          return ListView(
+            padding: const EdgeInsets.fromLTRB(KmSpace.gutter, 12, KmSpace.gutter, 120),
+            children: [
+              if (low.isNotEmpty)
+                _LowBand(
+                  title: l.lowBandTitle(low.length),
+                  names: low.map((i) => i.name).join(', '),
+                  buttonLabel: l.orderButton,
+                  ordering: _ordering,
+                  onOrder: _order,
+                )
+              else
+                _AllGoodBand(label: l.allGoodBand),
+              const SizedBox(height: KmSpace.cardGap),
+              KmRowGroup(
+                children: [
+                  for (var i = 0; i < items.length; i++)
+                    KmRow(
+                      leading: ItemTile(name: items[i].name, index: i),
+                      title: items[i].packSize == null || items[i].packSize!.isEmpty
+                          ? items[i].name
+                          : '${items[i].name} ${items[i].packSize}',
+                      caption: l.reorderAt(Fmt.qty(items[i].reorderLevel)),
+                      value: Fmt.qty(items[i].quantity),
+                      valueColor: items[i].lowStock ? KmColors.mirchi : KmColors.ink,
+                      valueCaption: items[i].unit,
+                      badge: items[i].lowStock ? KmBadge(variant: KmBadgeVariant.low, label: l.lowStockBadge, inRow: true) : null,
+                      low: items[i].lowStock,
+                    ),
+                ],
+              ),
+            ],
           );
         },
       ),
@@ -56,82 +104,77 @@ class StockScreen extends ConsumerWidget {
   }
 }
 
-class _StockTile extends StatelessWidget {
-  const _StockTile({required this.item, required this.lowLabel, required this.reorderAt});
+class _LowBand extends StatelessWidget {
+  const _LowBand({
+    required this.title,
+    required this.names,
+    required this.buttonLabel,
+    required this.ordering,
+    required this.onOrder,
+  });
 
-  final StockItem item;
-  final String lowLabel;
-  final String Function(String) reorderAt;
+  final String title;
+  final String names;
+  final String buttonLabel;
+  final bool ordering;
+  final VoidCallback onOrder;
 
   @override
   Widget build(BuildContext context) {
-    final qty = item.quantity % 1 == 0 ? item.quantity.toInt().toString() : item.quantity.toString();
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: item.lowStock ? const Color(0xFFFFE5E2) : KmColors.cream,
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Icon(
-                Icons.inventory_2_outlined,
-                color: item.lowStock ? KmColors.alert : KmColors.saffron,
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.packSize == null || item.packSize!.isEmpty ? item.name : '${item.name} ${item.packSize}',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 2),
-                  Text(reorderAt('${item.reorderLevel}'), style: Theme.of(context).textTheme.bodySmall),
-                ],
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: KmColors.mirchiTint,
+        borderRadius: BorderRadius.circular(KmRadius.row),
+        border: Border.all(color: KmColors.mirchiBorder),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.arrow_downward_rounded, size: 28, color: KmColors.mirchi),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: qty,
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.w700,
-                          color: item.lowStock ? KmColors.alert : KmColors.brown,
-                        ),
-                      ),
-                      TextSpan(text: ' ${item.unit}', style: const TextStyle(fontSize: 15, color: KmColors.brownSoft)),
-                    ],
-                  ),
-                ),
-                if (item.lowStock)
-                  Container(
-                    margin: const EdgeInsets.only(top: 4),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: KmColors.alert,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      lowLabel,
-                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.white),
-                    ),
-                  ),
+                Text(title, style: KmText.bodyBold),
+                const SizedBox(height: 2),
+                Text(names, style: KmText.caption14, maxLines: 2, overflow: TextOverflow.ellipsis),
               ],
             ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 10),
+          KmButton(
+            size: KmButtonSize.small,
+            label: buttonLabel,
+            loading: ordering,
+            onPressed: ordering ? null : onOrder,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AllGoodBand extends StatelessWidget {
+  const _AllGoodBand({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: KmColors.leafTint,
+        borderRadius: BorderRadius.circular(KmRadius.row),
+        border: Border.all(color: KmColors.leafTint),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.check_circle_rounded, size: 28, color: KmColors.leaf),
+          const SizedBox(width: 10),
+          Text(label, style: KmText.bodyBold.copyWith(color: KmColors.leaf)),
+        ],
       ),
     );
   }
