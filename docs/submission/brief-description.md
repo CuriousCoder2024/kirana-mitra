@@ -18,7 +18,7 @@ Kirana Mitra is a voice- and photo-first assistant for small Indian grocery shop
 
 ## Short version (60 words)
 
-Kirana Mitra lets a kirana owner speak, type or photograph a shelf in Hindi, Hinglish or English. Gemini 3.8 Flash on Vertex AI turns it into stock and udhaar entries with Undo. Cloud Run hosts the API, Firestore stores shops, stock and orders, Firebase Hosting serves the web app, BigQuery ML forecasts festival demand.
+Kirana Mitra lets a kirana owner speak, type or photograph a shelf in Hindi, Hinglish or English. Gemini 3.8 Flash on Vertex AI turns it into stock and udhaar entries with Undo. Cloud Run hosts the API, Firestore stores shops, stock and orders, the Firebase project hosts the database with Firebase Hosting as the next web target, and BigQuery ML forecasts festival demand.
 
 ## Sources for the numbers and claims
 
