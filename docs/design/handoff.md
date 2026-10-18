@@ -1,9 +1,10 @@
-# Kirana Mitra · design v2 handoff for Flutter
+# Kirana Mitra · design v2.1 handoff for Flutter
 
 Design board (annotated phone frames, tokens, components): https://claude.ai/artifact/Cv8J8Uh37PWCLuMfFFT1N2
 
-Scope: visual and interaction redesign of the existing five screens plus three additions
-(recording sheet, per-customer history, evening hisaab card). The API contract in
+Scope: visual and interaction redesign of the existing five screens plus five additions
+(first-run welcome, recording sheet, per-customer history, evening hisaab card, empty and
+error states). v2.1 adds the friendliness audit in section 8 and the Barni logo. The API contract in
 `docs/api-contract.md` is unchanged; every screen below renders data that contract already
 returns. Current implementation referenced throughout is `app/lib/` as of commit `a5369b8`.
 
@@ -91,7 +92,7 @@ Use `FontFeature.tabularFigures()` on every number style.
   buttons 14, text fields and option cards 16, chips and badges full, mic full, bottom sheet 28 top.
 - Tap targets: chips and list rows 48 minimum, buttons and dock buttons 56, mic FAB on tabs 60,
   hero mic in chat 80 (92 while recording), onboarding and forecast primary buttons 60.
-- App bar 64 dp, bottom nav 72 dp, status bar as system. Mic dock 94 dp with the mic raised
+- App bar 56 dp, bottom nav 72 dp, status bar as system. Mic dock 94 dp with the mic raised
   30 dp above the dock's top edge.
 
 ## 4. Components
@@ -130,8 +131,10 @@ Bot replies with `intent` in `stock_in | sale | udhaar_given | udhaar_paid` rend
 
 ### 4.5 Samjha card (`ConfirmCard`) — `applied: true`
 Paper card, radius 20, 1 dp sand border, 6 dp leaf stripe on the left edge.
-- Header row (padding 12 16 0): 22 dp check-circle icon in leaf + "Samjha · likh diya" 16 sp bold leaf.
-- Body (padding 6 16 10, gap 6): one or two key/value rows. Row 1: subject (customer name or
+- Header row (padding 8 10 0 16): 22 dp check-circle icon in leaf + "Samjha · likh diya" 16 sp bold leaf,
+  then a `SunoButton` (4.16) pushed to the right.
+- Body (padding 6 16 10, gap 6): one or two key/value rows, then a 13 sp inkSoft caption
+  "Likha {time} · {source} se" (source: voice / photo / likha). Row 1: subject (customer name or
   item name + pack) 18 sp left, delta right in Number M with sign ("+ ₹350", "+ 3 carton",
   "− ₹500"). Delta is terracotta for udhaar given and stock out, leaf for udhaar paid, ink for
   stock in. Row 2: caption "Udhaar · ab total" / "Stock · ab total" 15 sp inkSoft left, new total
@@ -146,8 +149,8 @@ Replaces: plain-text reply + Undo chip.
 
 ### 4.6 Pakka nahi card (`AskCard`) — `applied: false`, confidence < 0.7
 Same shell with a 6 dp haldi stripe.
-- Header: 22 dp warning icon + "Pakka nahi" in haldiText. If `transcript` is present append
-  " · aapne kaha “<transcript>”" (wraps).
+- Header: 22 dp warning icon + "Pakka nahi" in haldiText, `SunoButton` at the right. The heard
+  transcript is already the user bubble above, so the header does not repeat it.
 - Body: subject/delta row as in 4.5, then the question line 15 sp inkSoft: "Stock mein add
   karoon?" / "Udhaar mein likhoon?" / "Bikri mein likhoon?" by intent.
 - Footer: `KmButton.leaf small` with check icon and the `confirm` action's label ("Haan, add
@@ -190,7 +193,8 @@ week ("21 Sep"), y labels left, 11 sp inkSoft. Legend beneath: Pichhle hafte · 
 Diwali, 13 sp.
 
 ### 4.11 Mic (`MicButton`, `MicDock`, `MicFab`)
-- Hero mic in chat: 80 dp, saffron, white 40 dp mic icon, glow shadow, label "Dabake bolo"
+- Hero mic in chat: 80 dp, linear gradient 150° from `saffronBright` to `saffron` (the only
+  gradient in the app besides the logo and the FAB), white 40 dp mic icon, glow shadow, label "Dabake bolo"
   14/600 saffron beneath. Raised 30 dp above the dock.
 - Dock: paper, 1 dp sand top border, padding 8 20 6. Left 56 dp outline circle with camera icon
   and label "Shelf photo" 13/600 inkSoft; right 56 dp with keyboard icon and label "Likho".
@@ -203,7 +207,7 @@ Diwali, 13 sp.
   X sits 90 dp left of the mic centre: when the finger is over it the mic turns `inkFaint`, the
   icon becomes X and the label "Chhod do, cancel ho gaya". The message list behind fades to 55 %.
   Respect `MediaQuery.disableAnimations` for the waveform.
-- Mic FAB on Stock, Udhaar, Forecast: 60 dp, saffron, bottom-right, 16 dp from the edge and
+- Mic FAB on Stock, Udhaar, Mangao: 60 dp, same gradient as the hero mic, bottom-right, 16 dp from the edge and
   32 dp above the nav bar. Same hold-to-talk; the reply shows as a floating `ConfirmCard` at the
   bottom for 6 s with its Undo, then the tab's list refreshes.
 
@@ -214,18 +218,50 @@ with the three option cards from onboarding; selection updates `ShopPrefs.langua
 locale immediately. (The contract's `POST /shops` is the only place language is sent; the app
 stores it locally and the next `/chat` reply follows the user's mix anyway.)
 
-### 4.13 Logo mark
-SVG in `app/assets/logo.svg` (copy the `<symbol id="logo">` from the design board): saffron
-rounded square (radius 25 %), cream awning with four scallops across the top, a paper speech
-bubble with a small ink mic. Sizes: 84 onboarding, 36 app bar, 24 notifications.
+### 4.13 Logo mark · the Barni (v2.1)
+A kirana's glass barni jar with a sound wave inside it. SVG, 64 × 64 viewBox, in
+`app/assets/logo.svg`; copy the `<symbol id="logo">` from the design board verbatim:
+
+- Background: rounded square, radius 18/64 (28 %), linear gradient top-left `#F08A2C` to
+  bottom-right `#BE520B`.
+- Lid: `ink` rect 22 × 8 at (21, 11), radius 3. Neck: `paper` rect 16 × 5 at (24, 18).
+- Jar body: `paper` rounded rect from (17, 22) to (47, 54), radius 8.
+- Wave: three `saffron` bars 4.5 wide, radius 2.25, at x 23.5 / 29.75 / 36 with heights 10 / 22 / 16,
+  vertically centred on y 39.
+
+Sizes: 84 onboarding, 44 wordmark lockup, 36 app bar, 24 bot "Mitra" line and notifications.
+Wordmark: Baloo 2 800 "Kirana Mitra" with "Mitra" in `saffron` (Devanagari: "किराना मित्र",
+"मित्र" in saffron). Android adaptive icon: the gradient as background layer, jar as foreground.
+The v2 awning-and-bubble mark is retired.
 
 ### 4.14 Bottom navigation
 72 dp, paper, 1 dp sand top border. Four items: Baat (mic icon), Stock (box), Udhaar (wallet),
-Forecast (trend). Icon 26 dp, label 13/600. Selected: terracotta icon and label with a
+Mangao (trend). "Mangao" replaces "Forecast" (v2.1): the tab is named for the question it
+answers, "kya mangao?". Icon 26 dp, label 13/600. Selected: terracotta icon and label with a
 56 × 32 saffronTint pill behind the icon. Replaces Material `NavigationBar` indicator styling.
 
+### 4.16 Suno button (`SunoButton`) — v2.1
+32 dp pill, cream fill, 18 dp speaker icon + "Suno" 13/700 inkSoft, right-aligned in every bot
+card header (`dark` variant on the hisaab header: 16 % paper fill, `#FFF4E6` text). Tap reads
+`reply_text` aloud with `flutter_tts` in the reply's `language` (`hi-IN` for hi and hi-Latn,
+`en-IN` for en). While speaking the icon animates and the label becomes "Ruko"; tapping again
+stops. Also present on plain bot bubbles longer than one line as a trailing 32 dp icon-only
+variant with semantics label "Suno".
+
+### 4.17 Example chip (`ExampleChip`) — v2.1
+Full-width `KmChip` variant: 52 dp min height, paper fill, sand border, left-aligned, 20 dp
+leading icon in saffron, text wraps. Tapping sends the sentence through `/chat` as if typed.
+Used in the first-run welcome and in every empty state.
+
+### 4.18 Error card (`ErrorCard`) — v2.1
+Floating card above the nav bar (14 dp side margins), paper, 1 dp sand border, 6 dp `ink` left
+stripe (not red: nothing in the shop is wrong), 22 dp wifi-off icon, title 17/700, one line
+15 inkSoft, `KmButton.outline small` "Phir try karo". Stays until resolved or dismissed by swipe.
+Voice notes and photos that failed to send are queued locally and resent when connectivity
+returns; the card then becomes a 3 s leaf toast "Bhej diya".
+
 ### 4.15 App bar
-64 dp, cream (same as scaffold), no elevation, no solid saffron. Title in Baloo 2 22/700 ink,
+56 dp, cream (same as scaffold), no elevation, no solid saffron. Title in Baloo 2 22/700 ink,
 subtitle 13 inkSoft beneath (shop name on chat, counts and freshness on tabs). Chat shows the
 36 dp logo on the left; detail screens show a 44 dp back circle. `LangChip` on the right.
 The "Demo" `KmBadge` sits left of the chip when the app is in mock mode.
@@ -246,11 +282,25 @@ Validation: empty fields get a saffron border and the caption "Yeh bharo" under 
 dialogs. Server failure keeps the current demo-mode fallback with the notice as a bot bubble on
 the chat screen instead of text on this screen.
 
+### 5.1b First run (v2.1, chat empty state)
+Shown until the first voice note or chip is sent. Day chip, then a "Mitra" line (24 dp logo +
+"Mitra" 13/700 inkSoft) above a bot bubble: "Namaste {name} ji! Main Mitra hoon. Dukaan mein jo
+bhi hua, bas bol do. Main likh lunga, aur galti ho toh Undo hai." Then the label "AISE BOLO (tap
+karke bhi bhej sakte ho)" 13/700 and three `ExampleChip`s (box icon "Aaj 2 carton Parle-G aaya",
+wallet icon "Sharma ji ne 200 udhaar liya", rupee icon "Maggi kitni bachi hai?"). The hero mic
+shows a pulsing 104 dp ring (`saffronBright`, 3 dp, scale 0.8→1.25, 1.6 s loop, off when
+animations are disabled) and the label "Yahan dabao aur bolo". After the first send the ring
+stops for good and the label returns to "Dabake bolo".
+
 ### 5.2 Chat home (`chat_screen.dart`)
 App bar (logo, "Kirana Mitra", shop name, LangChip). Message list bottom-aligned, 14 dp side
-padding, 10 dp gap, day chips ("Aaj · Sat 18 Oct") 13/600 on sand. Replies render per 4.4–4.6.
-Mic dock per 4.11. Bottom nav per 4.14. The welcome message stays as the first bot bubble.
-Remove the always-visible text field; "Likho" reveals it.
+padding, 10 dp gap, day chips ("Aaj · Sat 18 Oct") 13/600 on sand. Replies render per 4.4–4.6
+with `SunoButton`. Mic dock per 4.11. Bottom nav per 4.14. Remove the always-visible text field;
+"Likho" reveals it. Navigation chips (`open_*`, `send_order`) render as a chip row under the
+latest reply only; older replies drop their chips so stale actions are never shown.
+Festival day (v2.1): when `/forecast` lists a festival dated today, the first bot message of the
+day is "Shubh {festival}, {name} ji! Aaj bheed hogi. Stock check kar lo?" with the chip "Stock
+dekho", and the day chip shows a diya glyph instead of the dot for that week.
 
 ### 5.3 Recording state
 Per 4.11. Triggered by pointer down on the hero mic or a tab FAB; ends on pointer up (send) or
@@ -258,6 +308,9 @@ on release over the cancel target. Max 60 s: at 55 s the timer turns mirchi; at 
 sent automatically.
 
 ### 5.4 Shelf-scan result
+Camera (v2.1): the capture screen shows a rounded-rectangle guide (16 dp inset, 2 dp paper at
+70 %) with one line beneath it, "Shelf seedha, roshni mein", 16/600 on a 45 % ink scrim. If the
+preview's sharpness score is low, the line becomes "Thoda aur paas, hilao mat" until it clears.
 User photo bubble, then the `AskCard` variant from 4.6 with the count list from 4.8 and the
 question "Stock yahi set kar doon?". After confirm, the card's footer swaps to a leaf "Samjha ·
 stock update ho gaya" line with an Undo button. The chips row beneath keeps "Stock dekho" and
@@ -268,8 +321,14 @@ App bar: "Stock", subtitle "{count} cheezein · update {time}". Below: low-stock
 fill, 1 dp `#EFC2BD` border, radius 18, 28 dp arrow-down icon in mirchi, "N cheezein kam hain"
 18/700, the low item names 14 inkSoft, and a `KmButton.primary small` "Order banao" on the
 right) shown only when `low_stock` count > 0; otherwise a leafTint band "Sab theek hai" with a
-check icon. Then one `KmRow` list, sorted low-stock first then by name. Mic FAB. Empty state:
-box icon + "Abhi stock nahi hai. Bolo kya aaya."
+check icon. Then one `KmRow` list, sorted low-stock first then by name. Mic FAB.
+Empty state (v2.1, same pattern on Udhaar and Mangao): centred column with an 84 dp tile
+(radius 26, saffronTint, 44 dp tab icon in terracotta), title 24/700 Baloo, one 15 sp inkSoft
+line, and one `ExampleChip` with a mic icon. Stock: "Stock abhi khaali hai" / "Jo aaya hai, bol
+do. Mitra gin lega." / "Aaj 2 carton Parle-G aaya". Udhaar: "Abhi koi udhaar nahi" / "Kisi ne
+udhaar liya? Bol do." / "Sharma ji ne 200 udhaar liya". Mangao: "Abhi anumaan nahi" / "2 hafte
+ki bikri ke baad Mitra bata dega kya mangao." / no chip. App bar subtitle while empty: "Abhi
+kuch nahi likha".
 
 ### 5.6 Udhaar (`udhaar_screen.dart`)
 App bar: "Udhaar", subtitle "{n} log · bahi-khata". `KhataCard` with "KUL BAAKI",
@@ -293,9 +352,9 @@ Data: the contract has no per-customer history endpoint; the app keeps the last 
 builds this list from those with `customer_name` matching. Document this as a Phase 5 gap.
 Reminder text: "Namaste {name} ji, Gupta General Store se. Aapka ₹{balance} baaki hai. Dhanyavaad!"
 
-### 5.8 Forecast (`forecast_screen.dart`)
-App bar: "Forecast", subtitle "Agle 4 hafte · {festival} {date}" when a festival falls in the
-horizon. Horizontal `KmChip` row of items (selected = filled, others `quiet`). Chart card per
+### 5.8 Mangao (`forecast_screen.dart`)
+App bar: "Kya mangao?", subtitle "Agle 4 hafte ka anumaan · {festival} {date}" when a festival
+falls in the horizon (else "Agle 4 hafte ka anumaan"). Horizontal `KmChip` row of items (selected = filled, others `quiet`). Chart card per
 4.10 with the item name 18/700 and "{unit} / hafta" 14 inkSoft in the header. Reason band
 (haldiTint fill, `#F3D98F` border, 28 dp diya icon in `#B07400`, `reorder_reason` 18/700,
 "Stock mein {on_hand} · mangao {reorder_qty} {unit}" 14). 60 dp `KmButton.primary block`
@@ -313,10 +372,13 @@ At the shop's closing time (default 21:30, local notification) the app fetches `
 appends a `HisaabCard` to the chat with the day chip "Dukaan band · 9:30 pm". Also reachable
 from the chat app bar overflow as "Aaj ka hisaab".
 Card: ink header (24 dp receipt icon in saffronBright, "Aaj ka hisaab" 18/700 Baloo, "{date} ·
-{entries} entries" 13 at 85 %), body with "Aaj ki bikri" 16 inkSoft + `sales_total` Number L in
-leaf; 2 × 2 tiles (cream, radius 14, label 13/600 inkSoft, value Number S): "Udhaar diya" +₹ in
+{entries} entries" 13 at 85 %, `SunoButton.dark` at the right), body with "Aaj ki bikri" 16
+inkSoft + `sales_total` Number L in leaf; beneath the label a `KmBadge.ok` "▲ kal se {pct}%"
+(or `KmBadge.warn` "▼ kal se {pct}%") computed against the previous day's cached `/summary`,
+omitted when there is none; 2 × 2 tiles (cream, radius 14, label 13/600 inkSoft, value Number S): "Udhaar diya" +₹ in
 terracotta, "Udhaar aaya" ₹ in leaf, "Kul baaki" ink, "Kam hai" count in mirchi on mirchiTint;
-then a 15 sp inkSoft line naming the low items and the next festival; footer with
+then a 15 sp inkSoft line: "Shabash! " prefix when sales are up, then "Kal ke liye: {items}
+mangao." and "{festival} {n} hafte door hai."; footer with
 `KmButton.primary small` "Kal ka order banao" (→ 5.9 with all low items) above
 `KmButton.outline small` "Ghar pe WhatsApp karo" (shares `reply_text`).
 
@@ -411,6 +473,44 @@ is needed for `language == en` shops, it is given in the third column; otherwise
 | `todayChip` | Aaj · {date} | आज · {date} | Today · {date} |
 | `demoNotice` | Server nahi mila. Demo mode mein shuru kar raha hoon. | सर्वर नहीं मिला। डेमो मोड में शुरू कर रहा हूँ। | Couldn't reach the server. Starting in demo mode. |
 
+#### Added in v2.1
+
+| Key | en (hi-Latn) | hi | en (plain), if different |
+|---|---|---|---|
+| `navForecast` | Mangao | मंगाओ | Order |
+| `forecastTitle` | Kya mangao? | क्या मंगाओ? | What to order? |
+| `forecastSubtitlePlain` | Agle 4 hafte ka anumaan | अगले 4 हफ्ते का अनुमान | Next 4 weeks' forecast |
+| `forecastSubtitle` | Agle 4 hafte ka anumaan · {festival} {date} | अगले 4 हफ्ते का अनुमान · {festival} {date} | Next 4 weeks' forecast · {festival} {date} |
+| `sunoButton` | Suno | सुनो | Listen |
+| `sunoStop` | Ruko | रुको | Stop |
+| `mitraName` | Mitra | मित्र | |
+| `firstRunWelcome` | Namaste {name} ji! Main Mitra hoon. Dukaan mein jo bhi hua, bas bol do. Main likh lunga, aur galti ho toh Undo hai. | नमस्ते {name} जी! मैं मित्र हूँ। दुकान में जो भी हुआ, बस बोल दो। मैं लिख लूँगा, और गलती हो तो Undo है। | Hello {name}! I'm Mitra. Whatever happens in the shop, just say it. I'll write it down, and there's Undo if I get it wrong. |
+| `exampleLabel` | Aise bolo (tap karke bhi bhej sakte ho) | ऐसे बोलो (टैप करके भी भेज सकते हो) | Try saying (or tap to send) |
+| `exampleStock` | Aaj 2 carton Parle-G aaya | आज 2 कार्टन Parle-G आया | 2 cartons of Parle-G came today |
+| `exampleUdhaar` | Sharma ji ne 200 udhaar liya | शर्मा जी ने 200 उधार लिया | Sharma ji took 200 on credit |
+| `exampleQuestion` | Maggi kitni bachi hai? | Maggi कितनी बची है? | How much Maggi is left? |
+| `micCoachLabel` | Yahan dabao aur bolo | यहाँ दबाओ और बोलो | Press here and speak |
+| `emptySubtitle` | Abhi kuch nahi likha | अभी कुछ नहीं लिखा | Nothing written yet |
+| `emptyStockTitle` | Stock abhi khaali hai | स्टॉक अभी खाली है | Stock is empty |
+| `emptyStockLine` | Jo aaya hai, bol do. Mitra gin lega. | जो आया है, बोल दो। मित्र गिन लेगा। | Say what came in. Mitra will count it. |
+| `emptyUdhaarTitle` | Abhi koi udhaar nahi | अभी कोई उधार नहीं | No credit yet |
+| `emptyUdhaarLine` | Kisi ne udhaar liya? Bol do. | किसी ने उधार लिया? बोल दो। | Someone took credit? Say it. |
+| `emptyForecastTitle` | Abhi anumaan nahi | अभी अनुमान नहीं | No forecast yet |
+| `emptyForecastLine` | 2 hafte ki bikri ke baad Mitra bata dega kya mangao. | 2 हफ्ते की बिक्री के बाद मित्र बता देगा क्या मंगाओ। | After two weeks of sales Mitra will tell you what to order. |
+| `errorOfflineTitle` | Net nahi chal raha | नेट नहीं चल रहा | No internet |
+| `errorOfflineLine` | Aapka voice note save hai. Net aate hi bhej dunga. | आपका वॉइस नोट सेव है। नेट आते ही भेज दूँगा। | Your voice note is saved. I'll send it when the internet is back. |
+| `errorRetry` | Phir try karo | फिर कोशिश करो | Try again |
+| `errorSent` | Bhej diya | भेज दिया | Sent |
+| `confirmWrittenAt` | Likha {time} · {source} se | लिखा {time} · {source} से | Written {time} · from {source} |
+| `sourceVoice` / `sourcePhoto` / `sourceTyped` | voice / photo / likha | वॉइस / फोटो / लिखा | voice / photo / typed |
+| `hisaabUpBadge` | ▲ kal se {pct}% | ▲ कल से {pct}% | ▲ {pct}% vs yesterday |
+| `hisaabDownBadge` | ▼ kal se {pct}% | ▼ कल से {pct}% | ▼ {pct}% vs yesterday |
+| `hisaabShabash` | Shabash! | शाबाश! | Well done! |
+| `hisaabTomorrow` | Kal ke liye: {items} mangao. | कल के लिए: {items} मंगाओ। | For tomorrow: order {items}. |
+| `festivalGreeting` | Shubh {festival}, {name} ji! Aaj bheed hogi. Stock check kar lo? | शुभ {festival}, {name} जी! आज भीड़ होगी। स्टॉक चेक कर लो? | Happy {festival}, {name}! It'll be busy today. Check stock? |
+| `cameraGuide` | Shelf seedha, roshni mein | शेल्फ सीधा, रोशनी में | Shelf straight, in good light |
+| `cameraCloser` | Thoda aur paas, hilao mat | थोड़ा और पास, हिलाओ मत | A bit closer, hold still |
+
 ### 6.2 Changed existing keys
 
 | Key | Was (en) | Now en (hi-Latn) | Now hi |
@@ -439,11 +539,13 @@ is needed for `language == en` shops, it is given in the third column; otherwise
 | `reorderButton` | Reorder | (replaced by `orderButtonQty`) | |
 | `copy` | Copy | Copy (unchanged) | कॉपी |
 | `navChat` | Chat | Baat | बात |
+| `navForecast` | Forecast | Mangao | मंगाओ |
+| `forecastTitle` | Forecast | Kya mangao? | क्या मंगाओ? |
 
 Unchanged keys keep their current values (`appTitle`, `welcomeMessage*`, `send`, `thinking`,
 `networkError`, `comingSoon`, `scanFailed`, `imageTooLarge`, `micPermissionDenied`,
 `voiceTooShort`, `navStock`, `navUdhaar`, `navForecast`, `demoMode`, `changeShop`, `retry`,
-`loading`, `errorLoading`, `orderReady` text already matches).
+`loading`, `errorLoading`).
 
 Number formatting: Indian grouping (`₹1,20,000`), no decimals for rupees, `NumberFormat('#,##,###', 'en_IN')`.
 Dates: "Sat 18 Oct", times "7:41 pm", relative "Aaj" / "Kal" for today and yesterday.
@@ -471,6 +573,29 @@ Dates: "Sat 18 Oct", times "7:41 pm", relative "Aaj" / "Kal" for today and yeste
    text in a bottom sheet with WhatsApp / Copy / Share.
 9. **Evening hisaab card** (new) pushed into chat and reachable from the app bar.
 10. **Palette deepened** (saffron `#C85A0E`, ink `#2A1A10`) and three semantic colours added.
+11. **v2.1:** Barni logo, "Suno" read-aloud on every bot card, "Mangao" tab, first-run welcome
+    with example chips and mic coach, designed empty states, persistent error card with offline
+    queue, hisaab day-over-day badge, camera guide, festival greeting, 56 dp app bar, gradient
+    on the mic and FAB.
+
+---
+
+## 8. UX audit (v2.1) — findings and where they land
+
+| # | Finding | Fix | Where |
+|---|---|---|---|
+| 1 | Mitra never introduces itself; the first screen is an empty chat | First-run welcome in first person with the mark, three example chips, pulsing mic coach | 5.1b, 4.17 |
+| 2 | Replies exist only as text; slow readers skip them | `SunoButton` on every bot card, TTS in the reply language | 4.16 |
+| 3 | "Forecast" is jargon at a counter | Tab "Mangao", title "Kya mangao?" | 4.14, 5.8 |
+| 4 | Confirmations carry no time, so they cannot be matched to memory | "Likha {time} · {source} se" caption; time and source on ledger rows | 4.5, 5.7 |
+| 5 | Empty tabs show one line of text | Tile + title + one line + example chip on every empty state | 5.5 |
+| 6 | Network errors are 4 s snackbars and the voice note is lost | Persistent `ErrorCard`, local queue, auto-resend | 4.18 |
+| 7 | The hisaab has no context or warmth | "▲ kal se 12%" badge, "Shabash!" when up, low list as tomorrow's to-do | 5.10 |
+| 8 | The camera gives no guidance; failures surface after the scan | Guide frame and one-line hint; sharpness nudge | 5.4 |
+| 9 | Flat saffron and heavy ink feel stern | Gradient on mic, FAB and logo only; app bar 56 dp | 4.11, 4.15 |
+| 10 | Festivals appear only in the chart | Festival-day greeting with a stock-check chip; diya in the day chip | 5.2 |
+| 11 | The awning logo was three ideas and broke at 24 dp | Barni mark: one object, three UI colours, legible at 24 dp | 4.13 |
 
 Not in this pass: dark mode, tablet layout, onboarding voice input, per-customer history
-endpoint (needs a contract change; the local cache workaround is in 5.7).
+endpoint (needs a contract change; the local cache workaround is in 5.7), yesterday's sales in
+`/summary` (the app caches the previous day's summary for the hisaab badge).
