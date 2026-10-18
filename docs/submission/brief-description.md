@@ -1,11 +1,6 @@
 # Brief description of what we built
 
-Hackathon form field: "Brief description of what you have built". Two versions below.
-Lines marked **[confirm after deploy]** depend on Firestore or Firebase Hosting being live; remove the marker once
-verified (state on 2026-10-18: Firestore is wired in `infra/setup.sh`, `infra/deploy.sh` and `backend/pyproject.toml`
-but the backend deploy that uses it is still pending; the web app is currently at
-`https://storage.googleapis.com/kirana-mitra-app-web/index.html`, and `https://kirana-mitra-app.web.app` is the
-planned Firebase Hosting URL).
+Hackathon form field: "Brief description of what you have built". Two versions below. State verified on 18 Oct 2026: Firestore live on Cloud Run revision 00006; web app at https://storage.googleapis.com/kirana-mitra-app-web/index.html.
 
 ## Full version (about 215 words)
 
@@ -15,15 +10,15 @@ Kirana Mitra is a voice- and photo-first assistant for small Indian grocery shop
 
 **Cloud Run.** One FastAPI service makes every Gemini call, serves the app's API and exposes the scheduler endpoint for automatic restock; it runs with one warm instance.
 
-**Firestore.** Shops, items, stock, messages, orders and feedback are stored in Firestore (Native mode, asia-south1). **[confirm after deploy]**
+**Firestore.** Shops, items, stock, messages, orders and feedback are stored in Firestore (Native mode, asia-south1), verified live on Cloud Run revision 00006 on 18 Oct 2026.
 
-**Firebase.** The Flutter web app is served from Firebase Hosting. **[confirm after deploy]** Firebase Auth for shop sign-in is on the roadmap.
+**Firebase.** kirana-mitra-app is a Firebase project (Hosting site configured, Firestore as the database); the Flutter web app is published at https://storage.googleapis.com/kirana-mitra-app-web/index.html with Firebase Hosting as the next publish target. Firebase Auth for shop sign-in is on the roadmap.
 
 **BigQuery ML.** An `ARIMA_PLUS` model forecasts four weeks of demand per item, with a festival uplift for Dussehra and Diwali, and drives a one-tap WhatsApp reorder. On a 14-day holdout of synthetic sales, the festival-adjusted forecast had 11.0% volume-weighted error against 19.6% for plain ARIMA.
 
 ## Short version (60 words)
 
-Kirana Mitra lets a kirana owner speak, type or photograph a shelf in Hindi, Hinglish or English. Gemini 3.8 Flash on Vertex AI turns it into stock and udhaar entries with Undo. Cloud Run hosts the API, Firestore stores shops, stock and orders **[confirm after deploy]**, Firebase Hosting serves the web app **[confirm after deploy]**, BigQuery ML forecasts festival demand.
+Kirana Mitra lets a kirana owner speak, type or photograph a shelf in Hindi, Hinglish or English. Gemini 3.8 Flash on Vertex AI turns it into stock and udhaar entries with Undo. Cloud Run hosts the API, Firestore stores shops, stock and orders, Firebase Hosting serves the web app, BigQuery ML forecasts festival demand.
 
 ## Sources for the numbers and claims
 
