@@ -548,4 +548,8 @@ class AppLocalizationsSat extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'ᱧᱤᱫᱟᱹ ᱨᱮᱭᱟᱜ ᱚᱴᱳ ᱚᱰᱟᱨ ᱦᱮᱡ ᱮᱱᱟ';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

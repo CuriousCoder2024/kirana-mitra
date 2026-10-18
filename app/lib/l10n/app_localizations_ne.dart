@@ -546,4 +546,8 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'रातिको अटो अर्डर आयो';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

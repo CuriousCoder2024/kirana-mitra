@@ -398,5 +398,6 @@
   "orderPlaced": "भेजा",
   "orderCancelled": "कैंसल हो गया",
   "viewOrders": "ऑर्डर देखो",
-  "newOrdersNotice": "रात का ऑटो ऑर्डर आया"
+  "newOrdersNotice": "रात का ऑटो ऑर्डर आया",
+  "shopReRegistered": "सर्वर रीस्टार्ट हुआ, दुकान फिर से रजिस्टर की।"
 }

@@ -549,4 +549,8 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'இரவின் ஆட்டோ ஆர்டர் வந்தது';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

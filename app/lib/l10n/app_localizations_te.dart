@@ -548,4 +548,8 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'రాత్రి ఆటో ఆర్డర్ వచ్చింది';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

@@ -547,4 +547,8 @@ class AppLocalizationsDoi extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'राती दा ऑटो ऑर्डर आया';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

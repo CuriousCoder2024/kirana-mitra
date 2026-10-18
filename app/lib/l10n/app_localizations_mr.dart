@@ -546,4 +546,8 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'रात्रीची ऑटो ऑर्डर तयार';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

@@ -30,26 +30,26 @@ class AsyncBody<T> extends StatelessWidget {
           // The provider surfaces the error state; nothing to do here.
         }
       },
-      child: value.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => ListView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          children: [
-            const SizedBox(height: 80),
-            EmptyHint(text: l.errorLoading, icon: Icons.cloud_off_rounded),
-            const SizedBox(height: 12),
-            Center(
-              child: KmButton(
-                variant: KmButtonVariant.ghost,
-                icon: Icons.refresh_rounded,
-                label: l.retry,
-                onPressed: onRefresh,
+      child: switch (value) {
+        AsyncValue(hasValue: true) => builder(value.requireValue),
+        AsyncValue(hasError: true) => ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              const SizedBox(height: 80),
+              EmptyHint(text: l.errorLoading, icon: Icons.cloud_off_rounded),
+              const SizedBox(height: 12),
+              Center(
+                child: KmButton(
+                  variant: KmButtonVariant.ghost,
+                  icon: Icons.refresh_rounded,
+                  label: l.retry,
+                  onPressed: onRefresh,
+                ),
               ),
-            ),
-          ],
-        ),
-        data: (d) => builder(d),
-      ),
+            ],
+          ),
+        _ => const Center(child: CircularProgressIndicator()),
+      },
     );
   }
 }

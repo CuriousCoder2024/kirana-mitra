@@ -550,4 +550,8 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'രാത്രിയിലെ ഓട്ടോ ഓർഡർ വന്നു';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

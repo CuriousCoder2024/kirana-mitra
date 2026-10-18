@@ -547,4 +547,8 @@ class AppLocalizationsKs extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'راتُک آٹو آرڈر آو';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

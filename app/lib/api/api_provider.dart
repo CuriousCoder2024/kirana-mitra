@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'api_client.dart';
 import 'dio_api_client.dart';
 import 'mock_api_client.dart';
+import 'recovering_api_client.dart';
+import '../state/shop_recovery.dart';
 
 const bool kUseMock = bool.fromEnvironment('USE_MOCK');
 
@@ -15,7 +17,10 @@ final mockClientProvider = Provider<MockApiClient>((ref) => MockApiClient());
 final apiClientFutureProvider = FutureProvider<ApiClient>((ref) async {
   if (kUseMock) return ref.watch(mockClientProvider);
   final live = DioApiClient();
-  if (await live.healthz()) return live;
+  if (await live.healthz()) {
+    // The backend keeps shops in memory; recover silently after a restart.
+    return RecoveringApiClient(live, recover: () => recoverShop(ref, live));
+  }
   debugPrint('Kirana Mitra: backend at ${live.baseUrl} not reachable, using mock');
   return ref.watch(mockClientProvider);
 });

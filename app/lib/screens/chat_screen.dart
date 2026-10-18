@@ -14,6 +14,7 @@ import '../state/chat_controller.dart';
 import '../state/data_providers.dart';
 import '../state/mic_state.dart';
 import '../state/shop_prefs.dart';
+import '../state/shop_recovery.dart';
 import '../state/voice_actions.dart';
 import '../theme/theme.dart';
 import '../util/format.dart';
@@ -178,6 +179,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final prefs = ref.watch(shopPrefsProvider);
     final recording = ref.watch(micStateProvider.select((s) => s.recording));
     final festival = ref.watch(forecastProvider).value?.festivals.firstOrNull;
+    ref.listen(shopRecoveredProvider, (prev, next) {
+      if (next) {
+        ref.read(shopRecoveredProvider.notifier).set(false);
+        ref.read(chatControllerProvider.notifier).addBotNote(l.shopReRegistered);
+      }
+    });
 
     // Build the visual list (day chips + messages), newest last, then reverse.
     final rows = <Widget>[];

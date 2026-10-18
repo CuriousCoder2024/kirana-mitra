@@ -23,7 +23,14 @@ final appReadyProvider = FutureProvider<String>((ref) async {
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: KiranaMitraApp()));
+  runApp(
+    ProviderScope(
+      // No automatic retries: a failed request shows its error state with a
+      // retry button instead of a spinner while Riverpod backs off.
+      retry: (retryCount, error) => null,
+      child: const KiranaMitraApp(),
+    ),
+  );
 }
 
 class KiranaMitraApp extends ConsumerWidget {

@@ -545,4 +545,8 @@ class AppLocalizationsKok extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'रातीची ऑटो ऑर्डर आयली';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

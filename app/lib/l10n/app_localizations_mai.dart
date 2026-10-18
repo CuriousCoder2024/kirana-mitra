@@ -545,4 +545,8 @@ class AppLocalizationsMai extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'रातिक ऑटो ऑर्डर आयल';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

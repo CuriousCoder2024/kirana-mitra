@@ -548,4 +548,8 @@ class AppLocalizationsMni extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'নুমিদাংগী auto order লাক্লে';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

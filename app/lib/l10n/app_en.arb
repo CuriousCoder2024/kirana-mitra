@@ -398,5 +398,6 @@
   "orderPlaced": "Bheja",
   "orderCancelled": "Cancel ho gaya",
   "viewOrders": "Orders dekho",
-  "newOrdersNotice": "Raat ka auto order aaya"
+  "newOrdersNotice": "Raat ka auto order aaya",
+  "shopReRegistered": "Server restart hua, dukaan phir se register ki."
 }

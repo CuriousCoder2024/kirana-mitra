@@ -1082,6 +1082,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Raat ka auto order aaya'**
   String get newOrdersNotice;
+
+  /// No description provided for @shopReRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'Server restart hua, dukaan phir se register ki.'**
+  String get shopReRegistered;
 }
 
 class _AppLocalizationsDelegate

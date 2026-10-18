@@ -545,4 +545,8 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'ರಾತ್ರಿಯ ಆಟೋ ಆರ್ಡರ್ ಬಂದಿದೆ';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

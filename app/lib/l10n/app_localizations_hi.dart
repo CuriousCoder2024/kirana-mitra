@@ -545,6 +545,10 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'रात का ऑटो ऑर्डर आया';
+
+  @override
+  String get shopReRegistered =>
+      'सर्वर रीस्टार्ट हुआ, दुकान फिर से रजिस्टर की।';
 }
 
 /// The translations for Hindi, using the Latin script (`hi_Latn`).
@@ -1090,4 +1094,8 @@ class AppLocalizationsHiLatn extends AppLocalizationsHi {
 
   @override
   String get newOrdersNotice => 'Raat ka auto order aaya';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }

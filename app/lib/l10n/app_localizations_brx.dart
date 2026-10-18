@@ -547,4 +547,8 @@ class AppLocalizationsBrx extends AppLocalizations {
 
   @override
   String get newOrdersNotice => 'हरनि अटो अर्डर फैबाय';
+
+  @override
+  String get shopReRegistered =>
+      'Server restart hua, dukaan phir se register ki.';
 }
