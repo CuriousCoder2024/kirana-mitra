@@ -31,3 +31,12 @@ def test_customer_names_merge_only_when_close():
     assert match_customer("gupta ji", known) == "Gupta ji"
     assert match_customer("Guptaji", known) == "Gupta ji"
     assert match_customer("Verma ji", known) == "Verma ji"
+
+
+def test_system_prompt_renders_with_catalogue():
+    from app.gemini import build_system_prompt
+
+    prompt = build_system_prompt(catalogue())
+    assert "Parle-G | 70g | packet | 42" in prompt
+    assert '"intent":"udhaar_given"' in prompt
+    assert "{name, pack_size, quantity, unit, unit_price}" in prompt

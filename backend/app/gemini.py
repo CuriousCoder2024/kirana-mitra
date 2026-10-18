@@ -41,7 +41,7 @@ Return JSON matching the schema with these fields:
   If the text mixes Hindi words in Roman script with English, it is "hi-Latn".
 - transcript: for audio input, exactly what you heard in the speaker's own script; null for text.
 - entities:
-  * items: list of {name, pack_size, quantity, unit, unit_price}. Keep the brand name as spoken
+  * items: list of {{name, pack_size, quantity, unit, unit_price}}. Keep the brand name as spoken
     (e.g. "Parle G", "Maggi"); the backend matches it to the catalogue. unit is one of
     carton | piece | kg | litre | packet | box. unit_price in integer rupees or null.
   * customer_name: as spoken, keep honorifics ("Gupta ji", "Sharma aunty"); null if none.
