@@ -44,6 +44,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   bool _typing = false;
   bool _ordering = false;
 
+  /// Bumped once the welcome and server notices have landed. With a
+  /// runtime-fetched script font the first list layout can paint nothing;
+  /// recreating the list forces a fresh layout, as a tab switch would.
+  int _listEpoch = 0;
+
   /// Contract limit for POST /shelf-scan.
   static const int _maxImageBytes = 8 * 1024 * 1024;
 
@@ -65,7 +70,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         ref.read(demoNoticePendingProvider.notifier).set(false);
         ctrl.addBotNote(l.demoNotice);
       }
-      ctrl.syncServerMessages();
+      if (mounted) setState(() => _listEpoch++);
+      // A second pass after the route transition settles; with a
+      // runtime-fetched font the first one can land while the page is
+      // still animating in and paint nothing.
+      Future<void>.delayed(const Duration(milliseconds: 700), () {
+        if (mounted) setState(() => _listEpoch++);
+      });
+      ctrl.syncServerMessages().then((_) {
+        if (mounted) setState(() => _listEpoch++);
+      });
     });
   }
 
@@ -207,6 +221,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               duration: const Duration(milliseconds: 150),
               opacity: recording ? 0.55 : 1,
               child: ListView.separated(
+                key: ValueKey(_listEpoch),
                 reverse: true,
                 padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
                 itemCount: reversed.length,
