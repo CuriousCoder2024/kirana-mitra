@@ -104,8 +104,9 @@ flutter:
 
 # Launcher icon: saffron rounded square, cream awning, paper speech bubble
 # with an ink mic (docs/design/handoff.md §4.13). Sources in assets/icon/*.svg,
-# rendered to PNG with `qlmanage -t -s 1024`. Regenerate with
-# `dart run flutter_launcher_icons`.
+# rendered to PNG with `swift assets/icon/svg2png.swift in.svg out.png 1024`
+# (keeps transparency; QuickLook flattens the foreground onto white, which
+# hides the adaptive background). Then `dart run flutter_launcher_icons`.
 flutter_launcher_icons:
   android: true
   ios: true

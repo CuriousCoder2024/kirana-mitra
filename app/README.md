@@ -61,8 +61,10 @@ with it on, R8 strips Kotlin coroutine/stdlib classes that
 preferences call fails, and the app never leaves the splash.
 
 The launcher icon comes from `assets/icon/*.svg` via `flutter_launcher_icons`
-(config at the bottom of `pubspec.yaml`); regenerate with
-`dart run flutter_launcher_icons`. The label is "Kirana Mitra".
+(config at the bottom of `pubspec.yaml`). To change it, edit the SVGs, render
+them with `swift assets/icon/svg2png.swift <in.svg> <out.png> 1024` (keeps the
+foreground transparent) and run `dart run flutter_launcher_icons`. The label is
+"Kirana Mitra".
 
 ### Reach the backend from the phone
 
