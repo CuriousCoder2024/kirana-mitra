@@ -41,9 +41,8 @@ h1.t { position: absolute; left: 60px; top: 40px; font-size: 54px; } h1.t span {
 window.seek = function (t) {
   document.querySelectorAll('[data-count]').forEach(function (el) {
     var tile = el.closest('.tile'); var d = parseFloat(getComputedStyle(tile).getPropertyValue('--d')) || 0;
-    var p = Math.max(0, Math.min(1, (t - d) / 1.4)); p = 1 - Math.pow(1 - p, 3);
-    var v = parseFloat(el.dataset.count) * p; var dec = parseInt(el.dataset.dec || '0');
-    el.textContent = v.toFixed(dec);
+    // static: every frame shows the final value (a count-up read as "6/26" in a still)
+    el.textContent = parseFloat(el.dataset.count).toFixed(parseInt(el.dataset.dec || '0'));
   });
 };
 window.seek(0);
