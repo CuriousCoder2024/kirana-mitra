@@ -204,7 +204,8 @@ else
   SCHED_ARGS=(--location "$REGION" --schedule "0 6 * * *" --time-zone "Asia/Kolkata"
               --uri "$SCHED_URI" --http-method POST
               --attempt-deadline 300s --max-retry-attempts 1
-              --description "Kirana Mitra daily auto-restock (POST /auto-restock/run)")
+              --description "Kirana Mitra daily auto-restock (POST /auto-restock/run)"
+              --format "value(name)")  # gcloud would otherwise print the headers, token included
   if [[ "$DRY_RUN" != "1" ]] && gcloud scheduler jobs describe "$SCHEDULER_JOB" \
        --project "$PROJECT_ID" --location "$REGION" >/dev/null 2>&1; then
     echo "scheduler job $SCHEDULER_JOB exists, updating in place"
