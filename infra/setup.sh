@@ -17,7 +17,9 @@
 #   2. Artifact Registry docker repo $AR_REPO in $REGION                                  (~free)
 #   3. GCS bucket gs://$GCS_BUCKET in $REGION                                             (~free)
 #   5. service account $CLOUD_RUN_SA with aiplatform.user, bigquery.jobUser,
-#      bigquery.dataViewer on the dataset and storage.objectUser on the bucket (free)
+#      READER+WRITER on the dataset and storage.objectUser on the bucket (free)
+#   6. Cloud Scheduler job $SCHEDULER_JOB: POST $API_BASE_URL/auto-restock/run
+#      daily 06:00 IST with X-Scheduler-Token (3 jobs free, then $0.10/job/month)
 #   4. (only with --with-cloudsql) Cloud SQL for PostgreSQL instance $CLOUDSQL_INSTANCE,
 #      db-f1-micro, + database + user (~$10-17/month)
 # The BigQuery dataset is created by data/load_bigquery.sh.
@@ -142,10 +144,12 @@ for role in roles/aiplatform.user roles/bigquery.jobUser; do
   run gcloud projects add-iam-policy-binding "$PROJECT_ID" \
     --member "serviceAccount:$SA_EMAIL" --role "$role" --condition None --quiet
 done
-# Dataset-level read access (READER = bigquery.dataViewer on the dataset).
-# `bq add-iam-policy-binding` needs allowlisting, so patch the access list.
+# Dataset-level access: READER (= bigquery.dataViewer) for the forecast and
+# WRITER (= bigquery.dataEditor) so the API can stream rows into
+# kirana.feedback. `bq add-iam-policy-binding` needs allowlisting, so patch
+# the access list.
 if [[ "$DRY_RUN" == "1" ]]; then
-  echo "DRY RUN: bq update --source <access.json with READER $SA_EMAIL> $PROJECT_ID:$BQ_DATASET"
+  echo "DRY RUN: bq update --source <access.json with READER+WRITER $SA_EMAIL> $PROJECT_ID:$BQ_DATASET"
 elif bq --project_id="$PROJECT_ID" show --dataset "$BQ_DATASET" >/dev/null 2>&1; then
   ACCESS_JSON="$(mktemp)"
   bq --project_id="$PROJECT_ID" show --format=prettyjson "$PROJECT_ID:$BQ_DATASET" \
@@ -154,8 +158,9 @@ import json, sys
 sa = sys.argv[1]
 ds = json.load(sys.stdin)
 access = ds.get("access", [])
-if not any(a.get("userByEmail") == sa and a.get("role") == "READER" for a in access):
-    access.append({"role": "READER", "userByEmail": sa})
+for role in ("READER", "WRITER"):
+    if not any(a.get("userByEmail") == sa and a.get("role") == role for a in access):
+        access.append({"role": role, "userByEmail": sa})
 json.dump({"access": access}, sys.stdout)
 ' "$SA_EMAIL" > "$ACCESS_JSON"
   run bq --project_id="$PROJECT_ID" update --source "$ACCESS_JSON" "$PROJECT_ID:$BQ_DATASET"
@@ -165,6 +170,36 @@ else
 fi
 run gcloud storage buckets add-iam-policy-binding "gs://$GCS_BUCKET" --project "$PROJECT_ID" \
   --member "serviceAccount:$SA_EMAIL" --role roles/storage.objectUser
+
+# 6. Cloud Scheduler: daily auto-restock at 06:00 IST. Needs API_BASE_URL (the
+#    Cloud Run URL from deploy.sh) and SCHEDULER_TOKEN (openssl rand -hex 24)
+#    in infra/.env; deploy.sh passes the same token to the service.
+#    Idempotent: creates the job or updates it in place.
+SCHEDULER_JOB="${SCHEDULER_JOB:-kirana-auto-restock}"
+if [[ "$DRY_RUN" != "1" && ( -z "${API_BASE_URL:-}" || "$API_BASE_URL" == http://localhost* ) ]]; then
+  echo "cloud scheduler: skipped (API_BASE_URL in infra/.env is not the Cloud Run URL yet; run infra/deploy.sh, then re-run setup)"
+elif [[ "$DRY_RUN" != "1" && -z "${SCHEDULER_TOKEN:-}" ]]; then
+  echo "cloud scheduler: skipped (SCHEDULER_TOKEN missing; add SCHEDULER_TOKEN=\$(openssl rand -hex 24) to infra/.env)"
+else
+  SCHED_URI="${API_BASE_URL:-<API_BASE_URL>}/auto-restock/run"
+  SCHED_ARGS=(--location "$REGION" --schedule "0 6 * * *" --time-zone "Asia/Kolkata"
+              --uri "$SCHED_URI" --http-method POST
+              --headers "X-Scheduler-Token=${SCHEDULER_TOKEN:-<SCHEDULER_TOKEN>},Content-Type=application/json"
+              --attempt-deadline 300s --max-retry-attempts 1
+              --description "Kirana Mitra daily auto-restock (POST /auto-restock/run)")
+  if [[ "$DRY_RUN" != "1" ]] && gcloud scheduler jobs describe "$SCHEDULER_JOB" \
+       --project "$PROJECT_ID" --location "$REGION" >/dev/null 2>&1; then
+    echo "scheduler job $SCHEDULER_JOB exists, updating in place"
+    run gcloud scheduler jobs update http "$SCHEDULER_JOB" --project "$PROJECT_ID" "${SCHED_ARGS[@]}"
+  elif confirm "Create Cloud Scheduler job '$SCHEDULER_JOB' in $REGION: POST $SCHED_URI daily at 06:00 IST.
+  Est. cost: the first 3 jobs per billing account are free, then \$0.10/job/month.
+  (https://cloud.google.com/scheduler/pricing)"; then
+    run gcloud services enable cloudscheduler.googleapis.com --project "$PROJECT_ID"
+    run gcloud scheduler jobs create http "$SCHEDULER_JOB" --project "$PROJECT_ID" "${SCHED_ARGS[@]}"
+  else
+    echo "skipped scheduler job"
+  fi
+fi
 
 echo
 echo "setup done. Next: uv run data/generate_sales.py && data/load_bigquery.sh all && infra/deploy.sh"

@@ -64,7 +64,13 @@ Navratri day 1 (Sun 11 Oct) and the Janmashtami weekend.
 | `kirana.sales_daily` | `sales_history.csv` | training, history_weekly, evaluation |
 | `kirana.catalogue` | `catalogue.csv` | names/units in forecast, categories for uplift |
 | `kirana.festivals`, `kirana.festival_uplift` | the two CSVs | festival uplift in `forecast.sql` |
-| `kirana.stock_on_hand` | seeded at 2x `reorder_level` | `on_hand` and `reorder_qty`; the backend should overwrite it from Cloud SQL before calling the forecast |
+| `kirana.stock_on_hand` | seeded at 2x `reorder_level` | `on_hand` and `reorder_qty` in `forecast_wide.sql` only |
+| `kirana.feedback` | created empty, `CREATE TABLE IF NOT EXISTS`, partitioned by `DATE(created_at)` | written by the backend on `POST /feedback` and `/feedback-voice` (service account has WRITER on the dataset) |
+
+`kirana.feedback` columns: `feedback_id STRING NOT NULL, shop_id STRING,
+screen STRING, rating STRING ('up' or 'down'), comment STRING, language STRING,
+app_version STRING, platform STRING ('android', 'web', 'ios'), created_at TIMESTAMP`.
+Read it with `SELECT rating, screen, COUNT(*) FROM kirana.feedback GROUP BY 1, 2`.
 
 ## What the backend actually reads (keep these column names stable)
 

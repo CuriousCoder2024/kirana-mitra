@@ -127,6 +127,10 @@ do_load() {
   local seed_sql="CREATE TABLE IF NOT EXISTS \`$DATASET.stock_on_hand\` AS SELECT item_id, reorder_level * 2 AS on_hand, CURRENT_TIMESTAMP() AS updated_at FROM \`$DATASET.catalogue\`"
   run "${BQ[@]}" query --use_legacy_sql=false "$seed_sql"
 
+  # App feedback written by the API (POST /feedback); idempotent, never replaced.
+  local feedback_sql="CREATE TABLE IF NOT EXISTS \`$DATASET.feedback\` (feedback_id STRING NOT NULL, shop_id STRING, screen STRING, rating STRING, comment STRING, language STRING, app_version STRING, platform STRING, created_at TIMESTAMP) PARTITION BY DATE(created_at) OPTIONS (description = 'Thumbs up/down feedback from the app, streamed by the backend')"
+  run "${BQ[@]}" query --use_legacy_sql=false "$feedback_sql"
+
   run_sql "$HERE/bqml/views.sql"
 }
 

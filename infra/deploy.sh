@@ -33,6 +33,14 @@ ENV_VARS+=",CONFIRM_THRESHOLD=${CONFIRM_THRESHOLD:-0.7}"
 ENV_VARS+=",GCS_BUCKET=${GCS_BUCKET:-}"
 ENV_VARS+=",BQ_DATASET=$BQ_DATASET"
 ENV_VARS+=",FORECAST_SOURCE=${FORECAST_SOURCE:-bigquery}"
+# Shared secret for POST /auto-restock/run (Cloud Scheduler sends it as
+# X-Scheduler-Token). Generated once with `openssl rand -hex 24` into
+# infra/.env; setup.sh puts the same value on the scheduler job.
+if [[ -n "${SCHEDULER_TOKEN:-}" ]]; then
+  ENV_VARS+=",SCHEDULER_TOKEN=$SCHEDULER_TOKEN"
+elif [[ "$DRY_RUN" != "1" ]]; then
+  echo "warning: SCHEDULER_TOKEN is empty in infra/.env; /auto-restock/run will reject the scheduler" >&2
+fi
 CLOUDSQL_FLAGS=()
 if [[ "$WITH_CLOUDSQL" == "1" ]]; then
   ENV_VARS+=",CLOUDSQL_INSTANCE=$CONNECTION_NAME"

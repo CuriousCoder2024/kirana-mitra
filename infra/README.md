@@ -77,6 +77,27 @@ the container, while `GET /healthz/` reaches FastAPI; the exact path
 `GET /health` with the same JSON (verified on revision 00002); use that for
 uptime checks and the app.
 
+## Cloud Scheduler: daily auto-restock
+
+`setup.sh` creates (or updates) job `kirana-auto-restock` in asia-south1:
+`POST $API_BASE_URL/auto-restock/run` daily at 06:00 Asia/Kolkata with
+header `X-Scheduler-Token`. The token is a shared secret: generate it once
+with `openssl rand -hex 24`, put it in the untracked `infra/.env` as
+`SCHEDULER_TOKEN`, and `deploy.sh` passes the same value to Cloud Run as the
+`SCHEDULER_TOKEN` env var. Rotate it by changing `.env`, then running
+`infra/deploy.sh` and `infra/setup.sh` again. Cost: the first 3 scheduler
+jobs per billing account are free, then $0.10/job/month.
+
+Trigger it by hand and read the result:
+
+```bash
+CLOUDSDK_ACTIVE_CONFIG_NAME=kirana gcloud scheduler jobs run kirana-auto-restock --project kirana-mitra-app --location asia-south1
+```
+
+```bash
+CLOUDSDK_ACTIVE_CONFIG_NAME=kirana gcloud logging read 'resource.type="cloud_run_revision" AND httpRequest.requestUrl:"auto-restock"' --project kirana-mitra-app --limit 3 --format='value(timestamp,httpRequest.status,httpRequest.userAgent)'
+```
+
 ## deploy_web.sh
 
 Builds the Flutter web app with `--dart-define API_BASE_URL=<Cloud Run URL>`

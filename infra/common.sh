@@ -51,6 +51,9 @@ run() {
   if [[ -n "${CLOUDSQL_PASSWORD:-}" ]]; then
     shown="${shown//"$CLOUDSQL_PASSWORD"/***}"
   fi
+  if [[ -n "${SCHEDULER_TOKEN:-}" ]]; then
+    shown="${shown//"$SCHEDULER_TOKEN"/***}"
+  fi
   if [[ "$DRY_RUN" == "1" ]]; then
     echo "DRY RUN: $shown"
   else
