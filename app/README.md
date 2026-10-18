@@ -34,24 +34,103 @@ the contract accepts it. The backend must send CORS headers for the Chrome
 origin (`http://localhost:<port>`), otherwise every call fails and the app
 falls back to the mock.
 
-## Run on an Android device with the local backend
+## Android
 
-1. Start the backend on your Mac (`cd backend && ...`, it listens on 8080).
-2. Plug in the phone with USB debugging on, or start an emulator.
-3. Emulator: nothing to configure, the app defaults to `http://10.0.2.2:8080`,
-   which is the emulator's alias for the host machine.
-4. Physical phone on the same Wi-Fi: find your Mac's LAN IP (`ipconfig getifaddr en0`)
-   and pass it in:
+Verified on a OnePlus 7T (Android 11, API 30) on 2026-10-18: onboarding, typed
+udhaar entry, hold-to-talk voice note (mic prompt, transcript, Hinglish/Hindi
+confirmation), camera shelf scan and Stock refresh, all against the live backend.
+Screenshots for slides are in [`docs/screens/android/`](docs/screens/android/).
+
+### Build and install
+
+```bash
+cd app
+yes | flutter doctor --android-licenses      # once; harmless if already accepted
+flutter build apk --release --dart-define API_BASE_URL=http://<mac-lan-ip>:8080
+flutter install -d <device-id> --release
+```
+
+The APK lands in `build/app/outputs/flutter-apk/app-release.apk` (about 60 MB,
+all ABIs; `--split-per-abi` gives ~22 MB per ABI). Release is signed with the
+debug key for the hackathon. `minSdk` is 24 (Flutter's default and what
+`record`, `image_picker` and `shared_preferences` require); `targetSdk` 36.
+
+Code shrinking (R8) is **off** for release builds in `android/app/build.gradle.kts`:
+with it on, R8 strips Kotlin coroutine/stdlib classes that
+`shared_preferences_android` reaches through Pigeon suspend functions, every
+preferences call fails, and the app never leaves the splash.
+
+The launcher icon comes from `assets/icon/*.svg` via `flutter_launcher_icons`
+(config at the bottom of `pubspec.yaml`); regenerate with
+`dart run flutter_launcher_icons`. The label is "Kirana Mitra".
+
+### Reach the backend from the phone
+
+* **Emulator**: nothing to do, the default is `http://10.0.2.2:8080`.
+* **Phone on the same Wi-Fi**: start the backend bound to all interfaces
+  (`uvicorn app.main:app --host 0.0.0.0 --port 8080`; the default `127.0.0.1`
+  refuses the phone), find the Mac's IP with `ipconfig getifaddr en0` and pass it
+  as `API_BASE_URL`. Cleartext HTTP is allowed in the manifest.
+* **Phone over USB** (no Wi-Fi needed): `adb reverse tcp:8080 tcp:8080`, then
+  point the app at `http://127.0.0.1:8080` with the runtime override below.
+
+### Runtime server override (no rebuild)
+
+Long-press the **Kirana Mitra** title on the onboarding screen. A "Server" sheet
+opens with the base URL (empty = the build default). **Test** calls `/healthz`;
+**Save** stores it in `shared_preferences` (key `server_url`) and re-runs the
+live-vs-mock check. The saved value wins over `--dart-define API_BASE_URL`.
+Clear the field and save to go back to the build default. Code:
+`lib/settings/server_settings.dart`.
+
+If the backend is unreachable the app falls back to the mock after the health
+check times out; the startup splash shows the error if a startup provider fails.
+
+## iOS
+
+The `ios/` folder is scaffolded (`flutter create --platforms ios --org
+com.singapuria`, bundle id `com.singapuria.kiranaMitra`, deployment target
+iOS 13.0 in both the Xcode project and the Podfile). `Info.plist` has
+`NSMicrophoneUsageDescription`, `NSCameraUsageDescription`,
+`NSPhotoLibraryUsageDescription` and `NSAppTransportSecurity` with
+`NSAllowsLocalNetworking` so `http://<mac-lan-ip>:8080` works in development.
+Launcher icons are generated into `Runner/Assets.xcassets`.
+
+`pod install` has been run (5 pods; `Podfile.lock` is committed, `Pods/` is
+not). Nothing on iOS has been built or run yet because this Mac has only the
+Command Line Tools. To run it:
+
+1. Install **Xcode** from the App Store (not just the Command Line Tools), open
+   it once and accept the licence.
+2. Point the tools at it and finish first launch:
 
    ```bash
-   flutter run -d <device-id> --dart-define=API_BASE_URL=http://192.168.1.23:8080
+   sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+   sudo xcodebuild -runFirstLaunch
    ```
 
-   Cleartext HTTP is allowed in the manifest for local development.
-5. Grant the microphone and camera prompts on first use.
+3. Refresh the pods (CocoaPods 1.16 on Ruby 4 needs a UTF-8 locale, otherwise
+   it dies with "Unicode Normalization not appropriate for ASCII-8BIT"):
 
-Build a release APK: `flutter build apk --release` (output in
-`build/app/outputs/flutter-apk/`).
+   ```bash
+   cd app/ios && LANG=en_US.UTF-8 pod install && cd ..
+   ```
+
+4. Run on a device or the simulator:
+
+   ```bash
+   flutter devices
+   flutter run -d <iphone> --dart-define API_BASE_URL=http://<mac-lan-ip>:8080
+   # or
+   flutter run -d "iPhone 17" --dart-define API_BASE_URL=http://localhost:8080
+   ```
+
+   For a real iPhone, open `ios/Runner.xcworkspace` once in Xcode, pick your
+   free personal team under Signing & Capabilities, and trust the developer
+   profile on the phone (Settings > General > VPN & Device Management).
+   The simulator has no camera; the shelf-scan button opens the photo library
+   there. The runtime server override (long-press the title) works the same as
+   on Android.
 
 ## Build the web bundle for the demo link
 
