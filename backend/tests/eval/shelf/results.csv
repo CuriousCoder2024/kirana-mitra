@@ -1,0 +1,3 @@
+date,model,images,recall,precision,exact_count_rate,count_mae,p50_ms,p95_ms,http_failures
+2026-10-18T21:00:40,gemini-3.8-flash,5,0.577,1.000,1.000,0.00,48236,80656,2
+2026-10-18T21:04:21,gemini-3.8-flash,5,1.000,1.000,0.962,0.04,9002,113337,0
