@@ -212,7 +212,7 @@ selected by `STORE`. Layout, one document per shop with subcollections:
 | `shops/{shop_id}` | shop_name, owner_name, language, created_at, auto_restock, distributor_phone |
 | `shops/{shop_id}/items/{item_id}` | name, pack_size, unit, quantity, reorder_level, updated_at, aliases, carton_size, price (15 seeded on create) |
 | `shops/{shop_id}/ledger/{entry_id}` | customer_name, delta, kind, message_id, at |
-| `shops/{shop_id}/messages/{message_id}` | `kind` = `applied` (intent, stock_moves, ledger_entry_ids, sale_amount, order_id, created_at, undone), `pending` (held extraction payload) or `bot` (reply_text, quick_actions, order_id) |
+| `shops/{shop_id}/messages/{message_id}` | one document per message id with role flags, merged on write: `is_applied` (intent, stock_moves, ledger_entry_ids, sale_amount, order_id, undone), `is_pending` (held extraction payload), `is_bot` (bot_kind, reply_text, quick_actions, order_id); an auto-order notice is both applied and bot |
 | `shops/{shop_id}/orders/{order_id}` | created_at, status, source, lines, text, whatsapp_url |
 | `shops/{shop_id}/feedback/{feedback_id}` | screen, rating, comment, language, app_version, platform, created_at |
 

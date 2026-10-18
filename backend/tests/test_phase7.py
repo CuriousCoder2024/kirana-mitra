@@ -62,14 +62,19 @@ def test_auto_restock_requires_token(client, shop_id):
 
 
 def test_auto_restock_places_once_per_day_posts_message_and_undo_cancels(client, shop_id):
-    off = client.post("/auto-restock/run", headers=TOKEN).json()
+    # ?shop_id= keeps the assertions to this shop: a shared (Firestore) store holds other test shops
+    run_url = f"/auto-restock/run?shop_id={shop_id}"
+    off = client.post(run_url, headers=TOKEN).json()
     assert off["orders"] == [] and off["skipped"] == [{"shop_id": shop_id, "reason": "auto_restock_off"}]
+    everyone = client.post("/auto-restock/run", headers=TOKEN).json()  # the scheduler's no-arg form
+    assert everyone["shops_checked"] >= 1
+    assert {"shop_id": shop_id, "reason": "auto_restock_off"} in everyone["skipped"]
 
     client.patch(f"/shops/{shop_id}", json={"auto_restock": True, "distributor_phone": "+919876543210"})
     eligible = {i["name"] for i in client.get(f"/top-items/{shop_id}?limit=50").json()["items"]
                 if i["auto_restock_eligible"]}
     assert eligible, "the local demo history should make at least one item eligible"
-    run = client.post("/auto-restock/run", headers=TOKEN).json()
+    run = client.post(run_url, headers=TOKEN).json()
     assert run["shops_checked"] == 1 and len(run["orders"]) == 1 and run["skipped"] == []
     order = run["orders"][0]
     assert order["status"] == "placed" and order["source"] == "auto" and order["shop_id"] == shop_id
@@ -78,10 +83,8 @@ def test_auto_restock_places_once_per_day_posts_message_and_undo_cancels(client,
     assert all(l["rank"] <= 10 and l["cover_days"] < 7 and l["demand_ratio"] >= 1.2 for l in order["lines"])
     assert order["whatsapp_url"].startswith("https://wa.me/919876543210?text=")
 
-    again = client.post("/auto-restock/run", headers=TOKEN).json()
+    again = client.post(run_url, headers=TOKEN).json()
     assert again["orders"] == [] and again["skipped"] == [{"shop_id": shop_id, "reason": "already_ran_today"}]
-    one = client.post(f"/auto-restock/run?shop_id={shop_id}", headers=TOKEN).json()
-    assert one["shops_checked"] == 1 and one["skipped"][0]["reason"] == "already_ran_today"
 
     msgs = client.get(f"/messages/{shop_id}").json()["messages"]
     assert len(msgs) == 1
@@ -101,7 +104,7 @@ def test_auto_restock_places_once_per_day_posts_message_and_undo_cancels(client,
     assert orders[0]["order_id"] == order["order_id"] and orders[0]["status"] == "cancelled"
     assert client.post("/undo", json={"shop_id": shop_id, "message_id": msg["message_id"]}).status_code == 409
     # still idempotent after the undo: no second auto order today
-    assert client.post("/auto-restock/run", headers=TOKEN).json()["skipped"][0]["reason"] == "already_ran_today"
+    assert client.post(run_url, headers=TOKEN).json()["skipped"][0]["reason"] == "already_ran_today"
 
 
 def test_auto_restock_skips_shops_with_nothing_to_order(client, scripted, shop_id):
@@ -111,7 +114,7 @@ def test_auto_restock_skips_shops_with_nothing_to_order(client, scripted, shop_i
                  "Red Label", "Nescafe", "Haldiram Namkeen", "Dettol"):
         scripted.push(intent="stock_in", entities={"items": [{"name": name, "quantity": 9000, "unit": "packet"}]})
         client.post("/chat", json={"shop_id": shop_id, "text": "x"})
-    run = client.post("/auto-restock/run", headers=TOKEN).json()
+    run = client.post(f"/auto-restock/run?shop_id={shop_id}", headers=TOKEN).json()
     assert run["orders"] == [] and run["skipped"] == [{"shop_id": shop_id, "reason": "nothing_to_order"}]
     assert client.get(f"/orders/{shop_id}").json()["orders"] == []
 

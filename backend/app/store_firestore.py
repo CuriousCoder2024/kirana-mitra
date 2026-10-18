@@ -7,11 +7,14 @@ Layout (one document per shop, everything else in subcollections):
     shops/{shop_id}/items/{item_id}    name, pack_size, unit, quantity, reorder_level,
                                        updated_at, aliases, carton_size, price
     shops/{shop_id}/ledger/{entry_id}  customer_name, delta, kind, message_id, at
-    shops/{shop_id}/messages/{id}      kind = "applied" | "pending" | "bot"
-        applied: intent, stock_moves [{item_id, delta}], ledger_entry_ids, sale_amount,
-                 order_id, created_at, undone
-        pending: payload (the held extraction / shelf scan), created_at
-        bot:     bot_kind, reply_text, quick_actions, order_id, created_at
+    shops/{shop_id}/messages/{id}      one document per message id; a document can play
+                                       several roles (an auto-order is both an applied
+                                       entry and a bot message), each behind a flag:
+        is_applied: intent, stock_moves [{item_id, delta}], ledger_entry_ids, sale_amount,
+                    order_id, undone
+        is_pending: payload (the held extraction / shelf scan)
+        is_bot:     bot_kind, reply_text, quick_actions, order_id
+        created_at on all; writes merge so roles never overwrite each other
     shops/{shop_id}/orders/{order_id}  created_at, status, source, lines, text, whatsapp_url
     shops/{shop_id}/feedback/{id}      screen, rating, comment, language, app_version,
                                        platform, created_at
@@ -219,9 +222,9 @@ class FirestoreRepository(Repository):
         self._sub(shop_id, "ledger").document(entry_id).delete()
 
     def list_ledger(self, shop_id: str) -> list[LedgerEntry]:
-        entries = [self._ledger_record(shop_id, d) for d in self._sub(shop_id, "ledger").stream()]
-        entries.sort(key=lambda e: e.at)
-        return entries
+        # sort on the raw timestamp (microseconds) so same-second entries keep insertion order
+        docs = sorted(self._sub(shop_id, "ledger").stream(), key=lambda d: d.get("at") or _now())
+        return [self._ledger_record(shop_id, d) for d in docs]
 
     def customer_balance(self, shop_id: str, customer_name: str) -> int:
         key = customer_name.strip().lower()
@@ -237,15 +240,17 @@ class FirestoreRepository(Repository):
 
     def record_applied(self, applied: AppliedMessage) -> None:
         self._sub(applied.shop_id, "messages").document(applied.message_id).set({
-            "kind": "applied", "intent": applied.intent,
+            "is_applied": True, "intent": applied.intent,
             "stock_moves": [{"item_id": m.item_id, "delta": float(m.delta)} for m in applied.stock_moves],
             "ledger_entry_ids": list(applied.ledger_entry_ids),
             "sale_amount": applied.sale_amount, "order_id": applied.order_id,
-            "created_at": _to_ts(applied.at) or _now(), "undone": False,
-        })
+            # microsecond timestamp: the record's ISO `at` has second precision, which cannot
+            # order the undo window when several entries land in the same second
+            "created_at": _now(), "undone": False,
+        }, merge=True)
 
     def _applied_docs(self, shop_id: str):
-        q = self._sub(shop_id, "messages").where(filter=firestore.FieldFilter("kind", "==", "applied"))
+        q = self._sub(shop_id, "messages").where(filter=firestore.FieldFilter("is_applied", "==", True))
         return list(q.stream())
 
     def pop_applied(self, shop_id: str, message_id: str) -> AppliedMessage | None:
@@ -260,7 +265,7 @@ class FirestoreRepository(Repository):
         @firestore.transactional
         def _flip(tx):
             snap = ref.get(transaction=tx)
-            if not snap.exists or snap.get("undone"):
+            if not snap.exists or not snap.get("is_applied") or snap.get("undone"):
                 return None  # a second tap loses the race
             tx.update(ref, {"undone": True, "undone_at": _now()})
             return snap
@@ -276,8 +281,8 @@ class FirestoreRepository(Repository):
 
     def put_pending(self, shop_id: str, message_id: str, payload: dict) -> None:
         self._sub(shop_id, "messages").document(message_id).set({
-            "kind": "pending", "payload": payload, "created_at": _now(),
-        })
+            "is_pending": True, "payload": payload, "created_at": _now(),
+        }, merge=True)
 
     def pop_pending(self, shop_id: str, message_id: str) -> dict | None:
         ref = self._sub(shop_id, "messages").document(message_id)
@@ -286,9 +291,9 @@ class FirestoreRepository(Repository):
         @firestore.transactional
         def _take(tx):
             snap = ref.get(transaction=tx)
-            if not snap.exists or snap.get("kind") != "pending":
+            if not snap.exists or not snap.get("is_pending"):
                 return None
-            tx.delete(ref)
+            tx.update(ref, {"is_pending": False, "payload": firestore.DELETE_FIELD})
             return snap.get("payload")
 
         return _take(transaction)
@@ -330,14 +335,14 @@ class FirestoreRepository(Repository):
 
     def add_bot_message(self, msg: BotMessageRecord) -> None:
         self._sub(msg.shop_id, "messages").document(msg.message_id).set({
-            "kind": "bot", "bot_kind": msg.kind, "reply_text": msg.reply_text,
+            "is_bot": True, "bot_kind": msg.kind, "reply_text": msg.reply_text,
             "quick_actions": list(msg.quick_actions), "order_id": msg.order_id,
             "created_at": _to_ts(msg.created_at) or _now(),
-        })
+        }, merge=True)
 
     def list_bot_messages(self, shop_id: str, since: str | None = None,
                           limit: int = 50) -> list[BotMessageRecord]:
-        q = self._sub(shop_id, "messages").where(filter=firestore.FieldFilter("kind", "==", "bot"))
+        q = self._sub(shop_id, "messages").where(filter=firestore.FieldFilter("is_bot", "==", True))
         docs = list(q.stream())
         docs.sort(key=lambda d: d.get("created_at") or _now(), reverse=True)
         out = []
