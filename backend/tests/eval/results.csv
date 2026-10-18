@@ -1,0 +1,2 @@
+date,model,samples,intent_acc,entity_acc,p50_ms,p95_ms,http_failures
+2026-10-18T19:50:57,mock-gemini,26,1.000,0.962,1,2,0

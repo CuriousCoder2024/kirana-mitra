@@ -1,0 +1,26 @@
+{"id": "hi-latn-01", "text": "Kal Parle-G ke 3 carton aaye", "expected": {"intent": "stock_in", "language": "hi-Latn", "item": "Parle-G", "quantity": 3}}
+{"id": "hi-latn-02", "text": "Gupta ji ne 350 rupaye udhaar liya", "expected": {"intent": "udhaar_given", "language": "hi-Latn", "customer": "Gupta ji", "amount": 350}}
+{"id": "hi-latn-03", "text": "aaj 5 maggi bik gaye", "expected": {"intent": "sale", "language": "hi-Latn", "item": "Maggi", "quantity": 5}}
+{"id": "hi-latn-04", "text": "Sharma aunty ne 200 rupaye wapas diye", "expected": {"intent": "udhaar_paid", "language": "hi-Latn", "customer": "Sharma aunty", "amount": 200}}
+{"id": "hi-latn-05", "text": "Tata salt kitna bacha hai?", "expected": {"intent": "question", "language": "hi-Latn", "item": "Tata Salt"}}
+{"id": "hi-latn-06", "text": "parle ji ke 2 packet bike", "expected": {"intent": "sale", "language": "hi-Latn", "item": "Parle-G", "quantity": 2}}
+{"id": "hi-latn-07", "text": "Verma ji 500 ka udhaar le gaye", "expected": {"intent": "udhaar_given", "language": "hi-Latn", "customer": "Verma ji", "amount": 500}}
+{"id": "hi-latn-08", "text": "surf excel ke 10 packet aaye hain", "expected": {"intent": "stock_in", "language": "hi-Latn", "item": "Surf Excel", "quantity": 10}}
+{"id": "hi-latn-09", "text": "Rahul bhai ne 150 chuka diye", "expected": {"intent": "udhaar_paid", "language": "hi-Latn", "customer": "Rahul bhai", "amount": 150}}
+{"id": "hi-latn-10", "text": "fortune tel ke 6 litre bik gaye", "expected": {"intent": "sale", "language": "hi-Latn", "item": "Fortune Oil", "quantity": 6}}
+{"id": "hi-01", "text": "गुप्ता जी ने 350 रुपये उधार लिया", "expected": {"intent": "udhaar_given", "language": "hi", "customer": "गुप्ता जी", "amount": 350}}
+{"id": "hi-02", "text": "आज 4 पैकेट मैगी बिके", "expected": {"intent": "sale", "language": "hi", "item": "Maggi", "quantity": 4}}
+{"id": "hi-03", "text": "कल अमूल दूध के 20 पैकेट आए", "expected": {"intent": "stock_in", "language": "hi", "item": "Amul Milk", "quantity": 20}}
+{"id": "hi-04", "text": "शर्मा आंटी ने 200 रुपये चुका दिए", "expected": {"intent": "udhaar_paid", "language": "hi", "customer": "शर्मा आंटी", "amount": 200}}
+{"id": "hi-05", "text": "डेटॉल कितने बचे हैं?", "expected": {"intent": "question", "language": "hi", "item": "Dettol"}}
+{"id": "hi-06", "text": "कोलगेट के 12 पीस आए", "expected": {"intent": "stock_in", "language": "hi", "item": "Colgate", "quantity": 12}}
+{"id": "hi-07", "text": "वर्मा जी ने 100 रुपये उधार लिए", "expected": {"intent": "udhaar_given", "language": "hi", "customer": "वर्मा जी", "amount": 100}}
+{"id": "en-01", "text": "Received 2 cartons of Maggi today", "expected": {"intent": "stock_in", "language": "en", "item": "Maggi", "quantity": 2}}
+{"id": "en-02", "text": "Sharma aunty paid back 200", "expected": {"intent": "udhaar_paid", "language": "en", "customer": "Sharma aunty", "amount": 200}}
+{"id": "en-03", "text": "Sold 3 Red Label tea packets", "expected": {"intent": "sale", "language": "en", "item": "Red Label", "quantity": 3}}
+{"id": "en-04", "text": "Mehta uncle took 450 rupees on credit", "expected": {"intent": "udhaar_given", "language": "en", "customer": "Mehta uncle", "amount": 450}}
+{"id": "en-05", "text": "How many Lifebuoy do we have?", "expected": {"intent": "question", "language": "en", "item": "Lifebuoy"}}
+{"id": "en-06", "text": "6 bottles of Dettol arrived", "expected": {"intent": "stock_in", "language": "en", "item": "Dettol", "quantity": 6}}
+{"id": "amb-01", "text": "shayad 5 maggi aaye, ya 6", "expected": {"intent": "stock_in", "language": "hi-Latn", "item": "Maggi", "max_confidence": 0.7}}
+{"id": "amb-02", "text": "wo wala do", "expected": {"intent": "unclear", "language": "hi-Latn"}}
+{"id": "amb-03", "text": "Gupta ji wala hisaab", "expected": {"intent": "question", "language": "hi-Latn", "customer": "Gupta ji", "alt_intent": "unclear"}}
