@@ -639,6 +639,26 @@ class MockApiClient implements ApiClient {
     );
   }
 
+  @override
+  Future<DaySummary> summary(String shopId, {String? date}) async {
+    await _wait();
+    final low = _stock.where((s) => s.lowStock).toList();
+    final outstanding = _ledger.values.fold<num>(0, (a, b) => a + b.balance);
+    final lowNames = low.map((s) => s.name).join(', ');
+    return DaySummary(
+      date: date ?? _today(),
+      salesTotal: 8450,
+      entries: 23,
+      lowStock: low,
+      udhaarGiven: 350,
+      udhaarReceived: 500,
+      totalOutstanding: outstanding,
+      replyText:
+          'Aaj ka hisaab: bikri ₹8,450, 23 entries. Udhaar diya ₹350, aaya ₹500, '
+          'kul baaki ₹$outstanding. Kam hai: $lowNames. Diwali 3 hafte door hai.',
+    );
+  }
+
   // -------------------------------------------------------------- helpers --
 
   String _today() {

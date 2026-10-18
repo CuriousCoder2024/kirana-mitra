@@ -73,6 +73,18 @@ class ShopPrefsNotifier extends Notifier<ShopPrefs> {
     await state.save(p);
   }
 
+  /// Language chip: update the stored preference and the locale immediately.
+  Future<void> setLanguage(String language) async {
+    state = ShopPrefs(
+      shopId: state.shopId,
+      shopName: state.shopName,
+      ownerName: state.ownerName,
+      language: language,
+    );
+    final p = await ref.read(sharedPreferencesProvider.future);
+    await state.save(p);
+  }
+
   Future<void> reset() async {
     final p = await ref.read(sharedPreferencesProvider.future);
     await ShopPrefs.clear(p);

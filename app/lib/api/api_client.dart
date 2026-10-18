@@ -57,4 +57,7 @@ abstract class ApiClient {
   Future<ForecastResponse> forecast(String shopId);
 
   Future<ReorderResponse> reorder(String shopId);
+
+  /// GET /summary/{shop_id}?date=YYYY-MM-DD (date defaults to today).
+  Future<DaySummary> summary(String shopId, {String? date});
 }

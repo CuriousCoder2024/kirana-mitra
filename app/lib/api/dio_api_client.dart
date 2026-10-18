@@ -198,4 +198,13 @@ class DioApiClient implements ApiClient {
     final json = await _run(() => _dio.post('/reorder/$shopId'));
     return ReorderResponse.fromJson(json);
   }
+
+  @override
+  Future<DaySummary> summary(String shopId, {String? date}) async {
+    final json = await _run(() => _dio.get(
+          '/summary/$shopId',
+          queryParameters: date == null ? null : {'date': date},
+        ));
+    return DaySummary.fromJson(json);
+  }
 }

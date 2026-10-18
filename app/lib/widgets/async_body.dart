@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/app_localizations.dart';
-import '../theme.dart';
+import '../theme/theme.dart';
+import 'km_button.dart';
 
 /// Loading / error / data with pull-to-refresh, shared by the list screens.
 class AsyncBody<T> extends StatelessWidget {
@@ -30,17 +31,19 @@ class AsyncBody<T> extends StatelessWidget {
         }
       },
       child: value.when(
-        loading: () => const Center(child: CircularProgressIndicator(color: KmColors.saffron)),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           children: [
             const SizedBox(height: 80),
             EmptyHint(text: l.errorLoading, icon: Icons.cloud_off_rounded),
+            const SizedBox(height: 12),
             Center(
-              child: TextButton.icon(
+              child: KmButton(
+                variant: KmButtonVariant.ghost,
+                icon: Icons.refresh_rounded,
+                label: l.retry,
                 onPressed: onRefresh,
-                icon: const Icon(Icons.refresh_rounded),
-                label: Text(l.retry),
               ),
             ),
           ],
@@ -63,11 +66,11 @@ class EmptyHint extends StatelessWidget {
       physics: const AlwaysScrollableScrollPhysics(),
       children: [
         const SizedBox(height: 80),
-        Icon(icon, size: 64, color: KmColors.brownSoft.withValues(alpha: 0.5)),
+        Icon(icon, size: 64, color: KmColors.inkFaint),
         const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Text(text, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyLarge),
+          child: Text(text, textAlign: TextAlign.center, style: KmText.body),
         ),
       ],
     );
