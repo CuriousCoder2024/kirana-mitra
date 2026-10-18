@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../api/api_client.dart';
 import '../api/api_provider.dart';
-import '../api/mock_api_client.dart';
+import '../models/models.dart';
 import '../l10n/app_localizations.dart';
 import '../state/shop_prefs.dart';
 import '../theme.dart';
@@ -30,6 +31,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     super.dispose();
   }
 
+  Future<Shop> _createShop(ApiClient api) => api.createShop(
+        shopName: _shop.text.trim(),
+        ownerName: _owner.text.trim(),
+        language: _language,
+      );
+
   Future<void> _submit() async {
     if (!_form.currentState!.validate()) return;
     setState(() {
@@ -37,24 +44,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       _notice = null;
     });
     final l = AppLocalizations.of(context);
-    var api = ref.read(apiClientProvider);
     try {
-      var shop = await api
-          .createShop(
-            shopName: _shop.text.trim(),
-            ownerName: _owner.text.trim(),
-            language: _language,
-          )
-          .catchError((Object e) async {
-        // Backend went away after the health check: fall back to the mock so
-        // the demo still proceeds.
-        api = MockApiClient();
+      final shop = await _createShop(ref.read(apiClientProvider)).catchError((Object e) {
+        // Backend went away after the health check: switch the whole app to
+        // the mock so the demo still proceeds consistently.
+        ref.read(forceMockProvider.notifier).enable();
         setState(() => _notice = l.couldNotCreateShop);
-        return api.createShop(
-          shopName: _shop.text.trim(),
-          ownerName: _owner.text.trim(),
-          language: _language,
-        );
+        return _createShop(ref.read(apiClientProvider));
       });
       await ref.read(shopPrefsProvider.notifier).setShop(shop);
       if (mounted) context.go('/chat');

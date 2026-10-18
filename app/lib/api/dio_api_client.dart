@@ -14,7 +14,7 @@ class DioApiClient implements ApiClient {
         _dio = dio ?? Dio() {
     _dio.options
       ..baseUrl = this.baseUrl
-      ..connectTimeout = const Duration(seconds: 8)
+      ..connectTimeout = const Duration(seconds: 15)
       ..receiveTimeout = const Duration(seconds: 60)
       ..headers = {'Accept': 'application/json'};
   }
@@ -41,8 +41,8 @@ class DioApiClient implements ApiClient {
       final res = await _dio.get<Map<String, dynamic>>(
         '/healthz',
         options: Options(
-          receiveTimeout: const Duration(seconds: 3),
-          sendTimeout: const Duration(seconds: 3),
+          receiveTimeout: const Duration(seconds: 6),
+          sendTimeout: const Duration(seconds: 6),
         ),
       );
       return res.data?['ok'] == true;
