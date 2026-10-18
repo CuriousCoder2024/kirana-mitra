@@ -40,9 +40,10 @@ Each step is idempotent: it checks `describe` first and skips what exists.
 `gcloud run deploy` from `backend/` source, region asia-south1,
 `--allow-unauthenticated --min-instances 0 --max-instances 3 --timeout 120`,
 Cloud SQL attached via `--add-cloudsql-instances`, and these env vars on the
-service: `GOOGLE_CLOUD_PROJECT, GOOGLE_CLOUD_LOCATION, GEMINI_MODEL, GCS_BUCKET,
-BQ_DATASET, CLOUDSQL_INSTANCE` (connection name `project:region:instance`),
-`DB_NAME, DB_USER, DB_PASSWORD`. If `backend/.env.example` uses different
+service: `GOOGLE_CLOUD_PROJECT, GOOGLE_GENAI_USE_VERTEXAI, GOOGLE_CLOUD_LOCATION`
+(`global`, where Gemini 3.x Flash is served), `GEMINI_MODEL, MOCK_GEMINI,
+CONFIRM_THRESHOLD, GCS_BUCKET, BQ_DATASET, CLOUDSQL_INSTANCE` (connection name
+`project:region:instance`), `DB_NAME, DB_USER, DB_PASSWORD`. If `backend/.env.example` uses different
 names, change the `ENV_VARS` block in `deploy.sh` in the same commit.
 
 The DB password is passed as a plain env var for the hackathon. For anything
