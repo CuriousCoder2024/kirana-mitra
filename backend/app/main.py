@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from fastapi import FastAPI, File, Form, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import Settings, get_settings
@@ -38,6 +39,10 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
     settings = settings or get_settings()
     repo = repo or InMemoryRepository(undo_window=settings.undo_window)
     app = FastAPI(title="Kirana Mitra API", version="1.0.0")
+    # The Flutter web build runs on another origin (flutter run -d chrome picks a
+    # random port), so allow any origin for the demo; tighten before production.
+    app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"],
+                       allow_headers=["*"])
     app.state.settings = settings
     app.state.repo = repo
     app.state.extractor = extractor  # built lazily so /healthz works without creds

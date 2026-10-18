@@ -40,3 +40,6 @@ uploads/
 *.wav
 *.m4a
 *.webm
+
+# Local tooling
+.claude/
