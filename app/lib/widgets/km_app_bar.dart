@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../api/api_provider.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/theme.dart';
+import 'feedback_sheet.dart';
 import 'km_badge.dart';
 import 'lang_chip.dart';
 import 'logo_mark.dart';
@@ -69,22 +71,33 @@ class KmAppBar extends ConsumerWidget implements PreferredSizeWidget {
               const SizedBox(width: 12),
             ],
             Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    alignment: Alignment.centerLeft,
-                    child: Text(title, style: KmText.heading, maxLines: 1),
-                  ),
-                  if (subtitle != null && subtitle!.isNotEmpty)
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: Text(subtitle!, style: KmText.status, maxLines: 1),
-                    ),
-                ],
+              child: LayoutBuilder(
+                builder: (context, c) => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // With the logo present the mark stands for the app name
+                    // when a narrow bar leaves no room for the title text.
+                    if (!(showLogo && c.maxWidth < 110))
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(title, style: KmText.heading, maxLines: 1),
+                      ),
+                    if (subtitle != null && subtitle!.isNotEmpty)
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          subtitle!,
+                          style: showLogo && c.maxWidth < 110
+                              ? KmText.status.copyWith(color: KmColors.ink)
+                              : KmText.status,
+                          maxLines: 1,
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -93,12 +106,64 @@ class KmAppBar extends ConsumerWidget implements PreferredSizeWidget {
       actions: [
         if (demo) ...[
           KmBadge(variant: KmBadgeVariant.demo, label: l.demoMode),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
         ],
+        _FeedbackAction(label: l.feedbackButton),
+        const SizedBox(width: 6),
         const LangChip(),
         ...actions,
         const SizedBox(width: KmSpace.gutter),
       ],
+    );
+  }
+}
+
+/// Icon + short label that opens the feedback sheet for the current route.
+class _FeedbackAction extends StatelessWidget {
+  const _FeedbackAction({required this.label});
+
+  final String label;
+
+  static String _screenName(BuildContext context) {
+    try {
+      return GoRouterState.of(context).matchedLocation;
+    } catch (_) {
+      return 'unknown';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: label,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => showFeedbackSheet(context, screen: _screenName(context)),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.thumbs_up_down_outlined,
+                  size: 22,
+                  color: KmColors.saffron,
+                ),
+                Text(
+                  label,
+                  style: KmText.status.copyWith(
+                    fontSize: 11,
+                    color: KmColors.saffron,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
