@@ -23,11 +23,11 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isUser = message.role == ChatRole.user;
-    final radius = BorderRadius.only(
-      topLeft: Radius.circular(isUser ? KmRadius.card : KmRadius.bubbleTight),
-      topRight: Radius.circular(isUser ? KmRadius.bubbleTight : KmRadius.card),
-      bottomLeft: const Radius.circular(KmRadius.card),
-      bottomRight: const Radius.circular(KmRadius.card),
+    final radius = BorderRadiusDirectional.only(
+      topStart: Radius.circular(isUser ? KmRadius.card : KmRadius.bubbleTight),
+      topEnd: Radius.circular(isUser ? KmRadius.bubbleTight : KmRadius.card),
+      bottomStart: const Radius.circular(KmRadius.card),
+      bottomEnd: const Radius.circular(KmRadius.card),
     );
 
     Widget child;
@@ -58,7 +58,7 @@ class MessageBubble extends StatelessWidget {
     }
 
     return Align(
-      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: isUser ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: maxWidth),
         child: Container(

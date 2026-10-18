@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'tokens.dart';
 import 'typography.dart';
 
+export 'script_fonts.dart';
 export 'tokens.dart';
 export 'typography.dart';
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../l10n/languages.dart';
 import '../models/models.dart';
 
 /// What we persist after onboarding.
@@ -22,8 +23,8 @@ class ShopPrefs {
 
   bool get isOnboarded => shopId != null && shopId!.isNotEmpty;
 
-  /// Hinglish uses the English UI strings; only `hi` switches the UI.
-  Locale get locale => language == 'hi' ? const Locale('hi') : const Locale('en');
+  /// Locale with an .arb file for this language (Hinglish → hi_Latn).
+  Locale get locale => localeFor(language);
 
   static const _kShopId = 'shop_id';
   static const _kShopName = 'shop_name';

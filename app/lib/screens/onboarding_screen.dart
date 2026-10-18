@@ -9,7 +9,7 @@ import '../models/models.dart';
 import '../state/shop_prefs.dart';
 import '../theme/theme.dart';
 import '../widgets/km_button.dart';
-import '../widgets/lang_chip.dart';
+import '../widgets/language_grid.dart';
 import '../widgets/logo_mark.dart';
 
 /// Set when onboarding fell back to the mock so the chat can say so in a
@@ -113,7 +113,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         const SizedBox(height: KmSpace.section),
                         Text(l.languageQuestion.toUpperCase(), style: KmText.sectionLabel),
                         const SizedBox(height: 10),
-                        LanguageOptions(value: _language, onChanged: (v) => setState(() => _language = v)),
+                        LanguageGrid(value: _language, onChanged: (v) => setState(() => _language = v)),
                         const Spacer(),
                         const SizedBox(height: 12),
                         KmButton(

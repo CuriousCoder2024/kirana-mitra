@@ -567,11 +567,11 @@ class _PlainBubble extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: KmColors.paper,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(KmRadius.bubbleTight),
-          topRight: Radius.circular(KmRadius.card),
-          bottomLeft: Radius.circular(KmRadius.card),
-          bottomRight: Radius.circular(KmRadius.card),
+        borderRadius: const BorderRadiusDirectional.only(
+          topStart: Radius.circular(KmRadius.bubbleTight),
+          topEnd: Radius.circular(KmRadius.card),
+          bottomStart: Radius.circular(KmRadius.card),
+          bottomEnd: Radius.circular(KmRadius.card),
         ),
         border: Border.all(color: KmColors.sand),
       ),

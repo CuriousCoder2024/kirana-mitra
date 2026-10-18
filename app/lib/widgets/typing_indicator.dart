@@ -28,7 +28,7 @@ class _TypingIndicatorState extends State<TypingIndicator> with SingleTickerProv
   Widget build(BuildContext context) {
     final animate = !MediaQuery.disableAnimationsOf(context);
     return Align(
-      alignment: Alignment.centerLeft,
+      alignment: AlignmentDirectional.centerStart,
       child: Semantics(
         label: widget.label,
         child: Container(
@@ -36,11 +36,11 @@ class _TypingIndicatorState extends State<TypingIndicator> with SingleTickerProv
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
           decoration: BoxDecoration(
             color: KmColors.paper,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(KmRadius.bubbleTight),
-              topRight: Radius.circular(KmRadius.card),
-              bottomLeft: Radius.circular(KmRadius.card),
-              bottomRight: Radius.circular(KmRadius.card),
+            borderRadius: const BorderRadiusDirectional.only(
+              topStart: Radius.circular(KmRadius.bubbleTight),
+              topEnd: Radius.circular(KmRadius.card),
+              bottomStart: Radius.circular(KmRadius.card),
+              bottomEnd: Radius.circular(KmRadius.card),
             ),
             border: Border.all(color: KmColors.sand),
           ),

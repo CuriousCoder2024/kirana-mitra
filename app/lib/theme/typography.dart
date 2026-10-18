@@ -13,7 +13,16 @@ abstract final class KmText {
   static const notoFamily = 'Noto Sans';
   static const devanagariFamily = 'Noto Sans Devanagari';
 
-  static const List<String> _fallback = [devanagariFamily, notoFamily, 'sans-serif'];
+  /// Active script family, set by the app root from the shop's language
+  /// before the theme is built. Latin and Devanagari use the bundled fonts.
+  static String? scriptFamily;
+
+  static List<String> get _fallback => [
+        ?scriptFamily,
+        devanagariFamily,
+        notoFamily,
+        'sans-serif',
+      ];
 
   /// Variable fonts need the wght axis set explicitly on every platform.
   static double _wght(FontWeight w) => w.value.toDouble();
@@ -44,7 +53,7 @@ abstract final class KmText {
     double? letterSpacing,
   }) =>
       TextStyle(
-        fontFamily: notoFamily,
+        fontFamily: scriptFamily ?? notoFamily,
         fontFamilyFallback: _fallback,
         fontSize: size,
         fontWeight: weight,
