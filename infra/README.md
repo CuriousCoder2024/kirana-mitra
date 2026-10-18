@@ -88,6 +88,10 @@ with `openssl rand -hex 24`, put it in the untracked `infra/.env` as
 `infra/deploy.sh` and `infra/setup.sh` again. Cost: the first 3 scheduler
 jobs per billing account are free, then $0.10/job/month.
 
+Verified 2026-10-18 on revision `kirana-mitra-api-00003-jql`: a manual
+`gcloud scheduler jobs run` reached the service as `Google-Cloud-Scheduler`
+and got HTTP 200; a POST without the header gets 401.
+
 Trigger it by hand and read the result:
 
 ```bash
