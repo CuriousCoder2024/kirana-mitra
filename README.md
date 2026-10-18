@@ -16,7 +16,7 @@ Measured numbers are in [`docs/submission/performance-report.md`](docs/submissio
 | | |
 |---|---|
 | Cloud Run API | `https://kirana-mitra-api-396621755403.asia-south1.run.app` (revision from `infra/deploy.sh`; `curl https://kirana-mitra-api-396621755403.asia-south1.run.app/health` returns `{"ok":true,...}`) |
-| Web demo | `<WEB_DEMO_URL>` (set after `infra/deploy_web.sh`, which prints `https://storage.googleapis.com/<bucket>/index.html`) |
+| Web demo | <https://storage.googleapis.com/kirana-mitra-app-web/index.html> (published with `infra/deploy_web.sh`; talks to the Cloud Run API above) |
 | Android APK | not built or hosted; see [Android](#android) |
 | Project / region | `kirana-mitra-app` / `asia-south1` (Gemini is called through the `global` endpoint) |
 
@@ -158,7 +158,7 @@ infra/deploy_web.sh
 ```
 
 - Cloud Run API: `https://kirana-mitra-api-396621755403.asia-south1.run.app`
-- Web demo: `<WEB_DEMO_URL>`
+- Web demo: <https://storage.googleapis.com/kirana-mitra-app-web/index.html>
 
 Teardown: `infra/teardown.sh` (add `--all` to also remove Cloud Run, Artifact Registry and the BigQuery dataset). Cloud SQL is not created by any default path; see [what is deferred](#what-is-mocked-or-deferred). Order, cost per step and known quirks: [`infra/README.md`](infra/README.md).
 
@@ -215,7 +215,7 @@ Forecast holdout: `data/load_bigquery.sh evaluate` (results copied into `backend
 - **Synthetic shelf images.** The shelf-scan eval uses 5 Pillow-generated images (no CC-licensed kirana photos with countable units were found). Real shelf photos have not been evaluated.
 - **Voice accuracy is measured on text.** The 26-utterance eval posts typed text to `/chat` (and 6 of the 26 sentences are also few-shot examples in the system prompt); the audio path (`/voice-note`, audio bytes sent inline to Gemini) is implemented and unit-tested with a scripted Gemini, but no recorded-audio accuracy or latency number exists.
 - **Festival effect is added by hand.** `HOLIDAY_REGION = 'IN'` is set on the model, but BigQuery only models holidays for series longer than a year; with 120 days the festival uplift comes from `data/festival_uplift.csv`, which the generator also used to create the data (see the caveat in the performance report).
-- **Cloud Storage is provisioned, not used by the API.** `GCS_BUCKET` is set on the Cloud Run service, but the backend does not store photos or audio; the web build goes to a separate public bucket via `infra/deploy_web.sh`, which has only been dry-run.
+- **Cloud Storage is provisioned, not used by the API.** `GCS_BUCKET` is set on the Cloud Run service, but the backend does not store photos or audio; the web build is served from a separate public bucket (`kirana-mitra-app-web`) published with `infra/deploy_web.sh`.
 - **No scheduled evening push.** The hisaab is fetched on demand from the chat menu ("Aaj ka hisaab"); the 21:30 notification in the design handoff is not implemented.
 - **Reorder is a link, not a send.** `/reorder` returns a `wa.me` URL; nothing is sent to a supplier.
 - **Open CORS.** The API allows any origin for the demo (`allow_origins=["*"]` in `backend/app/main.py`); tighten before production.
@@ -223,6 +223,17 @@ Forecast holdout: `data/load_bigquery.sh evaluate` (results copied into `backend
 ## Known issue at the time of writing
 
 The API contract and Cloud Run use `GET /health`: the `*.run.app` edge answers the exact path `/healthz` with its own 404 before the container sees it. The app's startup check in `app/lib/api/dio_api_client.dart` calls `/health` (since commit 6e3665f), so against the Cloud Run URL it correctly starts in live mode. Locally both paths work.
+
+## Roadmap
+
+State as reported by the team on 2026-10-18 (evening). Request and response shapes for the first three items are in [`docs/api-contract.md`](docs/api-contract.md) (v1.1 additions).
+
+- **Automatic restock of top sellers.** Rule: an item is ordered only if it is in the top 10 by 4-week sales, has under 7 days of cover, and each of the last 2 weeks is at least 1.2x the earlier weekly average; the order covers 2 weeks of demand. Backend endpoints are in progress on main, the Cloud Scheduler job `kirana-auto-restock` is already created, and the app UI is parked on branch `feat/app-v1.1`.
+- **In-app feedback button.** Backend `POST /feedback` is in progress; the BigQuery table `kirana.feedback` exists; the UI is parked on `feat/app-v1.1`.
+- **22 scheduled languages.** Backend reply-language support is in progress; the language picker and machine-translated strings are parked on `feat/app-v1.1` and have not been reviewed by native speakers.
+- **Cloud SQL persistence.** Deferred. The in-memory store resets on redeploy.
+- **iOS build.** Cancelled for the hackathon; the Android APK is the mobile deliverable.
+- **Vertex AI Search catalogue matching and a Looker Studio distributor dashboard.** From the original brief; not started.
 
 ## Documents
 

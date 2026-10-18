@@ -1,7 +1,7 @@
 # Kirana Mitra: two-minute judge demo
 
 Persona: Ramesh Gupta, owner of Gupta General Store. Language: Hinglish. Run against the live Cloud Run API
-(`<CLOUD_RUN_URL>`) from the web demo (`<WEB_DEMO_URL>`) or an Android phone.
+(`https://kirana-mitra-api-396621755403.asia-south1.run.app`) from the web demo (<https://storage.googleapis.com/kirana-mitra-app-web/index.html>) or an Android phone.
 
 How to read the "App replies" lines: text in quotes is copied from the code (`backend/app/service.py`,
 `backend/app/gemini.py`, `app/lib/l10n/app_en.arb`) or from a local run of the backend in mock mode on 2026-10-18.
@@ -21,7 +21,7 @@ With live Gemini the first sentence of a reply is written by the model, followin
 
 ## 0. Pre-flight (do this 5 minutes before, not on stage)
 
-1. `curl <CLOUD_RUN_URL>/health` returns `{"ok":true,"model":"gemini-3.8-flash"}`. Cloud Run runs with
+1. `curl https://kirana-mitra-api-396621755403.asia-south1.run.app/health` returns `{"ok":true,"model":"gemini-3.8-flash"}`. Cloud Run runs with
    `--min-instances 0`, so the first request after idle is a cold start.
 2. The store is in memory (`InMemoryRepository`): shops are lost whenever the instance restarts. Onboard the
    demo shop after the last restart, not before.
@@ -31,9 +31,9 @@ With live Gemini the first sentence of a reply is written by the model, followin
 4. Have `backend/tests/eval/shelf/images/shelf_01_easy.jpg` ready to pick (web opens a file picker; Android
    opens the camera, so photograph a printed copy or a real shelf instead).
 5. Allow the microphone in the browser or phone.
-6. Make sure the app is not in demo mode: there must be no "Demo" badge in the app bar. (If the app was built
-   with the `/healthz` health check, the Cloud Run URL makes it fall back to the mock; see the README's "Known
-   issue".) Keep a second tab or phone built with `--dart-define USE_MOCK=true` as the safety net.
+6. Make sure the app is not in demo mode: there must be no "Demo" badge in the app bar (the app now probes
+   `GET /health`, so it should start live against Cloud Run). Keep a second tab or phone built with
+   `--dart-define USE_MOCK=true` as the safety net.
 
 ## 1. Onboarding in Hinglish (0:00 to 0:20)
 
