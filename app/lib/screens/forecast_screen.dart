@@ -143,6 +143,8 @@ class _ForecastScreenState extends ConsumerState<ForecastScreen> {
                         ],
                       ),
                     ),
+                    // Keeps the text clear of the mic FAB on short screens.
+                    const SizedBox(width: 56),
                   ],
                 ),
               ),
