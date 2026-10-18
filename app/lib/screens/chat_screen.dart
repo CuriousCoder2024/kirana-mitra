@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../api/api_client.dart';
@@ -10,12 +11,21 @@ import '../api/api_provider.dart';
 import '../l10n/app_localizations.dart';
 import '../models/models.dart';
 import '../state/chat_controller.dart';
+import '../state/data_providers.dart';
+import '../state/mic_state.dart';
 import '../state/shop_prefs.dart';
-import '../state/voice_recorder.dart';
-import '../theme.dart';
+import '../state/voice_actions.dart';
+import '../theme/theme.dart';
+import '../util/format.dart';
+import '../widgets/day_chip.dart';
+import '../widgets/hisaab_card.dart';
+import '../widgets/km_app_bar.dart';
 import '../widgets/message_bubble.dart';
-import '../widgets/mic_button.dart';
+import '../widgets/mic.dart';
+import '../widgets/order_sheet.dart';
+import '../widgets/reply_card.dart';
 import '../widgets/typing_indicator.dart';
+import 'onboarding_screen.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
@@ -26,9 +36,14 @@ class ChatScreen extends ConsumerStatefulWidget {
 
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final _text = TextEditingController();
-  final _scroll = ScrollController();
-  final _recorder = VoiceRecorder();
+  final _focus = FocusNode();
   final _picker = ImagePicker();
+  late final VoiceActions _voice = VoiceActions(ref);
+  bool _typing = false;
+  bool _ordering = false;
+
+  /// Contract limit for POST /shelf-scan.
+  static const int _maxImageBytes = 8 * 1024 * 1024;
 
   @override
   void initState() {
@@ -41,18 +56,21 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       final ctrl = ref.read(chatControllerProvider.notifier)
         ..networkErrorText = l.networkError
         ..comingSoonText = l.comingSoon
-        ..scanFailedText = l.scanFailed;
-      ctrl.addWelcome(
-        prefs.language == 'hi-Latn' ? l.welcomeMessageHinglish(name) : l.welcomeMessage(name),
-      );
+        ..scanFailedText = l.scanFailed
+        ..declinedText = l.askDeclined;
+      ctrl.addWelcome(prefs.language == 'hi-Latn' ? l.welcomeMessageHinglish(name) : l.welcomeMessage(name));
+      if (ref.read(demoNoticePendingProvider)) {
+        ref.read(demoNoticePendingProvider.notifier).set(false);
+        ctrl.addBotNote(l.demoNotice);
+      }
     });
   }
 
   @override
   void dispose() {
     _text.dispose();
-    _scroll.dispose();
-    _recorder.dispose();
+    _focus.dispose();
+    _voice.dispose();
     super.dispose();
   }
 
@@ -64,56 +82,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   Future<void> _sendText() async {
     final t = _text.text;
+    if (t.trim().isEmpty) return;
     _text.clear();
+    setState(() => _typing = false);
     await ref.read(chatControllerProvider.notifier).sendText(t);
   }
 
-  Future<bool> _startRecording() async {
-    final l = AppLocalizations.of(context);
-    try {
-      if (!await _recorder.hasPermission()) {
-        _snack(l.micPermissionDenied);
-        return false;
-      }
-      await _recorder.start();
-      return true;
-    } catch (_) {
-      _snack(l.micPermissionDenied);
-      return false;
-    }
-  }
-
-  Future<void> _stopRecording() async {
-    final l = AppLocalizations.of(context);
-    final tooShort = _recorder.elapsed < const Duration(milliseconds: 600);
-    UploadBlob? blob;
-    try {
-      blob = await _recorder.stop();
-    } catch (_) {
-      blob = null;
-    }
-    if (tooShort || blob == null) {
-      _snack(l.voiceTooShort);
-      return;
-    }
-    await ref
-        .read(chatControllerProvider.notifier)
-        .sendVoice(blob, placeholder: l.voiceNoteSent);
-  }
-
-  Future<void> _cancelRecording() async {
-    final l = AppLocalizations.of(context);
-    await _recorder.cancel();
-    _snack(l.recordingCancelled);
-  }
-
-  /// Contract limit for POST /shelf-scan.
-  static const int _maxImageBytes = 8 * 1024 * 1024;
-
   bool get _hasCamera =>
-      !kIsWeb &&
-      (defaultTargetPlatform == TargetPlatform.android ||
-          defaultTargetPlatform == TargetPlatform.iOS);
+      !kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
 
   Future<void> _pickPhoto() async {
     final l = AppLocalizations.of(context);
@@ -136,15 +112,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     }
     final lowerName = file.name.toLowerCase();
     final mime = file.mimeType ?? (lowerName.endsWith('.png') ? 'image/png' : 'image/jpeg');
-    final filename = file.name.isEmpty ? 'shelf.jpg' : file.name;
     await ref.read(chatControllerProvider.notifier).sendImage(
-          UploadBlob(bytes: bytes, filename: filename, mimeType: mime),
-          placeholder: l.photoSent,
+          UploadBlob(bytes: bytes, filename: file.name.isEmpty ? 'shelf.jpg' : file.name, mimeType: mime),
         );
   }
 
-  Future<void> _onAction(ChatMessage from, QuickAction a) async {
-    final effect = await ref.read(chatControllerProvider.notifier).tapAction(from, a);
+  Future<void> _chip(QuickAction a) async {
+    final effect = ref.read(chatControllerProvider.notifier).chipEffect(a);
     if (!mounted || effect == null) return;
     switch (effect) {
       case NavigateEffect(:final route):
@@ -154,46 +128,69 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     }
   }
 
+  Future<void> _orderFromHisaab() async {
+    final l = AppLocalizations.of(context);
+    setState(() => _ordering = true);
+    try {
+      final order = await ref.read(apiClientProvider).reorder(ref.read(shopPrefsProvider).shopId ?? '');
+      if (mounted) await showOrderSheet(context, order);
+    } catch (_) {
+      if (mounted) _snack(l.networkError);
+    } finally {
+      if (mounted) setState(() => _ordering = false);
+    }
+  }
+
   Future<void> _changeShop() async {
     await ref.read(shopPrefsProvider.notifier).reset();
     if (mounted) context.go('/onboarding');
+  }
+
+  String _dayLabel(AppLocalizations l, DateTime d) {
+    final now = DateTime.now();
+    if (Fmt.sameDay(d, now)) return l.todayChip(Fmt.dateShort(d));
+    if (Fmt.sameDay(d, now.subtract(const Duration(days: 1)))) return l.yesterdayChip(Fmt.dateShort(d));
+    return Fmt.dateShort(d);
   }
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final state = ref.watch(chatControllerProvider);
-    final demo = ref.watch(isDemoModeProvider);
     final prefs = ref.watch(shopPrefsProvider);
+    final recording = ref.watch(micStateProvider.select((s) => s.recording));
+    final festival = ref.watch(forecastProvider).value?.festivals.firstOrNull;
+
+    // Build the visual list (day chips + messages), newest last, then reverse.
+    final rows = <Widget>[];
+    DateTime? lastDay;
+    for (final m in state.messages) {
+      if (lastDay == null || !Fmt.sameDay(lastDay, m.at)) {
+        rows.add(DayChip(label: _dayLabel(l, m.at)));
+        lastDay = m.at;
+      }
+      rows.add(_row(m, state.busy, l, festival));
+    }
+    if (state.busy) rows.add(TypingIndicator(label: l.thinking));
+    final reversed = rows.reversed.toList();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(l.chatTitle),
-            if (prefs.shopName.isNotEmpty)
-              Text(prefs.shopName, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white)),
-          ],
-        ),
+      appBar: KmAppBar(
+        showLogo: true,
+        title: l.chatTitle,
+        subtitle: prefs.shopName,
         actions: [
-          if (demo)
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: Chip(
-                label: Text(l.demoMode, style: const TextStyle(fontSize: 13, color: KmColors.brown)),
-                backgroundColor: KmColors.cream,
-                side: BorderSide.none,
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                visualDensity: VisualDensity.compact,
-              ),
-            ),
           PopupMenuButton<String>(
-            iconSize: 28,
+            iconSize: 26,
+            tooltip: '',
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 40),
             onSelected: (v) {
+              if (v == 'hisaab') ref.read(chatControllerProvider.notifier).showHisaab();
               if (v == 'change') _changeShop();
             },
             itemBuilder: (_) => [
+              PopupMenuItem(value: 'hisaab', child: Text(l.hisaabTitle)),
               PopupMenuItem(value: 'change', child: Text(l.changeShop)),
             ],
           ),
@@ -202,122 +199,165 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              controller: _scroll,
-              reverse: true,
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              itemCount: state.messages.length + (state.busy ? 1 : 0),
-              itemBuilder: (context, i) {
-                if (state.busy && i == 0) return TypingIndicator(label: l.thinking);
-                final idx = state.messages.length - 1 - (state.busy ? i - 1 : i);
-                final m = state.messages[idx];
-                return MessageBubble(
-                  message: m,
-                  onAction: (a) => _onAction(m, a),
-                  lowLabel: l.lowStockBadge,
-                  colItem: l.scanColItem,
-                  colPack: l.scanColPack,
-                  colCount: l.scanColCount,
-                );
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 150),
+              opacity: recording ? 0.55 : 1,
+              child: ListView.separated(
+                reverse: true,
+                padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+                itemCount: reversed.length,
+                separatorBuilder: (_, _) => const SizedBox(height: KmSpace.bubbleGap),
+                itemBuilder: (context, i) => reversed[i],
+              ),
+            ),
+          ),
+          if (_typing)
+            _TypeRow(
+              controller: _text,
+              focus: _focus,
+              hint: l.typeMessageHint,
+              sendLabel: l.send,
+              busy: state.busy,
+              onSend: _sendText,
+              onClose: () => setState(() => _typing = false),
+            )
+          else
+            MicDock(
+              enabled: !state.busy,
+              onStart: () => _voice.start(context),
+              onSend: (d) => _voice.send(context, d),
+              onCancel: () => _voice.cancel(context),
+              onPhoto: _pickPhoto,
+              onType: () {
+                setState(() => _typing = true);
+                WidgetsBinding.instance.addPostFrameCallback((_) => _focus.requestFocus());
               },
             ),
-          ),
-          _Composer(
-            controller: _text,
-            hint: l.typeMessageHint,
-            sendLabel: l.send,
-            busy: state.busy,
-            onSend: _sendText,
-            onPhoto: _pickPhoto,
-            photoLabel: l.pickPhoto,
-            mic: MicButton(
-              enabled: !state.busy,
-              onStart: _startRecording,
-              onStop: _stopRecording,
-              onCancel: _cancelRecording,
-              holdLabel: l.holdToTalk,
-              recordingLabel: l.recording,
-              cancelLabel: l.slideToCancel,
-            ),
-          ),
         ],
       ),
     );
   }
+
+  Widget _row(ChatMessage m, bool busy, AppLocalizations l, Festival? festival) {
+    final ctrl = ref.read(chatControllerProvider.notifier);
+    switch (m.kind) {
+      case ChatKind.reply:
+      case ChatKind.scan:
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 360),
+            child: ReplyCard(
+              message: m,
+              busy: busy,
+              onConfirm: () => ctrl.confirm(m),
+              onDecline: () => ctrl.decline(m),
+              onUndo: () => ctrl.undo(m.id),
+              onChip: _chip,
+            ),
+          ),
+        );
+      case ChatKind.hisaab:
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 360),
+            child: HisaabCard(
+              summary: m.summary!,
+              festival: festival,
+              ordering: _ordering,
+              onOrder: _orderFromHisaab,
+              onShare: () => SharePlus.instance.share(ShareParams(text: m.text)),
+            ),
+          ),
+        );
+      case ChatKind.text:
+      case ChatKind.voice:
+      case ChatKind.photo:
+        return MessageBubble(message: m, voiceLabel: l.voiceNoteLabel);
+    }
+  }
 }
 
-class _Composer extends StatelessWidget {
-  const _Composer({
+/// The on-demand text row that replaces the dock after "Likho".
+class _TypeRow extends StatelessWidget {
+  const _TypeRow({
     required this.controller,
+    required this.focus,
     required this.hint,
     required this.sendLabel,
     required this.busy,
     required this.onSend,
-    required this.onPhoto,
-    required this.photoLabel,
-    required this.mic,
+    required this.onClose,
   });
 
   final TextEditingController controller;
+  final FocusNode focus;
   final String hint;
   final String sendLabel;
   final bool busy;
   final VoidCallback onSend;
-  final VoidCallback onPhoto;
-  final String photoLabel;
-  final Widget mic;
+  final VoidCallback onClose;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      elevation: 8,
-      shadowColor: KmColors.brown.withValues(alpha: 0.15),
+    return Container(
+      decoration: const BoxDecoration(
+        color: KmColors.paper,
+        border: Border(top: BorderSide(color: KmColors.sand)),
+      ),
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 8, 8, 10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+          child: Row(
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: busy ? null : onPhoto,
-                    iconSize: 30,
-                    color: KmColors.terracotta,
-                    tooltip: photoLabel,
-                    constraints: const BoxConstraints(minWidth: 56, minHeight: 56),
-                    icon: const Icon(Icons.photo_camera_outlined),
+              IconButton(
+                onPressed: onClose,
+                iconSize: 26,
+                color: KmColors.inkSoft,
+                constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                icon: const Icon(Icons.keyboard_hide_outlined),
+              ),
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  focusNode: focus,
+                  minLines: 1,
+                  maxLines: 3,
+                  textInputAction: TextInputAction.send,
+                  onSubmitted: (_) => onSend(),
+                  style: KmText.body,
+                  decoration: InputDecoration(
+                    hintText: hint,
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    fillColor: KmColors.cream,
                   ),
-                  Expanded(
-                    child: TextField(
-                      controller: controller,
-                      minLines: 1,
-                      maxLines: 3,
-                      textInputAction: TextInputAction.send,
-                      onSubmitted: (_) => onSend(),
-                      style: const TextStyle(fontSize: 18),
-                      decoration: InputDecoration(
-                        hintText: hint,
-                        isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                        fillColor: KmColors.cream,
-                      ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  color: KmColors.saffron,
+                  borderRadius: BorderRadius.circular(KmRadius.button),
+                  boxShadow: KmShadow.hard(KmColors.saffronShadow),
+                ),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(KmRadius.button),
+                    onTap: busy ? null : onSend,
+                    child: Semantics(
+                      button: true,
+                      label: sendLabel,
+                      child: const Icon(Icons.send_rounded, color: KmColors.white, size: 26),
                     ),
                   ),
-                  const SizedBox(width: 4),
-                  IconButton.filled(
-                    onPressed: busy ? null : onSend,
-                    iconSize: 26,
-                    tooltip: sendLabel,
-                    constraints: const BoxConstraints(minWidth: 56, minHeight: 56),
-                    icon: const Icon(Icons.send_rounded),
-                  ),
-                ],
+                ),
               ),
-              const SizedBox(height: 8),
-              mic,
             ],
           ),
         ),
