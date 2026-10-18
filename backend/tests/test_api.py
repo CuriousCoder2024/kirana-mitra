@@ -12,6 +12,7 @@ def test_healthz(client):
     assert r.status_code == 200
     assert r.json()["ok"] is True
     assert r.json()["model"]
+    assert client.get("/health").json() == r.json()  # Cloud Run alias
 
 
 def test_shop_is_seeded_with_catalogue(client, shop_id):

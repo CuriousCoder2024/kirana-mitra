@@ -96,7 +96,11 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
 
     # ---- health -----------------------------------------------------------------
 
+    # /health is an alias: the run.app frontend answers the exact path /healthz itself
+    # with a 404 before the request reaches the container, so uptime checks and the
+    # app use /health on Cloud Run. Both return the contract's shape.
     @app.get("/healthz")
+    @app.get("/health")
     def healthz():
         return {"ok": True, "model": model_id()}
 

@@ -103,6 +103,9 @@ curl -s "localhost:8080/summary/shp_...?date=2026-10-18"
 curl -s -X POST localhost:8080/reorder/shp_...
 ```
 
+Health: `GET /healthz`, or `GET /health` on Cloud Run, where the run.app frontend answers the exact
+path `/healthz` with its own 404 before the container sees it.
+
 Interactive docs: http://localhost:8080/docs
 
 ## How a message is handled
