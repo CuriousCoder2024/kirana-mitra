@@ -32,7 +32,7 @@ yet (`deploy_web.sh` is ready, the app is mid-redesign).
 | 3 | `data/load_bigquery.sh all` | under 1 cent per run (ARIMA_PLUS training); everything else inside the BigQuery free tier. See `data/README.md`. |
 | 4 | `infra/deploy.sh --dry-run` then `infra/deploy.sh` | Cloud Build minutes (120 free/day) + Cloud Run with `min-instances 0`: free at demo traffic. First deploy took ~4 min. |
 | 5 | Put the printed URL in `API_BASE_URL` (infra/.env and the app) | no |
-| 6 | `infra/deploy_web.sh --dry-run` then `infra/deploy_web.sh` | public GCS bucket with the Flutter web build: cents. Not run yet. |
+| 6 | `firebase login --reauth` once, then `infra/deploy_web.sh` | Firebase Hosting free tier. Not run yet; owner runs it. |
 
 Gemini on Vertex AI is billed per token when the backend runs; a demo day is
 a few rupees. `GEMINI_MODEL` is owned by `backend/.env.example`; copy the value.
@@ -123,28 +123,45 @@ tier. Every deploy still replaces that instance and wipes the shops, so
 redeploy only on the owner's go. Override per run with
 `CLOUD_RUN_MIN_INSTANCES` / `CLOUD_RUN_MAX_INSTANCES` in `infra/.env`.
 
-## deploy_web.sh
+## deploy_web.sh: the web demo on Firebase Hosting
 
-Builds the Flutter web app with `--dart-define API_BASE_URL=<Cloud Run URL>`
-and `--base-href /<bucket>/`, then publishes `app/build/web` to a **public**
-bucket `$WEB_BUCKET` (default `<project>-web`) with `index.html` as main and
-404 page. URL: `https://storage.googleapis.com/<bucket>/index.html`. Asks
-before creating the public bucket. The backend must allow CORS from
-`https://storage.googleapis.com`. A custom domain would need a load balancer
-and is not set up.
+Firebase was added to project `kirana-mitra-app` on 2026-10-18 through the
+Firebase Management API (state ACTIVE, default Hosting site
+`kirana-mitra-app`). Hosting config lives at the repo root: `firebase.json`
+(public `app/build/web`, SPA rewrite to `/index.html`, no-cache on
+`index.html`, `flutter_service_worker.js`, `flutter_bootstrap.js` and
+`version.json`, one-year immutable cache on hashed assets) and `.firebaserc`
+(default project). Free tier: 10 GB stored, 360 MB/day transfer
+([pricing](https://firebase.google.com/pricing)).
 
-## Stopping the bill
+`infra/deploy_web.sh` (default `--firebase`) builds the Flutter web app with
+`--dart-define API_BASE_URL=<Cloud Run URL> --base-href /` and runs
+`firebase deploy --only hosting --project kirana-mitra-app`. Result:
+**https://kirana-mitra-app.web.app** (also `kirana-mitra-app.firebaseapp.com`).
+`--gcs` keeps the public-bucket fallback at
+`https://storage.googleapis.com/<bucket>/index.html` (asks before creating
+the bucket).
 
-- Between demos: `gcloud sql instances patch kirana-pg --activation-policy NEVER`
-  (and `ALWAYS` to resume). Cloud Run at min-instances 0 costs nothing idle.
-- For good: `infra/teardown.sh` deletes the Cloud SQL instance and the bucket
-  after a confirmation each. `infra/teardown.sh --all` also removes the Cloud
-  Run service, the Artifact Registry repo and the BigQuery dataset.
+The owner runs it from a terminal; the firebase CLI (15.x is installed via
+nvm) needs a one-time browser login on this machine:
+
+```bash
+firebase login --reauth
+```
+
+```bash
+infra/deploy_web.sh
+```
+
+Nothing in `app/` is touched by the scripts. The backend allows CORS from
+any origin, so no API change is needed for the new host.
 
 ## Not verified
 
 - `setup.sh --with-cloudsql` (the Cloud SQL block) and `teardown.sh` have only
   been dry-run. If `gcloud sql instances create` rejects `--edition ENTERPRISE`
   with `--tier db-f1-micro` on your gcloud version, run `gcloud components update`.
-- `deploy_web.sh` has only been dry-run; a `constraints/storage.publicAccessPrevention`
-  org policy would block the public bucket.
+- `deploy_web.sh` has only been dry-run in both modes. The firebase CLI on
+  this machine has expired credentials, so the first `firebase deploy` needs
+  `firebase login --reauth`. In `--gcs` mode a
+  `constraints/storage.publicAccessPrevention` org policy would block the bucket.
