@@ -1,19 +1,15 @@
 {
   "@@locale": "hi",
   "appTitle": "किराना मित्र",
-  "onboardingTitle": "अपनी दुकान सेट करें",
-  "onboardingSubtitle": "बस 20 सेकंड। फिर कभी फॉर्म नहीं भरना।",
   "shopNameLabel": "दुकान का नाम",
   "shopNameHint": "गुप्ता जनरल स्टोर",
   "ownerNameLabel": "आपका नाम",
   "ownerNameHint": "रमेश गुप्ता",
-  "languageLabel": "जवाब की भाषा",
   "langHindi": "हिंदी",
   "langEnglish": "English",
   "langHinglish": "Hinglish",
   "startButton": "शुरू करें",
   "requiredField": "कृपया यह भरें",
-  "couldNotCreateShop": "सर्वर से संपर्क नहीं हुआ। डेमो मोड में शुरू कर रहे हैं।",
   "navChat": "बात",
   "navStock": "स्टॉक",
   "navUdhaar": "उधार",
@@ -22,57 +18,329 @@
   "demoMode": "डेमो",
   "changeShop": "दुकान बदलें",
   "welcomeMessage": "नमस्ते {name}! बताइए क्या आया, क्या बिका, किसको उधार दिया। माइक दबाकर बोलिए।",
-  "@welcomeMessage": {"placeholders": {"name": {"type": "String"}}},
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "welcomeMessageHinglish": "Namaste {name}! Bolo: kya aaya, kya bika, kisko udhaar diya. Mic dabake rakho aur bolo.",
-  "@welcomeMessageHinglish": {"placeholders": {"name": {"type": "String"}}},
-  "holdToTalk": "दबाकर बोलें",
-  "recording": "सुन रहा हूँ… छोड़ें तो भेजेगा",
-  "slideToCancel": "रद्द करने के लिए उंगली खिसकाएँ",
-  "recordingCancelled": "रद्द",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "छोड़ दो, कैंसल हो गया",
   "voiceTooShort": "थोड़ा और देर दबाकर बोलें",
   "micPermissionDenied": "वॉइस नोट के लिए माइक की अनुमति चाहिए।",
   "voiceNoteSent": "🎤 वॉइस नोट",
   "photoSent": "📷 शेल्फ की फोटो",
-  "typeMessageHint": "या यहाँ लिखें…",
+  "typeMessageHint": "यहाँ लिखो…",
   "send": "भेजें",
   "thinking": "सोच रहा हूँ…",
   "networkError": "सर्वर से संपर्क नहीं हुआ। फिर से कोशिश करें।",
   "comingSoon": "जल्दी आ रहा है! शेल्फ स्कैन अभी तैयार हो रहा है।",
   "scanFailed": "फोटो समझ नहीं आई, फिर से कोशिश करें।",
   "imageTooLarge": "फोटो बहुत बड़ी है (8 MB से ज़्यादा)। छोटी फोटो लें।",
-  "scanColItem": "सामान",
-  "scanColPack": "पैक",
-  "scanColCount": "गिनती",
-  "pickPhoto": "शेल्फ की फोटो स्कैन करें",
   "stockTitle": "स्टॉक",
   "lowStockBadge": "कम है",
-  "reorderAt": "{level} पर दोबारा मंगाएँ",
-  "@reorderAt": {"placeholders": {"level": {"type": "String"}}},
-  "emptyStock": "अभी स्टॉक नहीं है। बताइए क्या आया।",
-  "lowStockCount": "{count, plural, =0{सब ठीक है} =1{1 चीज़ कम} other{{count} चीज़ें कम}}",
-  "@lowStockCount": {"placeholders": {"count": {"type": "int"}}},
+  "reorderAt": "{level} पर मंगाओ",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "अभी स्टॉक नहीं है। बोलो क्या आया।",
   "udhaarTitle": "उधार",
-  "totalOutstanding": "कुल बकाया",
-  "customersCount": "{count, plural, =0{कोई ग्राहक नहीं} =1{1 ग्राहक} other{{count} ग्राहक}}",
-  "@customersCount": {"placeholders": {"count": {"type": "int"}}},
-  "lastEntry": "आखिरी एंट्री {date}",
-  "@lastEntry": {"placeholders": {"date": {"type": "String"}}},
-  "emptyLedger": "अभी कोई उधार नहीं। बोलिए \"गुप्ता जी को 350 का उधार दिया\"।",
+  "totalOutstanding": "कुल बाकी",
+  "emptyLedger": "अभी कोई उधार नहीं। बोलो \"गुप्ता जी को 350 का उधार दिया\"।",
   "forecastTitle": "अनुमान",
   "legendHistory": "पिछले हफ्ते",
   "legendForecast": "अनुमान",
-  "legendBand": "संभावित दायरा",
-  "onHand": "स्टॉक में: {qty} {unit}",
-  "@onHand": {"placeholders": {"qty": {"type": "String"}, "unit": {"type": "String"}}},
-  "suggestedReorder": "सुझाव: {qty} {unit}",
-  "@suggestedReorder": {"placeholders": {"qty": {"type": "String"}, "unit": {"type": "String"}}},
-  "reorderButton": "ऑर्डर बनाएँ",
-  "reorderPreparing": "ऑर्डर बन रहा है…",
+  "legendBand": "दायरा",
   "orderReady": "ऑर्डर तैयार",
-  "shareWhatsapp": "WhatsApp पर भेजें",
+  "shareWhatsapp": "WhatsApp पर भेजो",
   "copied": "कॉपी हो गया",
   "copy": "कॉपी",
   "retry": "फिर कोशिश करें",
   "loading": "लोड हो रहा है…",
-  "errorLoading": "लोड नहीं हुआ। नीचे खींचकर फिर कोशिश करें।"
+  "errorLoading": "लोड नहीं हुआ। नीचे खींचकर फिर कोशिश करें।",
+  "tagline": "बोलो, हो जाएगा।",
+  "languageQuestion": "मित्र किस भाषा में बोले?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "यह भरो",
+  "dockPhoto": "शेल्फ फोटो",
+  "dockType": "लिखो",
+  "micLabel": "दबाकर बोलो",
+  "recordingLabel": "सुन रहा हूँ… छोड़ो तो भेजेगा",
+  "recordingCancelHint": "कैंसल के लिए उंगली बाहर ले जाओ",
+  "confirmHeader": "समझा · लिख दिया",
+  "confirmTotalUdhaar": "उधार · अब कुल",
+  "confirmTotalStock": "स्टॉक · अब कुल",
+  "confirmTotalSale": "बिक्री · आज कुल",
+  "askHeader": "पक्का नहीं",
+  "askHeard": "आपने कहा “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "स्टॉक में जोड़ूँ?",
+  "askUdhaar": "उधार में लिखूँ?",
+  "askSale": "बिक्री में लिखूँ?",
+  "askNo": "नहीं",
+  "askDeclined": "ठीक है, नहीं लिखा।",
+  "scanHeader": "शेल्फ देखा · {count} चीज़ें मिलीं",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "स्टॉक यही सेट कर दूँ?",
+  "scanConfirmed": "समझा · स्टॉक अपडेट हो गया",
+  "stockSubtitle": "{count} चीज़ें · अपडेट {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 चीज़ कम है} other{{count} चीज़ें कम हैं}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "सब ठीक है",
+  "orderButton": "ऑर्डर बनाओ",
+  "orderButtonQty": "ऑर्डर बनाओ · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} लोग · बही-खाता",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "बाकी",
+  "todayGiven": "आज दिया +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "आज आया −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "बाकी",
+  "settledBadge": "चुकता",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} आया",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "उधार शुरू {date} · {count} एंट्री",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "आखिरी: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "याद दिलाओ",
+  "paidButton": "पैसा आया",
+  "paidPrompt": "कितना आया? बोलो।",
+  "historyLabel": "हिस्ट्री",
+  "entryGiven": "उधार लिया",
+  "entryPaid": "पैसा आया",
+  "entrySourceVoice": "वॉइस",
+  "entrySourceCash": "कैश",
+  "entrySourcePhoto": "फोटो",
+  "reminderText": "नमस्ते {name} जी, {shop} से। आपका ₹{balance} बाकी है। धन्यवाद!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "अगले 4 हफ्ते · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "अगले 4 हफ्ते",
+  "perWeek": "{unit} / हफ्ता",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "आगे · अनुमान",
+  "onHandReorder": "स्टॉक में {onHand} · मंगाओ {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} चीज़ें",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "शेयर",
+  "hisaabTitle": "आज का हिसाब",
+  "hisaabSubtitle": "{date} · {count} एंट्री",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "दुकान बंद · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "आज की बिक्री",
+  "hisaabGiven": "उधार दिया",
+  "hisaabReceived": "उधार आया",
+  "hisaabOutstanding": "कुल बाकी",
+  "hisaabLow": "कम है",
+  "hisaabLowItems": "{items} कल मंगाओ।",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} {weeks} हफ्ते दूर है।",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "कल का ऑर्डर बनाओ",
+  "hisaabShareButton": "घर पर WhatsApp करो",
+  "todayChip": "आज · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "कल · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "सर्वर नहीं मिला। डेमो मोड में शुरू कर रहा हूँ।",
+  "languageSheetTitle": "मित्र किस भाषा में बोले?",
+  "backLabel": "पीछे",
+  "voiceNoteLabel": "वॉइस नोट",
+  "undo": "अनडू"
 }

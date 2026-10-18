@@ -12,26 +12,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Kirana Mitra';
 
   @override
-  String get onboardingTitle => 'Set up your shop';
-
-  @override
-  String get onboardingSubtitle =>
-      'Takes 20 seconds. You will never fill a form again.';
-
-  @override
-  String get shopNameLabel => 'Shop name';
+  String get shopNameLabel => 'Dukaan ka naam';
 
   @override
   String get shopNameHint => 'Gupta General Store';
 
   @override
-  String get ownerNameLabel => 'Your name';
+  String get ownerNameLabel => 'Aapka naam';
 
   @override
   String get ownerNameHint => 'Ramesh Gupta';
-
-  @override
-  String get languageLabel => 'Reply language';
 
   @override
   String get langHindi => 'हिंदी';
@@ -43,17 +33,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get langHinglish => 'Hinglish';
 
   @override
-  String get startButton => 'Start';
+  String get startButton => 'Shuru karo';
 
   @override
   String get requiredField => 'Please fill this in';
 
   @override
-  String get couldNotCreateShop =>
-      'Could not reach the server. Starting in demo mode.';
-
-  @override
-  String get navChat => 'Chat';
+  String get navChat => 'Baat';
 
   @override
   String get navStock => 'Stock';
@@ -84,16 +70,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get holdToTalk => 'Hold to talk';
-
-  @override
-  String get recording => 'Listening… release to send';
-
-  @override
-  String get slideToCancel => 'Slide away to cancel';
-
-  @override
-  String get recordingCancelled => 'Cancelled';
+  String get recordingCancelled => 'Chhod do, cancel ho gaya';
 
   @override
   String get voiceTooShort => 'Hold a bit longer and speak';
@@ -109,7 +86,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get photoSent => '📷 Shelf photo';
 
   @override
-  String get typeMessageHint => 'Or type here…';
+  String get typeMessageHint => 'Yahan likho…';
 
   @override
   String get send => 'Send';
@@ -131,18 +108,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Photo is too big (over 8 MB). Try a smaller one.';
 
   @override
-  String get scanColItem => 'Item';
-
-  @override
-  String get scanColPack => 'Pack';
-
-  @override
-  String get scanColCount => 'Count';
-
-  @override
-  String get pickPhoto => 'Scan shelf photo';
-
-  @override
   String get stockTitle => 'Stock';
 
   @override
@@ -150,87 +115,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String reorderAt(String level) {
-    return 'Reorder at $level';
+    return 'reorder at $level';
   }
 
   @override
-  String get emptyStock => 'No stock yet. Tell me what came in.';
-
-  @override
-  String lowStockCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count items low',
-      one: '1 item low',
-      zero: 'All good',
-    );
-    return '$_temp0';
-  }
+  String get emptyStock => 'Abhi stock nahi hai. Bolo kya aaya.';
 
   @override
   String get udhaarTitle => 'Udhaar';
 
   @override
-  String get totalOutstanding => 'Total outstanding';
-
-  @override
-  String customersCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count customers',
-      one: '1 customer',
-      zero: 'No customers',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String lastEntry(String date) {
-    return 'Last entry $date';
-  }
+  String get totalOutstanding => 'Kul baaki';
 
   @override
   String get emptyLedger =>
-      'No udhaar yet. Say \"Gupta ji ko 350 ka udhaar diya\".';
+      'Abhi koi udhaar nahi. Bolo \"Gupta ji ko 350 ka udhaar diya\".';
 
   @override
   String get forecastTitle => 'Forecast';
 
   @override
-  String get legendHistory => 'Past weeks';
+  String get legendHistory => 'Pichhle hafte';
 
   @override
-  String get legendForecast => 'Forecast';
+  String get legendForecast => 'Anumaan';
 
   @override
-  String get legendBand => 'Likely range';
+  String get legendBand => 'Range';
 
   @override
-  String onHand(String qty, String unit) {
-    return 'On hand: $qty $unit';
-  }
+  String get orderReady => 'Order taiyaar';
 
   @override
-  String suggestedReorder(String qty, String unit) {
-    return 'Suggested: $qty $unit';
-  }
+  String get shareWhatsapp => 'WhatsApp pe bhejo';
 
   @override
-  String get reorderButton => 'Reorder';
-
-  @override
-  String get reorderPreparing => 'Preparing order…';
-
-  @override
-  String get orderReady => 'Order ready';
-
-  @override
-  String get shareWhatsapp => 'Send on WhatsApp';
-
-  @override
-  String get copied => 'Copied';
+  String get copied => 'Copy ho gaya';
 
   @override
   String get copy => 'Copy';
@@ -243,4 +163,285 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorLoading => 'Couldn\'t load. Pull down to retry.';
+
+  @override
+  String get tagline => 'Bolo, ho jayega.';
+
+  @override
+  String get languageQuestion => 'Mitra kis bhasha mein bole?';
+
+  @override
+  String get langSampleHindi => 'नमस्ते! आज क्या आया?';
+
+  @override
+  String get langSampleHinglish => 'Namaste! Aaj kya aaya?';
+
+  @override
+  String get langSampleEnglish => 'Hello! What came in today?';
+
+  @override
+  String get fieldRequired => 'Yeh bharo';
+
+  @override
+  String get dockPhoto => 'Shelf photo';
+
+  @override
+  String get dockType => 'Likho';
+
+  @override
+  String get micLabel => 'Dabake bolo';
+
+  @override
+  String get recordingLabel => 'Sun raha hoon… chhodo toh bhejega';
+
+  @override
+  String get recordingCancelHint => 'Cancel ke liye ungli bahar le jao';
+
+  @override
+  String get confirmHeader => 'Samjha · likh diya';
+
+  @override
+  String get confirmTotalUdhaar => 'Udhaar · ab total';
+
+  @override
+  String get confirmTotalStock => 'Stock · ab total';
+
+  @override
+  String get confirmTotalSale => 'Bikri · aaj total';
+
+  @override
+  String get askHeader => 'Pakka nahi';
+
+  @override
+  String askHeard(String text) {
+    return 'aapne kaha “$text”';
+  }
+
+  @override
+  String get askStock => 'Stock mein add karoon?';
+
+  @override
+  String get askUdhaar => 'Udhaar mein likhoon?';
+
+  @override
+  String get askSale => 'Bikri mein likhoon?';
+
+  @override
+  String get askNo => 'Nahi';
+
+  @override
+  String get askDeclined => 'Theek hai, nahi likha.';
+
+  @override
+  String scanHeader(int count) {
+    return 'Shelf dekha · $count cheezein mili';
+  }
+
+  @override
+  String get scanQuestion => 'Stock yahi set kar doon?';
+
+  @override
+  String get scanConfirmed => 'Samjha · stock update ho gaya';
+
+  @override
+  String stockSubtitle(int count, String time) {
+    return '$count cheezein · update $time';
+  }
+
+  @override
+  String lowBandTitle(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cheezein kam hain',
+      one: '1 cheez kam hai',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get allGoodBand => 'Sab theek hai';
+
+  @override
+  String get orderButton => 'Order banao';
+
+  @override
+  String orderButtonQty(String qty, String unit) {
+    return 'Order banao · $qty $unit';
+  }
+
+  @override
+  String udhaarSubtitle(int count) {
+    return '$count log · bahi-khata';
+  }
+
+  @override
+  String get balanceLabel => 'Baaki';
+
+  @override
+  String todayGiven(String amount) {
+    return 'Aaj diya +₹$amount';
+  }
+
+  @override
+  String todayReceived(String amount) {
+    return 'Aaj aaya −₹$amount';
+  }
+
+  @override
+  String get owedCaption => 'baaki';
+
+  @override
+  String get settledBadge => 'Chukta';
+
+  @override
+  String lastMovementGiven(String date, String amount) {
+    return '$date · +₹$amount';
+  }
+
+  @override
+  String lastMovementPaid(String date, String amount) {
+    return '$date · −₹$amount aaya';
+  }
+
+  @override
+  String customerSubtitle(String date, int count) {
+    return 'Udhaar shuru $date · $count entries';
+  }
+
+  @override
+  String lastEntryAt(String time) {
+    return 'Last: $time';
+  }
+
+  @override
+  String get remindButton => 'Yaad dilao';
+
+  @override
+  String get paidButton => 'Paisa aaya';
+
+  @override
+  String get paidPrompt => 'Kitna aaya? Bolo.';
+
+  @override
+  String get historyLabel => 'History';
+
+  @override
+  String get entryGiven => 'Udhaar liya';
+
+  @override
+  String get entryPaid => 'Paisa aaya';
+
+  @override
+  String get entrySourceVoice => 'voice';
+
+  @override
+  String get entrySourceCash => 'cash';
+
+  @override
+  String get entrySourcePhoto => 'photo';
+
+  @override
+  String reminderText(String name, String shop, String balance) {
+    return 'Namaste $name ji, $shop se. Aapka ₹$balance baaki hai. Dhanyavaad!';
+  }
+
+  @override
+  String forecastSubtitle(String festival, String date) {
+    return 'Agle 4 hafte · $festival $date';
+  }
+
+  @override
+  String get forecastSubtitlePlain => 'Agle 4 hafte';
+
+  @override
+  String perWeek(String unit) {
+    return '$unit / hafta';
+  }
+
+  @override
+  String get forecastFuture => 'AAGE · forecast';
+
+  @override
+  String onHandReorder(String onHand, String qty, String unit) {
+    return 'Stock mein $onHand · mangao $qty $unit';
+  }
+
+  @override
+  String orderItemCount(int count) {
+    return '$count cheezein';
+  }
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get hisaabTitle => 'Aaj ka hisaab';
+
+  @override
+  String hisaabSubtitle(String date, int count) {
+    return '$date · $count entries';
+  }
+
+  @override
+  String hisaabDayChip(String time) {
+    return 'Dukaan band · $time';
+  }
+
+  @override
+  String get hisaabSales => 'Aaj ki bikri';
+
+  @override
+  String get hisaabGiven => 'Udhaar diya';
+
+  @override
+  String get hisaabReceived => 'Udhaar aaya';
+
+  @override
+  String get hisaabOutstanding => 'Kul baaki';
+
+  @override
+  String get hisaabLow => 'Kam hai';
+
+  @override
+  String hisaabLowItems(String items) {
+    return '$items kal mangao.';
+  }
+
+  @override
+  String hisaabFestival(String festival, String weeks) {
+    return '$festival $weeks hafte door hai.';
+  }
+
+  @override
+  String get hisaabOrderButton => 'Kal ka order banao';
+
+  @override
+  String get hisaabShareButton => 'Ghar pe WhatsApp karo';
+
+  @override
+  String todayChip(String date) {
+    return 'Aaj · $date';
+  }
+
+  @override
+  String yesterdayChip(String date) {
+    return 'Kal · $date';
+  }
+
+  @override
+  String get demoNotice =>
+      'Server nahi mila. Demo mode mein shuru kar raha hoon.';
+
+  @override
+  String get languageSheetTitle => 'Mitra kis bhasha mein bole?';
+
+  @override
+  String get backLabel => 'Peeche';
+
+  @override
+  String get voiceNoteLabel => 'Voice note';
+
+  @override
+  String get undo => 'Undo';
 }

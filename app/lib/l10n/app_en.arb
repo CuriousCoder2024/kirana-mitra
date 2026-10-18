@@ -1,20 +1,16 @@
 {
   "@@locale": "en",
   "appTitle": "Kirana Mitra",
-  "onboardingTitle": "Set up your shop",
-  "onboardingSubtitle": "Takes 20 seconds. You will never fill a form again.",
-  "shopNameLabel": "Shop name",
+  "shopNameLabel": "Dukaan ka naam",
   "shopNameHint": "Gupta General Store",
-  "ownerNameLabel": "Your name",
+  "ownerNameLabel": "Aapka naam",
   "ownerNameHint": "Ramesh Gupta",
-  "languageLabel": "Reply language",
   "langHindi": "हिंदी",
   "langEnglish": "English",
   "langHinglish": "Hinglish",
-  "startButton": "Start",
+  "startButton": "Shuru karo",
   "requiredField": "Please fill this in",
-  "couldNotCreateShop": "Could not reach the server. Starting in demo mode.",
-  "navChat": "Chat",
+  "navChat": "Baat",
   "navStock": "Stock",
   "navUdhaar": "Udhaar",
   "navForecast": "Forecast",
@@ -22,57 +18,329 @@
   "demoMode": "Demo",
   "changeShop": "Change shop",
   "welcomeMessage": "Namaste {name}! Tell me what came in, what sold, or who took udhaar. Hold the mic and speak.",
-  "@welcomeMessage": {"placeholders": {"name": {"type": "String"}}},
+  "@welcomeMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "welcomeMessageHinglish": "Namaste {name}! Bolo: kya aaya, kya bika, kisko udhaar diya. Mic dabake rakho aur bolo.",
-  "@welcomeMessageHinglish": {"placeholders": {"name": {"type": "String"}}},
-  "holdToTalk": "Hold to talk",
-  "recording": "Listening… release to send",
-  "slideToCancel": "Slide away to cancel",
-  "recordingCancelled": "Cancelled",
+  "@welcomeMessageHinglish": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recordingCancelled": "Chhod do, cancel ho gaya",
   "voiceTooShort": "Hold a bit longer and speak",
   "micPermissionDenied": "Microphone permission is needed for voice notes.",
   "voiceNoteSent": "🎤 Voice note",
   "photoSent": "📷 Shelf photo",
-  "typeMessageHint": "Or type here…",
+  "typeMessageHint": "Yahan likho…",
   "send": "Send",
   "thinking": "Thinking…",
   "networkError": "Couldn't reach the server. Try again.",
   "comingSoon": "Jaldi aa raha hai! Shelf scan is coming soon.",
   "scanFailed": "Photo samajh nahi aayi, phir se try karo.",
   "imageTooLarge": "Photo is too big (over 8 MB). Try a smaller one.",
-  "scanColItem": "Item",
-  "scanColPack": "Pack",
-  "scanColCount": "Count",
-  "pickPhoto": "Scan shelf photo",
   "stockTitle": "Stock",
   "lowStockBadge": "Kam hai",
-  "reorderAt": "Reorder at {level}",
-  "@reorderAt": {"placeholders": {"level": {"type": "String"}}},
-  "emptyStock": "No stock yet. Tell me what came in.",
-  "lowStockCount": "{count, plural, =0{All good} =1{1 item low} other{{count} items low}}",
-  "@lowStockCount": {"placeholders": {"count": {"type": "int"}}},
+  "reorderAt": "reorder at {level}",
+  "@reorderAt": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "emptyStock": "Abhi stock nahi hai. Bolo kya aaya.",
   "udhaarTitle": "Udhaar",
-  "totalOutstanding": "Total outstanding",
-  "customersCount": "{count, plural, =0{No customers} =1{1 customer} other{{count} customers}}",
-  "@customersCount": {"placeholders": {"count": {"type": "int"}}},
-  "lastEntry": "Last entry {date}",
-  "@lastEntry": {"placeholders": {"date": {"type": "String"}}},
-  "emptyLedger": "No udhaar yet. Say \"Gupta ji ko 350 ka udhaar diya\".",
+  "totalOutstanding": "Kul baaki",
+  "emptyLedger": "Abhi koi udhaar nahi. Bolo \"Gupta ji ko 350 ka udhaar diya\".",
   "forecastTitle": "Forecast",
-  "legendHistory": "Past weeks",
-  "legendForecast": "Forecast",
-  "legendBand": "Likely range",
-  "onHand": "On hand: {qty} {unit}",
-  "@onHand": {"placeholders": {"qty": {"type": "String"}, "unit": {"type": "String"}}},
-  "suggestedReorder": "Suggested: {qty} {unit}",
-  "@suggestedReorder": {"placeholders": {"qty": {"type": "String"}, "unit": {"type": "String"}}},
-  "reorderButton": "Reorder",
-  "reorderPreparing": "Preparing order…",
-  "orderReady": "Order ready",
-  "shareWhatsapp": "Send on WhatsApp",
-  "copied": "Copied",
+  "legendHistory": "Pichhle hafte",
+  "legendForecast": "Anumaan",
+  "legendBand": "Range",
+  "orderReady": "Order taiyaar",
+  "shareWhatsapp": "WhatsApp pe bhejo",
+  "copied": "Copy ho gaya",
   "copy": "Copy",
   "retry": "Try again",
   "loading": "Loading…",
-  "errorLoading": "Couldn't load. Pull down to retry."
+  "errorLoading": "Couldn't load. Pull down to retry.",
+  "tagline": "Bolo, ho jayega.",
+  "languageQuestion": "Mitra kis bhasha mein bole?",
+  "langSampleHindi": "नमस्ते! आज क्या आया?",
+  "langSampleHinglish": "Namaste! Aaj kya aaya?",
+  "langSampleEnglish": "Hello! What came in today?",
+  "fieldRequired": "Yeh bharo",
+  "dockPhoto": "Shelf photo",
+  "dockType": "Likho",
+  "micLabel": "Dabake bolo",
+  "recordingLabel": "Sun raha hoon… chhodo toh bhejega",
+  "recordingCancelHint": "Cancel ke liye ungli bahar le jao",
+  "confirmHeader": "Samjha · likh diya",
+  "confirmTotalUdhaar": "Udhaar · ab total",
+  "confirmTotalStock": "Stock · ab total",
+  "confirmTotalSale": "Bikri · aaj total",
+  "askHeader": "Pakka nahi",
+  "askHeard": "aapne kaha “{text}”",
+  "@askHeard": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "askStock": "Stock mein add karoon?",
+  "askUdhaar": "Udhaar mein likhoon?",
+  "askSale": "Bikri mein likhoon?",
+  "askNo": "Nahi",
+  "askDeclined": "Theek hai, nahi likha.",
+  "scanHeader": "Shelf dekha · {count} cheezein mili",
+  "@scanHeader": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanQuestion": "Stock yahi set kar doon?",
+  "scanConfirmed": "Samjha · stock update ho gaya",
+  "stockSubtitle": "{count} cheezein · update {time}",
+  "@stockSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "lowBandTitle": "{count, plural, =1{1 cheez kam hai} other{{count} cheezein kam hain}}",
+  "@lowBandTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allGoodBand": "Sab theek hai",
+  "orderButton": "Order banao",
+  "orderButtonQty": "Order banao · {qty} {unit}",
+  "@orderButtonQty": {
+    "placeholders": {
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "udhaarSubtitle": "{count} log · bahi-khata",
+  "@udhaarSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "balanceLabel": "Baaki",
+  "todayGiven": "Aaj diya +₹{amount}",
+  "@todayGiven": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "todayReceived": "Aaj aaya −₹{amount}",
+  "@todayReceived": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "owedCaption": "baaki",
+  "settledBadge": "Chukta",
+  "lastMovementGiven": "{date} · +₹{amount}",
+  "@lastMovementGiven": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "lastMovementPaid": "{date} · −₹{amount} aaya",
+  "@lastMovementPaid": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "customerSubtitle": "Udhaar shuru {date} · {count} entries",
+  "@customerSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "lastEntryAt": "Last: {time}",
+  "@lastEntryAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindButton": "Yaad dilao",
+  "paidButton": "Paisa aaya",
+  "paidPrompt": "Kitna aaya? Bolo.",
+  "historyLabel": "History",
+  "entryGiven": "Udhaar liya",
+  "entryPaid": "Paisa aaya",
+  "entrySourceVoice": "voice",
+  "entrySourceCash": "cash",
+  "entrySourcePhoto": "photo",
+  "reminderText": "Namaste {name} ji, {shop} se. Aapka ₹{balance} baaki hai. Dhanyavaad!",
+  "@reminderText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "shop": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitle": "Agle 4 hafte · {festival} {date}",
+  "@forecastSubtitle": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastSubtitlePlain": "Agle 4 hafte",
+  "perWeek": "{unit} / hafta",
+  "@perWeek": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "forecastFuture": "AAGE · forecast",
+  "onHandReorder": "Stock mein {onHand} · mangao {qty} {unit}",
+  "@onHandReorder": {
+    "placeholders": {
+      "onHand": {
+        "type": "String"
+      },
+      "qty": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "orderItemCount": "{count} cheezein",
+  "@orderItemCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "share": "Share",
+  "hisaabTitle": "Aaj ka hisaab",
+  "hisaabSubtitle": "{date} · {count} entries",
+  "@hisaabSubtitle": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hisaabDayChip": "Dukaan band · {time}",
+  "@hisaabDayChip": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabSales": "Aaj ki bikri",
+  "hisaabGiven": "Udhaar diya",
+  "hisaabReceived": "Udhaar aaya",
+  "hisaabOutstanding": "Kul baaki",
+  "hisaabLow": "Kam hai",
+  "hisaabLowItems": "{items} kal mangao.",
+  "@hisaabLowItems": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabFestival": "{festival} {weeks} hafte door hai.",
+  "@hisaabFestival": {
+    "placeholders": {
+      "festival": {
+        "type": "String"
+      },
+      "weeks": {
+        "type": "String"
+      }
+    }
+  },
+  "hisaabOrderButton": "Kal ka order banao",
+  "hisaabShareButton": "Ghar pe WhatsApp karo",
+  "todayChip": "Aaj · {date}",
+  "@todayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "yesterdayChip": "Kal · {date}",
+  "@yesterdayChip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "demoNotice": "Server nahi mila. Demo mode mein shuru kar raha hoon.",
+  "languageSheetTitle": "Mitra kis bhasha mein bole?",
+  "backLabel": "Peeche",
+  "voiceNoteLabel": "Voice note",
+  "undo": "Undo"
 }

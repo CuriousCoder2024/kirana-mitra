@@ -104,22 +104,10 @@ abstract class AppLocalizations {
   /// **'Kirana Mitra'**
   String get appTitle;
 
-  /// No description provided for @onboardingTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Set up your shop'**
-  String get onboardingTitle;
-
-  /// No description provided for @onboardingSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Takes 20 seconds. You will never fill a form again.'**
-  String get onboardingSubtitle;
-
   /// No description provided for @shopNameLabel.
   ///
   /// In en, this message translates to:
-  /// **'Shop name'**
+  /// **'Dukaan ka naam'**
   String get shopNameLabel;
 
   /// No description provided for @shopNameHint.
@@ -131,7 +119,7 @@ abstract class AppLocalizations {
   /// No description provided for @ownerNameLabel.
   ///
   /// In en, this message translates to:
-  /// **'Your name'**
+  /// **'Aapka naam'**
   String get ownerNameLabel;
 
   /// No description provided for @ownerNameHint.
@@ -139,12 +127,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ramesh Gupta'**
   String get ownerNameHint;
-
-  /// No description provided for @languageLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Reply language'**
-  String get languageLabel;
 
   /// No description provided for @langHindi.
   ///
@@ -167,7 +149,7 @@ abstract class AppLocalizations {
   /// No description provided for @startButton.
   ///
   /// In en, this message translates to:
-  /// **'Start'**
+  /// **'Shuru karo'**
   String get startButton;
 
   /// No description provided for @requiredField.
@@ -176,16 +158,10 @@ abstract class AppLocalizations {
   /// **'Please fill this in'**
   String get requiredField;
 
-  /// No description provided for @couldNotCreateShop.
-  ///
-  /// In en, this message translates to:
-  /// **'Could not reach the server. Starting in demo mode.'**
-  String get couldNotCreateShop;
-
   /// No description provided for @navChat.
   ///
   /// In en, this message translates to:
-  /// **'Chat'**
+  /// **'Baat'**
   String get navChat;
 
   /// No description provided for @navStock.
@@ -236,28 +212,10 @@ abstract class AppLocalizations {
   /// **'Namaste {name}! Bolo: kya aaya, kya bika, kisko udhaar diya. Mic dabake rakho aur bolo.'**
   String welcomeMessageHinglish(String name);
 
-  /// No description provided for @holdToTalk.
-  ///
-  /// In en, this message translates to:
-  /// **'Hold to talk'**
-  String get holdToTalk;
-
-  /// No description provided for @recording.
-  ///
-  /// In en, this message translates to:
-  /// **'Listening… release to send'**
-  String get recording;
-
-  /// No description provided for @slideToCancel.
-  ///
-  /// In en, this message translates to:
-  /// **'Slide away to cancel'**
-  String get slideToCancel;
-
   /// No description provided for @recordingCancelled.
   ///
   /// In en, this message translates to:
-  /// **'Cancelled'**
+  /// **'Chhod do, cancel ho gaya'**
   String get recordingCancelled;
 
   /// No description provided for @voiceTooShort.
@@ -287,7 +245,7 @@ abstract class AppLocalizations {
   /// No description provided for @typeMessageHint.
   ///
   /// In en, this message translates to:
-  /// **'Or type here…'**
+  /// **'Yahan likho…'**
   String get typeMessageHint;
 
   /// No description provided for @send.
@@ -326,30 +284,6 @@ abstract class AppLocalizations {
   /// **'Photo is too big (over 8 MB). Try a smaller one.'**
   String get imageTooLarge;
 
-  /// No description provided for @scanColItem.
-  ///
-  /// In en, this message translates to:
-  /// **'Item'**
-  String get scanColItem;
-
-  /// No description provided for @scanColPack.
-  ///
-  /// In en, this message translates to:
-  /// **'Pack'**
-  String get scanColPack;
-
-  /// No description provided for @scanColCount.
-  ///
-  /// In en, this message translates to:
-  /// **'Count'**
-  String get scanColCount;
-
-  /// No description provided for @pickPhoto.
-  ///
-  /// In en, this message translates to:
-  /// **'Scan shelf photo'**
-  String get pickPhoto;
-
   /// No description provided for @stockTitle.
   ///
   /// In en, this message translates to:
@@ -365,20 +299,14 @@ abstract class AppLocalizations {
   /// No description provided for @reorderAt.
   ///
   /// In en, this message translates to:
-  /// **'Reorder at {level}'**
+  /// **'reorder at {level}'**
   String reorderAt(String level);
 
   /// No description provided for @emptyStock.
   ///
   /// In en, this message translates to:
-  /// **'No stock yet. Tell me what came in.'**
+  /// **'Abhi stock nahi hai. Bolo kya aaya.'**
   String get emptyStock;
-
-  /// No description provided for @lowStockCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{All good} =1{1 item low} other{{count} items low}}'**
-  String lowStockCount(int count);
 
   /// No description provided for @udhaarTitle.
   ///
@@ -389,25 +317,13 @@ abstract class AppLocalizations {
   /// No description provided for @totalOutstanding.
   ///
   /// In en, this message translates to:
-  /// **'Total outstanding'**
+  /// **'Kul baaki'**
   String get totalOutstanding;
-
-  /// No description provided for @customersCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{No customers} =1{1 customer} other{{count} customers}}'**
-  String customersCount(int count);
-
-  /// No description provided for @lastEntry.
-  ///
-  /// In en, this message translates to:
-  /// **'Last entry {date}'**
-  String lastEntry(String date);
 
   /// No description provided for @emptyLedger.
   ///
   /// In en, this message translates to:
-  /// **'No udhaar yet. Say \"Gupta ji ko 350 ka udhaar diya\".'**
+  /// **'Abhi koi udhaar nahi. Bolo \"Gupta ji ko 350 ka udhaar diya\".'**
   String get emptyLedger;
 
   /// No description provided for @forecastTitle.
@@ -419,61 +335,37 @@ abstract class AppLocalizations {
   /// No description provided for @legendHistory.
   ///
   /// In en, this message translates to:
-  /// **'Past weeks'**
+  /// **'Pichhle hafte'**
   String get legendHistory;
 
   /// No description provided for @legendForecast.
   ///
   /// In en, this message translates to:
-  /// **'Forecast'**
+  /// **'Anumaan'**
   String get legendForecast;
 
   /// No description provided for @legendBand.
   ///
   /// In en, this message translates to:
-  /// **'Likely range'**
+  /// **'Range'**
   String get legendBand;
-
-  /// No description provided for @onHand.
-  ///
-  /// In en, this message translates to:
-  /// **'On hand: {qty} {unit}'**
-  String onHand(String qty, String unit);
-
-  /// No description provided for @suggestedReorder.
-  ///
-  /// In en, this message translates to:
-  /// **'Suggested: {qty} {unit}'**
-  String suggestedReorder(String qty, String unit);
-
-  /// No description provided for @reorderButton.
-  ///
-  /// In en, this message translates to:
-  /// **'Reorder'**
-  String get reorderButton;
-
-  /// No description provided for @reorderPreparing.
-  ///
-  /// In en, this message translates to:
-  /// **'Preparing order…'**
-  String get reorderPreparing;
 
   /// No description provided for @orderReady.
   ///
   /// In en, this message translates to:
-  /// **'Order ready'**
+  /// **'Order taiyaar'**
   String get orderReady;
 
   /// No description provided for @shareWhatsapp.
   ///
   /// In en, this message translates to:
-  /// **'Send on WhatsApp'**
+  /// **'WhatsApp pe bhejo'**
   String get shareWhatsapp;
 
   /// No description provided for @copied.
   ///
   /// In en, this message translates to:
-  /// **'Copied'**
+  /// **'Copy ho gaya'**
   String get copied;
 
   /// No description provided for @copy.
@@ -499,6 +391,462 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t load. Pull down to retry.'**
   String get errorLoading;
+
+  /// No description provided for @tagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Bolo, ho jayega.'**
+  String get tagline;
+
+  /// No description provided for @languageQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Mitra kis bhasha mein bole?'**
+  String get languageQuestion;
+
+  /// No description provided for @langSampleHindi.
+  ///
+  /// In en, this message translates to:
+  /// **'नमस्ते! आज क्या आया?'**
+  String get langSampleHindi;
+
+  /// No description provided for @langSampleHinglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Namaste! Aaj kya aaya?'**
+  String get langSampleHinglish;
+
+  /// No description provided for @langSampleEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello! What came in today?'**
+  String get langSampleEnglish;
+
+  /// No description provided for @fieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Yeh bharo'**
+  String get fieldRequired;
+
+  /// No description provided for @dockPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Shelf photo'**
+  String get dockPhoto;
+
+  /// No description provided for @dockType.
+  ///
+  /// In en, this message translates to:
+  /// **'Likho'**
+  String get dockType;
+
+  /// No description provided for @micLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dabake bolo'**
+  String get micLabel;
+
+  /// No description provided for @recordingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sun raha hoon… chhodo toh bhejega'**
+  String get recordingLabel;
+
+  /// No description provided for @recordingCancelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel ke liye ungli bahar le jao'**
+  String get recordingCancelHint;
+
+  /// No description provided for @confirmHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Samjha · likh diya'**
+  String get confirmHeader;
+
+  /// No description provided for @confirmTotalUdhaar.
+  ///
+  /// In en, this message translates to:
+  /// **'Udhaar · ab total'**
+  String get confirmTotalUdhaar;
+
+  /// No description provided for @confirmTotalStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock · ab total'**
+  String get confirmTotalStock;
+
+  /// No description provided for @confirmTotalSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Bikri · aaj total'**
+  String get confirmTotalSale;
+
+  /// No description provided for @askHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Pakka nahi'**
+  String get askHeader;
+
+  /// No description provided for @askHeard.
+  ///
+  /// In en, this message translates to:
+  /// **'aapne kaha “{text}”'**
+  String askHeard(String text);
+
+  /// No description provided for @askStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock mein add karoon?'**
+  String get askStock;
+
+  /// No description provided for @askUdhaar.
+  ///
+  /// In en, this message translates to:
+  /// **'Udhaar mein likhoon?'**
+  String get askUdhaar;
+
+  /// No description provided for @askSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Bikri mein likhoon?'**
+  String get askSale;
+
+  /// No description provided for @askNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Nahi'**
+  String get askNo;
+
+  /// No description provided for @askDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Theek hai, nahi likha.'**
+  String get askDeclined;
+
+  /// No description provided for @scanHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Shelf dekha · {count} cheezein mili'**
+  String scanHeader(int count);
+
+  /// No description provided for @scanQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock yahi set kar doon?'**
+  String get scanQuestion;
+
+  /// No description provided for @scanConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Samjha · stock update ho gaya'**
+  String get scanConfirmed;
+
+  /// No description provided for @stockSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} cheezein · update {time}'**
+  String stockSubtitle(int count, String time);
+
+  /// No description provided for @lowBandTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 cheez kam hai} other{{count} cheezein kam hain}}'**
+  String lowBandTitle(int count);
+
+  /// No description provided for @allGoodBand.
+  ///
+  /// In en, this message translates to:
+  /// **'Sab theek hai'**
+  String get allGoodBand;
+
+  /// No description provided for @orderButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Order banao'**
+  String get orderButton;
+
+  /// No description provided for @orderButtonQty.
+  ///
+  /// In en, this message translates to:
+  /// **'Order banao · {qty} {unit}'**
+  String orderButtonQty(String qty, String unit);
+
+  /// No description provided for @udhaarSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} log · bahi-khata'**
+  String udhaarSubtitle(int count);
+
+  /// No description provided for @balanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Baaki'**
+  String get balanceLabel;
+
+  /// No description provided for @todayGiven.
+  ///
+  /// In en, this message translates to:
+  /// **'Aaj diya +₹{amount}'**
+  String todayGiven(String amount);
+
+  /// No description provided for @todayReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Aaj aaya −₹{amount}'**
+  String todayReceived(String amount);
+
+  /// No description provided for @owedCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'baaki'**
+  String get owedCaption;
+
+  /// No description provided for @settledBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Chukta'**
+  String get settledBadge;
+
+  /// No description provided for @lastMovementGiven.
+  ///
+  /// In en, this message translates to:
+  /// **'{date} · +₹{amount}'**
+  String lastMovementGiven(String date, String amount);
+
+  /// No description provided for @lastMovementPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'{date} · −₹{amount} aaya'**
+  String lastMovementPaid(String date, String amount);
+
+  /// No description provided for @customerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Udhaar shuru {date} · {count} entries'**
+  String customerSubtitle(String date, int count);
+
+  /// No description provided for @lastEntryAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Last: {time}'**
+  String lastEntryAt(String time);
+
+  /// No description provided for @remindButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Yaad dilao'**
+  String get remindButton;
+
+  /// No description provided for @paidButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Paisa aaya'**
+  String get paidButton;
+
+  /// No description provided for @paidPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Kitna aaya? Bolo.'**
+  String get paidPrompt;
+
+  /// No description provided for @historyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get historyLabel;
+
+  /// No description provided for @entryGiven.
+  ///
+  /// In en, this message translates to:
+  /// **'Udhaar liya'**
+  String get entryGiven;
+
+  /// No description provided for @entryPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paisa aaya'**
+  String get entryPaid;
+
+  /// No description provided for @entrySourceVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'voice'**
+  String get entrySourceVoice;
+
+  /// No description provided for @entrySourceCash.
+  ///
+  /// In en, this message translates to:
+  /// **'cash'**
+  String get entrySourceCash;
+
+  /// No description provided for @entrySourcePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'photo'**
+  String get entrySourcePhoto;
+
+  /// No description provided for @reminderText.
+  ///
+  /// In en, this message translates to:
+  /// **'Namaste {name} ji, {shop} se. Aapka ₹{balance} baaki hai. Dhanyavaad!'**
+  String reminderText(String name, String shop, String balance);
+
+  /// No description provided for @forecastSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Agle 4 hafte · {festival} {date}'**
+  String forecastSubtitle(String festival, String date);
+
+  /// No description provided for @forecastSubtitlePlain.
+  ///
+  /// In en, this message translates to:
+  /// **'Agle 4 hafte'**
+  String get forecastSubtitlePlain;
+
+  /// No description provided for @perWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'{unit} / hafta'**
+  String perWeek(String unit);
+
+  /// No description provided for @forecastFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'AAGE · forecast'**
+  String get forecastFuture;
+
+  /// No description provided for @onHandReorder.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock mein {onHand} · mangao {qty} {unit}'**
+  String onHandReorder(String onHand, String qty, String unit);
+
+  /// No description provided for @orderItemCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} cheezein'**
+  String orderItemCount(int count);
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @hisaabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Aaj ka hisaab'**
+  String get hisaabTitle;
+
+  /// No description provided for @hisaabSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{date} · {count} entries'**
+  String hisaabSubtitle(String date, int count);
+
+  /// No description provided for @hisaabDayChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Dukaan band · {time}'**
+  String hisaabDayChip(String time);
+
+  /// No description provided for @hisaabSales.
+  ///
+  /// In en, this message translates to:
+  /// **'Aaj ki bikri'**
+  String get hisaabSales;
+
+  /// No description provided for @hisaabGiven.
+  ///
+  /// In en, this message translates to:
+  /// **'Udhaar diya'**
+  String get hisaabGiven;
+
+  /// No description provided for @hisaabReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Udhaar aaya'**
+  String get hisaabReceived;
+
+  /// No description provided for @hisaabOutstanding.
+  ///
+  /// In en, this message translates to:
+  /// **'Kul baaki'**
+  String get hisaabOutstanding;
+
+  /// No description provided for @hisaabLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Kam hai'**
+  String get hisaabLow;
+
+  /// No description provided for @hisaabLowItems.
+  ///
+  /// In en, this message translates to:
+  /// **'{items} kal mangao.'**
+  String hisaabLowItems(String items);
+
+  /// No description provided for @hisaabFestival.
+  ///
+  /// In en, this message translates to:
+  /// **'{festival} {weeks} hafte door hai.'**
+  String hisaabFestival(String festival, String weeks);
+
+  /// No description provided for @hisaabOrderButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Kal ka order banao'**
+  String get hisaabOrderButton;
+
+  /// No description provided for @hisaabShareButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Ghar pe WhatsApp karo'**
+  String get hisaabShareButton;
+
+  /// No description provided for @todayChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Aaj · {date}'**
+  String todayChip(String date);
+
+  /// No description provided for @yesterdayChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Kal · {date}'**
+  String yesterdayChip(String date);
+
+  /// No description provided for @demoNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Server nahi mila. Demo mode mein shuru kar raha hoon.'**
+  String get demoNotice;
+
+  /// No description provided for @languageSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mitra kis bhasha mein bole?'**
+  String get languageSheetTitle;
+
+  /// No description provided for @backLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Peeche'**
+  String get backLabel;
+
+  /// No description provided for @voiceNoteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice note'**
+  String get voiceNoteLabel;
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
 }
 
 class _AppLocalizationsDelegate
