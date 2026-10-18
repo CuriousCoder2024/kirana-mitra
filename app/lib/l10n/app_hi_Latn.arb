@@ -406,5 +406,13 @@
   "takePhoto": "Camera",
   "sampleShelfTitle": "Sample shelf",
   "sampleShelfHint": "Koi ek shelf chuno; photo waise hi scan hogi jaise camera se.",
-  "askYes": "Haan, add karo"
+  "askYes": "Haan, add karo",
+  "scanUnmatched": "Dikha par catalogue mein nahi: {items}",
+  "@scanUnmatched": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  }
 }

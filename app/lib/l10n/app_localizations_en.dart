@@ -12,13 +12,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Kirana Mitra';
 
   @override
-  String get shopNameLabel => 'Dukaan ka naam';
+  String get shopNameLabel => 'Shop name';
 
   @override
   String get shopNameHint => 'Gupta General Store';
 
   @override
-  String get ownerNameLabel => 'Aapka naam';
+  String get ownerNameLabel => 'Your name';
 
   @override
   String get ownerNameHint => 'Ramesh Gupta';
@@ -33,19 +33,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get langHinglish => 'Hinglish';
 
   @override
-  String get startButton => 'Shuru karo';
+  String get startButton => 'Get started';
 
   @override
   String get requiredField => 'Please fill this in';
 
   @override
-  String get navChat => 'Baat';
+  String get navChat => 'Chat';
 
   @override
   String get navStock => 'Stock';
 
   @override
-  String get navUdhaar => 'Udhaar';
+  String get navUdhaar => 'Credit';
 
   @override
   String get navForecast => 'Forecast';
@@ -66,11 +66,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String welcomeMessageHinglish(String name) {
-    return 'Namaste $name! Bolo: kya aaya, kya bika, kisko udhaar diya. Mic dabake rakho aur bolo.';
+    return 'Namaste $name! Tell me what came in, what sold, or who took credit. Hold the mic and speak.';
   }
 
   @override
-  String get recordingCancelled => 'Chhod do, cancel ho gaya';
+  String get recordingCancelled => 'Released, cancelled';
 
   @override
   String get voiceTooShort => 'Hold a bit longer and speak';
@@ -86,7 +86,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get photoSent => '📷 Shelf photo';
 
   @override
-  String get typeMessageHint => 'Yahan likho…';
+  String get typeMessageHint => 'Type here…';
 
   @override
   String get send => 'Send';
@@ -98,10 +98,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get networkError => 'Couldn\'t reach the server. Try again.';
 
   @override
-  String get comingSoon => 'Jaldi aa raha hai! Shelf scan is coming soon.';
+  String get comingSoon => 'Coming soon: shelf scan.';
 
   @override
-  String get scanFailed => 'Photo samajh nahi aayi, phir se try karo.';
+  String get scanFailed => 'Couldn\'t read the photo, try again.';
 
   @override
   String get imageTooLarge =>
@@ -111,7 +111,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get stockTitle => 'Stock';
 
   @override
-  String get lowStockBadge => 'Kam hai';
+  String get lowStockBadge => 'Low';
 
   @override
   String reorderAt(String level) {
@@ -119,38 +119,38 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get emptyStock => 'Abhi stock nahi hai. Bolo kya aaya.';
+  String get emptyStock => 'No stock yet. Tell me what came in.';
 
   @override
-  String get udhaarTitle => 'Udhaar';
+  String get udhaarTitle => 'Credit';
 
   @override
-  String get totalOutstanding => 'Kul baaki';
+  String get totalOutstanding => 'Total due';
 
   @override
   String get emptyLedger =>
-      'Abhi koi udhaar nahi. Bolo \"Gupta ji ko 350 ka udhaar diya\".';
+      'No credit yet. Say \"Gupta ji took 350 on credit\".';
 
   @override
   String get forecastTitle => 'Forecast';
 
   @override
-  String get legendHistory => 'Pichhle hafte';
+  String get legendHistory => 'Past weeks';
 
   @override
-  String get legendForecast => 'Anumaan';
+  String get legendForecast => 'Forecast';
 
   @override
-  String get legendBand => 'Range';
+  String get legendBand => 'Likely range';
 
   @override
-  String get orderReady => 'Order taiyaar';
+  String get orderReady => 'Order ready';
 
   @override
-  String get shareWhatsapp => 'WhatsApp pe bhejo';
+  String get shareWhatsapp => 'Send on WhatsApp';
 
   @override
-  String get copied => 'Copy ho gaya';
+  String get copied => 'Copied';
 
   @override
   String get copy => 'Copy';
@@ -165,10 +165,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorLoading => 'Couldn\'t load. Pull down to retry.';
 
   @override
-  String get tagline => 'Bolo, ho jayega.';
+  String get tagline => 'Say it, it\'s done.';
 
   @override
-  String get languageQuestion => 'Mitra kis bhasha mein bole?';
+  String get languageQuestion => 'Which language should Mitra reply in?';
 
   @override
   String get langSampleHindi => 'नमस्ते! आज क्या आया?';
@@ -180,72 +180,72 @@ class AppLocalizationsEn extends AppLocalizations {
   String get langSampleEnglish => 'Hello! What came in today?';
 
   @override
-  String get fieldRequired => 'Yeh bharo';
+  String get fieldRequired => 'Fill this in';
 
   @override
   String get dockPhoto => 'Shelf photo';
 
   @override
-  String get dockType => 'Likho';
+  String get dockType => 'Type';
 
   @override
-  String get micLabel => 'Dabake bolo';
+  String get micLabel => 'Hold and speak';
 
   @override
-  String get recordingLabel => 'Sun raha hoon… chhodo toh bhejega';
+  String get recordingLabel => 'Listening… release to send';
 
   @override
-  String get recordingCancelHint => 'Cancel ke liye ungli bahar le jao';
+  String get recordingCancelHint => 'Slide out to cancel';
 
   @override
-  String get confirmHeader => 'Samjha · likh diya';
+  String get confirmHeader => 'Got it · saved';
 
   @override
-  String get confirmTotalUdhaar => 'Udhaar · ab total';
+  String get confirmTotalUdhaar => 'Credit · new total';
 
   @override
-  String get confirmTotalStock => 'Stock · ab total';
+  String get confirmTotalStock => 'Stock · new total';
 
   @override
-  String get confirmTotalSale => 'Bikri · aaj total';
+  String get confirmTotalSale => 'Sales · today\'s total';
 
   @override
-  String get askHeader => 'Pakka nahi';
+  String get askHeader => 'Not sure';
 
   @override
   String askHeard(String text) {
-    return 'aapne kaha “$text”';
+    return 'you said “$text”';
   }
 
   @override
-  String get askStock => 'Stock mein add karoon?';
+  String get askStock => 'Add to stock?';
 
   @override
-  String get askUdhaar => 'Udhaar mein likhoon?';
+  String get askUdhaar => 'Write it as credit?';
 
   @override
-  String get askSale => 'Bikri mein likhoon?';
+  String get askSale => 'Record as a sale?';
 
   @override
-  String get askNo => 'Nahi';
+  String get askNo => 'No';
 
   @override
-  String get askDeclined => 'Theek hai, nahi likha.';
+  String get askDeclined => 'Okay, not saved.';
 
   @override
   String scanHeader(int count) {
-    return 'Shelf dekha · $count cheezein mili';
+    return 'Shelf scanned · $count items found';
   }
 
   @override
-  String get scanQuestion => 'Stock yahi set kar doon?';
+  String get scanQuestion => 'Set stock to these counts?';
 
   @override
-  String get scanConfirmed => 'Samjha · stock update ho gaya';
+  String get scanConfirmed => 'Got it · stock updated';
 
   @override
   String stockSubtitle(int count, String time) {
-    return '$count cheezein · update $time';
+    return '$count items · updated $time';
   }
 
   @override
@@ -253,46 +253,46 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count cheezein kam hain',
-      one: '1 cheez kam hai',
+      other: '$count items are low',
+      one: '1 item is low',
     );
     return '$_temp0';
   }
 
   @override
-  String get allGoodBand => 'Sab theek hai';
+  String get allGoodBand => 'All good';
 
   @override
-  String get orderButton => 'Order banao';
+  String get orderButton => 'Build order';
 
   @override
   String orderButtonQty(String qty, String unit) {
-    return 'Order banao · $qty $unit';
+    return 'Build order · $qty $unit';
   }
 
   @override
   String udhaarSubtitle(int count) {
-    return '$count log · bahi-khata';
+    return '$count people · ledger';
   }
 
   @override
-  String get balanceLabel => 'Baaki';
+  String get balanceLabel => 'Due';
 
   @override
   String todayGiven(String amount) {
-    return 'Aaj diya +₹$amount';
+    return 'Given today +₹$amount';
   }
 
   @override
   String todayReceived(String amount) {
-    return 'Aaj aaya −₹$amount';
+    return 'Received today −₹$amount';
   }
 
   @override
-  String get owedCaption => 'baaki';
+  String get owedCaption => 'due';
 
   @override
-  String get settledBadge => 'Chukta';
+  String get settledBadge => 'Settled';
 
   @override
   String lastMovementGiven(String date, String amount) {
@@ -301,12 +301,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String lastMovementPaid(String date, String amount) {
-    return '$date · −₹$amount aaya';
+    return '$date · −₹$amount paid';
   }
 
   @override
   String customerSubtitle(String date, int count) {
-    return 'Udhaar shuru $date · $count entries';
+    return 'Credit since $date · $count entries';
   }
 
   @override
@@ -315,22 +315,22 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get remindButton => 'Yaad dilao';
+  String get remindButton => 'Remind';
 
   @override
-  String get paidButton => 'Paisa aaya';
+  String get paidButton => 'Payment received';
 
   @override
-  String get paidPrompt => 'Kitna aaya? Bolo.';
+  String get paidPrompt => 'How much came in? Speak.';
 
   @override
   String get historyLabel => 'History';
 
   @override
-  String get entryGiven => 'Udhaar liya';
+  String get entryGiven => 'Took credit';
 
   @override
-  String get entryPaid => 'Paisa aaya';
+  String get entryPaid => 'Paid';
 
   @override
   String get entrySourceVoice => 'voice';
@@ -343,40 +343,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String reminderText(String name, String shop, String balance) {
-    return 'Namaste $name ji, $shop se. Aapka ₹$balance baaki hai. Dhanyavaad!';
+    return 'Hello $name, this is $shop. ₹$balance is due. Thank you!';
   }
 
   @override
   String forecastSubtitle(String festival, String date) {
-    return 'Agle 4 hafte · $festival $date';
+    return 'Next 4 weeks · $festival $date';
   }
 
   @override
-  String get forecastSubtitlePlain => 'Agle 4 hafte';
+  String get forecastSubtitlePlain => 'Next 4 weeks';
 
   @override
   String perWeek(String unit) {
-    return '$unit / hafta';
+    return '$unit / week';
   }
 
   @override
-  String get forecastFuture => 'AAGE · forecast';
+  String get forecastFuture => 'AHEAD · forecast';
 
   @override
   String onHandReorder(String onHand, String qty, String unit) {
-    return 'Stock mein $onHand · mangao $qty $unit';
+    return 'On hand $onHand · order $qty $unit';
   }
 
   @override
   String orderItemCount(int count) {
-    return '$count cheezein';
+    return '$count items';
   }
 
   @override
   String get share => 'Share';
 
   @override
-  String get hisaabTitle => 'Aaj ka hisaab';
+  String get hisaabTitle => 'Today\'s summary';
 
   @override
   String hisaabSubtitle(String date, int count) {
@@ -385,59 +385,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String hisaabDayChip(String time) {
-    return 'Dukaan band · $time';
+    return 'Shop closed · $time';
   }
 
   @override
-  String get hisaabSales => 'Aaj ki bikri';
+  String get hisaabSales => 'Today\'s sales';
 
   @override
-  String get hisaabGiven => 'Udhaar diya';
+  String get hisaabGiven => 'Credit given';
 
   @override
-  String get hisaabReceived => 'Udhaar aaya';
+  String get hisaabReceived => 'Credit received';
 
   @override
-  String get hisaabOutstanding => 'Kul baaki';
+  String get hisaabOutstanding => 'Total due';
 
   @override
-  String get hisaabLow => 'Kam hai';
+  String get hisaabLow => 'Low';
 
   @override
   String hisaabLowItems(String items) {
-    return '$items kal mangao.';
+    return 'Order $items tomorrow.';
   }
 
   @override
   String hisaabFestival(String festival, String weeks) {
-    return '$festival $weeks hafte door hai.';
+    return '$festival is $weeks weeks away.';
   }
 
   @override
-  String get hisaabOrderButton => 'Kal ka order banao';
+  String get hisaabOrderButton => 'Build tomorrow\'s order';
 
   @override
-  String get hisaabShareButton => 'Ghar pe WhatsApp karo';
+  String get hisaabShareButton => 'WhatsApp it home';
 
   @override
   String todayChip(String date) {
-    return 'Aaj · $date';
+    return 'Today · $date';
   }
 
   @override
   String yesterdayChip(String date) {
-    return 'Kal · $date';
+    return 'Yesterday · $date';
   }
 
   @override
-  String get demoNotice =>
-      'Server nahi mila. Demo mode mein shuru kar raha hoon.';
+  String get demoNotice => 'Couldn\'t reach the server. Starting in demo mode.';
 
   @override
-  String get languageSheetTitle => 'Mitra kis bhasha mein bole?';
+  String get languageSheetTitle => 'Which language should Mitra reply in?';
 
   @override
-  String get backLabel => 'Peeche';
+  String get backLabel => 'Back';
 
   @override
   String get voiceNoteLabel => 'Voice note';
@@ -449,55 +448,55 @@ class AppLocalizationsEn extends AppLocalizations {
   String get feedbackButton => 'Feedback';
 
   @override
-  String get feedbackTitle => 'Kirana Mitra kaisa chal raha hai?';
+  String get feedbackTitle => 'How is Kirana Mitra working for you?';
 
   @override
-  String get feedbackUp => 'Achha';
+  String get feedbackUp => 'Good';
 
   @override
-  String get feedbackDown => 'Theek nahi';
+  String get feedbackDown => 'Not good';
 
   @override
-  String get feedbackCommentHint => 'Kuch aur batana ho toh likho…';
+  String get feedbackCommentHint => 'Anything else? Type it here…';
 
   @override
-  String get feedbackVoiceHint => 'Ya dabake bolo';
+  String get feedbackVoiceHint => 'Or hold and speak';
 
   @override
   String feedbackVoiceReady(String seconds) {
-    return 'Aawaz taiyaar · ${seconds}s';
+    return 'Voice ready · ${seconds}s';
   }
 
   @override
-  String get feedbackSend => 'Bhejo';
+  String get feedbackSend => 'Send';
 
   @override
-  String get feedbackPickRating => 'Pehle achha ya theek nahi chuno';
+  String get feedbackPickRating => 'Pick Good or Not good first';
 
   @override
-  String get feedbackThanks => 'Shukriya!';
+  String get feedbackThanks => 'Thank you!';
 
   @override
-  String get changeLanguage => 'Bhasha badlo';
+  String get changeLanguage => 'Change language';
 
   @override
-  String get languageSearchHint => 'Bhasha dhoondo…';
+  String get languageSearchHint => 'Search languages…';
 
   @override
-  String get languageNoMatch => 'Koi bhasha nahi mili';
+  String get languageNoMatch => 'No language found';
 
   @override
   String get topSellersTitle => 'Top sellers';
 
   @override
-  String get topSellersSubtitle => 'Pichhle 2 hafte · agle 2 hafte ka anumaan';
+  String get topSellersSubtitle => 'Last 2 weeks · next 2 weeks forecast';
 
   @override
   String get autoBadge => 'Auto';
 
   @override
   String coverDays(String days) {
-    return '$days din';
+    return '$days days';
   }
 
   @override
@@ -510,25 +509,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get autoRestockSubtitle =>
-      'Kam stock wale top sellers ka order raat ko apne aap jayega';
+      'Low-stock top sellers get ordered automatically overnight';
 
   @override
-  String get distributorPhoneLabel => 'Distributor ka WhatsApp number';
+  String get distributorPhoneLabel => 'Distributor\'s WhatsApp number';
 
   @override
   String get distributorPhoneHint => '+91 98765 43210';
 
   @override
-  String get save => 'Save karo';
+  String get save => 'Save';
 
   @override
-  String get settingsSaved => 'Save ho gaya';
+  String get settingsSaved => 'Saved';
 
   @override
   String get ordersTitle => 'Orders';
 
   @override
-  String get ordersEmpty => 'Abhi koi order nahi. Forecast se Order banao.';
+  String get ordersEmpty => 'No orders yet. Build one from Forecast.';
 
   @override
   String get orderAuto => 'Auto';
@@ -537,20 +536,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orderManual => 'Manual';
 
   @override
-  String get orderPlaced => 'Bheja';
+  String get orderPlaced => 'Placed';
 
   @override
-  String get orderCancelled => 'Cancel ho gaya';
+  String get orderCancelled => 'Cancelled';
 
   @override
-  String get viewOrders => 'Orders dekho';
+  String get viewOrders => 'View orders';
 
   @override
-  String get newOrdersNotice => 'Raat ka auto order aaya';
+  String get newOrdersNotice => 'Overnight auto order arrived';
 
   @override
   String get shopReRegistered =>
-      'Server restart hua, dukaan phir se register ki.';
+      'The server restarted, so the shop was registered again.';
 
   @override
   String get imageCredits => 'Image credits';
@@ -566,8 +565,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sampleShelfHint =>
-      'Koi ek shelf chuno; photo waise hi scan hogi jaise camera se.';
+      'Pick a shelf; it is scanned exactly like a camera photo.';
 
   @override
-  String get askYes => 'Haan, add karo';
+  String get askYes => 'Yes, add';
+
+  @override
+  String scanUnmatched(String items) {
+    return 'Seen but not in the catalogue: $items';
+  }
 }

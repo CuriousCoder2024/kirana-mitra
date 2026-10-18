@@ -145,8 +145,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     await ref.read(chatControllerProvider.notifier).sendImage(blob);
   }
 
-  Future<void> _chip(QuickAction a) async {
-    final effect = ref.read(chatControllerProvider.notifier).chipEffect(a);
+  Future<void> _chip(QuickAction a, {ChatMessage? from}) async {
+    final ctrl = ref.read(chatControllerProvider.notifier);
+    if (from != null && a.action == 'confirm') return ctrl.confirm(from);
+    if (from != null && a.action == 'dismiss') return ctrl.decline(from);
+    final effect = ctrl.chipEffect(a);
     if (!mounted || effect == null) return;
     switch (effect) {
       case NavigateEffect(:final route):
@@ -291,7 +294,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               onConfirm: () => ctrl.confirm(m),
               onDecline: () => ctrl.decline(m),
               onUndo: () => ctrl.undo(m.id),
-              onChip: _chip,
+              onChip: (a) => _chip(a, from: m),
             ),
           ),
         );

@@ -13,7 +13,8 @@ class RecoveringApiClient implements ApiClient {
   /// Re-registers the shop and returns the new id, or null to give up.
   final Future<String?> Function() recover;
 
-  DateTime? _lastRecovery;
+  Future<String?>? _inFlight;
+  String? _lastNewId;
 
   bool _isShopGone(ApiException e) =>
       e.status == 404 && e.code == 'not_found' && e.message.toLowerCase().contains('shop');
@@ -23,12 +24,13 @@ class RecoveringApiClient implements ApiClient {
       return await call(shopId);
     } on ApiException catch (e) {
       if (!_isShopGone(e)) rethrow;
-      // Never loop: one recovery per 30 s.
-      final now = DateTime.now();
-      if (_lastRecovery != null && now.difference(_lastRecovery!) < const Duration(seconds: 30)) rethrow;
-      _lastRecovery = now;
-      final newId = await recover();
+      // The id that the last recovery produced is itself gone: do not loop.
+      if (shopId == _lastNewId) rethrow;
+      // Concurrent callers (startup fires several requests at once) share
+      // one recovery instead of each failing on their own.
+      final newId = await (_inFlight ??= recover().whenComplete(() => _inFlight = null));
       if (newId == null || newId == shopId) rethrow;
+      _lastNewId = newId;
       return call(newId);
     }
   }

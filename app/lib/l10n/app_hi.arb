@@ -405,5 +405,13 @@
   "takePhoto": "कैमरा",
   "sampleShelfTitle": "सैंपल शेल्फ",
   "sampleShelfHint": "कोई एक शेल्फ चुनो; फोटो वैसे ही स्कैन होगी जैसे कैमरे से।",
-  "askYes": "हाँ, जोड़ो"
+  "askYes": "हाँ, जोड़ो",
+  "scanUnmatched": "दिखा पर कैटलॉग में नहीं: {items}",
+  "@scanUnmatched": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  }
 }

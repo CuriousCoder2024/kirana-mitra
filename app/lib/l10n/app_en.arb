@@ -1,18 +1,18 @@
 {
   "@@locale": "en",
   "appTitle": "Kirana Mitra",
-  "shopNameLabel": "Dukaan ka naam",
+  "shopNameLabel": "Shop name",
   "shopNameHint": "Gupta General Store",
-  "ownerNameLabel": "Aapka naam",
+  "ownerNameLabel": "Your name",
   "ownerNameHint": "Ramesh Gupta",
   "langHindi": "हिंदी",
   "langEnglish": "English",
   "langHinglish": "Hinglish",
-  "startButton": "Shuru karo",
+  "startButton": "Get started",
   "requiredField": "Please fill this in",
-  "navChat": "Baat",
+  "navChat": "Chat",
   "navStock": "Stock",
-  "navUdhaar": "Udhaar",
+  "navUdhaar": "Credit",
   "navForecast": "Forecast",
   "chatTitle": "Kirana Mitra",
   "demoMode": "Demo",
@@ -25,7 +25,7 @@
       }
     }
   },
-  "welcomeMessageHinglish": "Namaste {name}! Bolo: kya aaya, kya bika, kisko udhaar diya. Mic dabake rakho aur bolo.",
+  "welcomeMessageHinglish": "Namaste {name}! Tell me what came in, what sold, or who took credit. Hold the mic and speak.",
   "@welcomeMessageHinglish": {
     "placeholders": {
       "name": {
@@ -33,20 +33,20 @@
       }
     }
   },
-  "recordingCancelled": "Chhod do, cancel ho gaya",
+  "recordingCancelled": "Released, cancelled",
   "voiceTooShort": "Hold a bit longer and speak",
   "micPermissionDenied": "Microphone permission is needed for voice notes.",
   "voiceNoteSent": "🎤 Voice note",
   "photoSent": "📷 Shelf photo",
-  "typeMessageHint": "Yahan likho…",
+  "typeMessageHint": "Type here…",
   "send": "Send",
   "thinking": "Thinking…",
   "networkError": "Couldn't reach the server. Try again.",
-  "comingSoon": "Jaldi aa raha hai! Shelf scan is coming soon.",
-  "scanFailed": "Photo samajh nahi aayi, phir se try karo.",
+  "comingSoon": "Coming soon: shelf scan.",
+  "scanFailed": "Couldn't read the photo, try again.",
   "imageTooLarge": "Photo is too big (over 8 MB). Try a smaller one.",
   "stockTitle": "Stock",
-  "lowStockBadge": "Kam hai",
+  "lowStockBadge": "Low",
   "reorderAt": "reorder at {level}",
   "@reorderAt": {
     "placeholders": {
@@ -55,38 +55,38 @@
       }
     }
   },
-  "emptyStock": "Abhi stock nahi hai. Bolo kya aaya.",
-  "udhaarTitle": "Udhaar",
-  "totalOutstanding": "Kul baaki",
-  "emptyLedger": "Abhi koi udhaar nahi. Bolo \"Gupta ji ko 350 ka udhaar diya\".",
+  "emptyStock": "No stock yet. Tell me what came in.",
+  "udhaarTitle": "Credit",
+  "totalOutstanding": "Total due",
+  "emptyLedger": "No credit yet. Say \"Gupta ji took 350 on credit\".",
   "forecastTitle": "Forecast",
-  "legendHistory": "Pichhle hafte",
-  "legendForecast": "Anumaan",
-  "legendBand": "Range",
-  "orderReady": "Order taiyaar",
-  "shareWhatsapp": "WhatsApp pe bhejo",
-  "copied": "Copy ho gaya",
+  "legendHistory": "Past weeks",
+  "legendForecast": "Forecast",
+  "legendBand": "Likely range",
+  "orderReady": "Order ready",
+  "shareWhatsapp": "Send on WhatsApp",
+  "copied": "Copied",
   "copy": "Copy",
   "retry": "Try again",
   "loading": "Loading…",
   "errorLoading": "Couldn't load. Pull down to retry.",
-  "tagline": "Bolo, ho jayega.",
-  "languageQuestion": "Mitra kis bhasha mein bole?",
+  "tagline": "Say it, it's done.",
+  "languageQuestion": "Which language should Mitra reply in?",
   "langSampleHindi": "नमस्ते! आज क्या आया?",
   "langSampleHinglish": "Namaste! Aaj kya aaya?",
   "langSampleEnglish": "Hello! What came in today?",
-  "fieldRequired": "Yeh bharo",
+  "fieldRequired": "Fill this in",
   "dockPhoto": "Shelf photo",
-  "dockType": "Likho",
-  "micLabel": "Dabake bolo",
-  "recordingLabel": "Sun raha hoon… chhodo toh bhejega",
-  "recordingCancelHint": "Cancel ke liye ungli bahar le jao",
-  "confirmHeader": "Samjha · likh diya",
-  "confirmTotalUdhaar": "Udhaar · ab total",
-  "confirmTotalStock": "Stock · ab total",
-  "confirmTotalSale": "Bikri · aaj total",
-  "askHeader": "Pakka nahi",
-  "askHeard": "aapne kaha “{text}”",
+  "dockType": "Type",
+  "micLabel": "Hold and speak",
+  "recordingLabel": "Listening… release to send",
+  "recordingCancelHint": "Slide out to cancel",
+  "confirmHeader": "Got it · saved",
+  "confirmTotalUdhaar": "Credit · new total",
+  "confirmTotalStock": "Stock · new total",
+  "confirmTotalSale": "Sales · today's total",
+  "askHeader": "Not sure",
+  "askHeard": "you said “{text}”",
   "@askHeard": {
     "placeholders": {
       "text": {
@@ -94,12 +94,12 @@
       }
     }
   },
-  "askStock": "Stock mein add karoon?",
-  "askUdhaar": "Udhaar mein likhoon?",
-  "askSale": "Bikri mein likhoon?",
-  "askNo": "Nahi",
-  "askDeclined": "Theek hai, nahi likha.",
-  "scanHeader": "Shelf dekha · {count} cheezein mili",
+  "askStock": "Add to stock?",
+  "askUdhaar": "Write it as credit?",
+  "askSale": "Record as a sale?",
+  "askNo": "No",
+  "askDeclined": "Okay, not saved.",
+  "scanHeader": "Shelf scanned · {count} items found",
   "@scanHeader": {
     "placeholders": {
       "count": {
@@ -107,9 +107,9 @@
       }
     }
   },
-  "scanQuestion": "Stock yahi set kar doon?",
-  "scanConfirmed": "Samjha · stock update ho gaya",
-  "stockSubtitle": "{count} cheezein · update {time}",
+  "scanQuestion": "Set stock to these counts?",
+  "scanConfirmed": "Got it · stock updated",
+  "stockSubtitle": "{count} items · updated {time}",
   "@stockSubtitle": {
     "placeholders": {
       "count": {
@@ -120,7 +120,7 @@
       }
     }
   },
-  "lowBandTitle": "{count, plural, =1{1 cheez kam hai} other{{count} cheezein kam hain}}",
+  "lowBandTitle": "{count, plural, =1{1 item is low} other{{count} items are low}}",
   "@lowBandTitle": {
     "placeholders": {
       "count": {
@@ -128,9 +128,9 @@
       }
     }
   },
-  "allGoodBand": "Sab theek hai",
-  "orderButton": "Order banao",
-  "orderButtonQty": "Order banao · {qty} {unit}",
+  "allGoodBand": "All good",
+  "orderButton": "Build order",
+  "orderButtonQty": "Build order · {qty} {unit}",
   "@orderButtonQty": {
     "placeholders": {
       "qty": {
@@ -141,7 +141,7 @@
       }
     }
   },
-  "udhaarSubtitle": "{count} log · bahi-khata",
+  "udhaarSubtitle": "{count} people · ledger",
   "@udhaarSubtitle": {
     "placeholders": {
       "count": {
@@ -149,8 +149,8 @@
       }
     }
   },
-  "balanceLabel": "Baaki",
-  "todayGiven": "Aaj diya +₹{amount}",
+  "balanceLabel": "Due",
+  "todayGiven": "Given today +₹{amount}",
   "@todayGiven": {
     "placeholders": {
       "amount": {
@@ -158,7 +158,7 @@
       }
     }
   },
-  "todayReceived": "Aaj aaya −₹{amount}",
+  "todayReceived": "Received today −₹{amount}",
   "@todayReceived": {
     "placeholders": {
       "amount": {
@@ -166,8 +166,8 @@
       }
     }
   },
-  "owedCaption": "baaki",
-  "settledBadge": "Chukta",
+  "owedCaption": "due",
+  "settledBadge": "Settled",
   "lastMovementGiven": "{date} · +₹{amount}",
   "@lastMovementGiven": {
     "placeholders": {
@@ -179,7 +179,7 @@
       }
     }
   },
-  "lastMovementPaid": "{date} · −₹{amount} aaya",
+  "lastMovementPaid": "{date} · −₹{amount} paid",
   "@lastMovementPaid": {
     "placeholders": {
       "date": {
@@ -190,7 +190,7 @@
       }
     }
   },
-  "customerSubtitle": "Udhaar shuru {date} · {count} entries",
+  "customerSubtitle": "Credit since {date} · {count} entries",
   "@customerSubtitle": {
     "placeholders": {
       "date": {
@@ -209,16 +209,16 @@
       }
     }
   },
-  "remindButton": "Yaad dilao",
-  "paidButton": "Paisa aaya",
-  "paidPrompt": "Kitna aaya? Bolo.",
+  "remindButton": "Remind",
+  "paidButton": "Payment received",
+  "paidPrompt": "How much came in? Speak.",
   "historyLabel": "History",
-  "entryGiven": "Udhaar liya",
-  "entryPaid": "Paisa aaya",
+  "entryGiven": "Took credit",
+  "entryPaid": "Paid",
   "entrySourceVoice": "voice",
   "entrySourceCash": "cash",
   "entrySourcePhoto": "photo",
-  "reminderText": "Namaste {name} ji, {shop} se. Aapka ₹{balance} baaki hai. Dhanyavaad!",
+  "reminderText": "Hello {name}, this is {shop}. ₹{balance} is due. Thank you!",
   "@reminderText": {
     "placeholders": {
       "name": {
@@ -232,7 +232,7 @@
       }
     }
   },
-  "forecastSubtitle": "Agle 4 hafte · {festival} {date}",
+  "forecastSubtitle": "Next 4 weeks · {festival} {date}",
   "@forecastSubtitle": {
     "placeholders": {
       "festival": {
@@ -243,8 +243,8 @@
       }
     }
   },
-  "forecastSubtitlePlain": "Agle 4 hafte",
-  "perWeek": "{unit} / hafta",
+  "forecastSubtitlePlain": "Next 4 weeks",
+  "perWeek": "{unit} / week",
   "@perWeek": {
     "placeholders": {
       "unit": {
@@ -252,8 +252,8 @@
       }
     }
   },
-  "forecastFuture": "AAGE · forecast",
-  "onHandReorder": "Stock mein {onHand} · mangao {qty} {unit}",
+  "forecastFuture": "AHEAD · forecast",
+  "onHandReorder": "On hand {onHand} · order {qty} {unit}",
   "@onHandReorder": {
     "placeholders": {
       "onHand": {
@@ -267,7 +267,7 @@
       }
     }
   },
-  "orderItemCount": "{count} cheezein",
+  "orderItemCount": "{count} items",
   "@orderItemCount": {
     "placeholders": {
       "count": {
@@ -276,7 +276,7 @@
     }
   },
   "share": "Share",
-  "hisaabTitle": "Aaj ka hisaab",
+  "hisaabTitle": "Today's summary",
   "hisaabSubtitle": "{date} · {count} entries",
   "@hisaabSubtitle": {
     "placeholders": {
@@ -288,7 +288,7 @@
       }
     }
   },
-  "hisaabDayChip": "Dukaan band · {time}",
+  "hisaabDayChip": "Shop closed · {time}",
   "@hisaabDayChip": {
     "placeholders": {
       "time": {
@@ -296,12 +296,12 @@
       }
     }
   },
-  "hisaabSales": "Aaj ki bikri",
-  "hisaabGiven": "Udhaar diya",
-  "hisaabReceived": "Udhaar aaya",
-  "hisaabOutstanding": "Kul baaki",
-  "hisaabLow": "Kam hai",
-  "hisaabLowItems": "{items} kal mangao.",
+  "hisaabSales": "Today's sales",
+  "hisaabGiven": "Credit given",
+  "hisaabReceived": "Credit received",
+  "hisaabOutstanding": "Total due",
+  "hisaabLow": "Low",
+  "hisaabLowItems": "Order {items} tomorrow.",
   "@hisaabLowItems": {
     "placeholders": {
       "items": {
@@ -309,7 +309,7 @@
       }
     }
   },
-  "hisaabFestival": "{festival} {weeks} hafte door hai.",
+  "hisaabFestival": "{festival} is {weeks} weeks away.",
   "@hisaabFestival": {
     "placeholders": {
       "festival": {
@@ -320,9 +320,9 @@
       }
     }
   },
-  "hisaabOrderButton": "Kal ka order banao",
-  "hisaabShareButton": "Ghar pe WhatsApp karo",
-  "todayChip": "Aaj · {date}",
+  "hisaabOrderButton": "Build tomorrow's order",
+  "hisaabShareButton": "WhatsApp it home",
+  "todayChip": "Today · {date}",
   "@todayChip": {
     "placeholders": {
       "date": {
@@ -330,7 +330,7 @@
       }
     }
   },
-  "yesterdayChip": "Kal · {date}",
+  "yesterdayChip": "Yesterday · {date}",
   "@yesterdayChip": {
     "placeholders": {
       "date": {
@@ -338,18 +338,18 @@
       }
     }
   },
-  "demoNotice": "Server nahi mila. Demo mode mein shuru kar raha hoon.",
-  "languageSheetTitle": "Mitra kis bhasha mein bole?",
-  "backLabel": "Peeche",
+  "demoNotice": "Couldn't reach the server. Starting in demo mode.",
+  "languageSheetTitle": "Which language should Mitra reply in?",
+  "backLabel": "Back",
   "voiceNoteLabel": "Voice note",
   "undo": "Undo",
   "feedbackButton": "Feedback",
-  "feedbackTitle": "Kirana Mitra kaisa chal raha hai?",
-  "feedbackUp": "Achha",
-  "feedbackDown": "Theek nahi",
-  "feedbackCommentHint": "Kuch aur batana ho toh likho…",
-  "feedbackVoiceHint": "Ya dabake bolo",
-  "feedbackVoiceReady": "Aawaz taiyaar · {seconds}s",
+  "feedbackTitle": "How is Kirana Mitra working for you?",
+  "feedbackUp": "Good",
+  "feedbackDown": "Not good",
+  "feedbackCommentHint": "Anything else? Type it here…",
+  "feedbackVoiceHint": "Or hold and speak",
+  "feedbackVoiceReady": "Voice ready · {seconds}s",
   "@feedbackVoiceReady": {
     "placeholders": {
       "seconds": {
@@ -357,16 +357,16 @@
       }
     }
   },
-  "feedbackSend": "Bhejo",
-  "feedbackPickRating": "Pehle achha ya theek nahi chuno",
-  "feedbackThanks": "Shukriya!",
-  "changeLanguage": "Bhasha badlo",
-  "languageSearchHint": "Bhasha dhoondo…",
-  "languageNoMatch": "Koi bhasha nahi mili",
+  "feedbackSend": "Send",
+  "feedbackPickRating": "Pick Good or Not good first",
+  "feedbackThanks": "Thank you!",
+  "changeLanguage": "Change language",
+  "languageSearchHint": "Search languages…",
+  "languageNoMatch": "No language found",
   "topSellersTitle": "Top sellers",
-  "topSellersSubtitle": "Pichhle 2 hafte · agle 2 hafte ka anumaan",
+  "topSellersSubtitle": "Last 2 weeks · next 2 weeks forecast",
   "autoBadge": "Auto",
-  "coverDays": "{days} din",
+  "coverDays": "{days} days",
   "@coverDays": {
     "placeholders": {
       "days": {
@@ -386,24 +386,32 @@
     }
   },
   "autoRestockTitle": "Auto-restock top sellers",
-  "autoRestockSubtitle": "Kam stock wale top sellers ka order raat ko apne aap jayega",
-  "distributorPhoneLabel": "Distributor ka WhatsApp number",
+  "autoRestockSubtitle": "Low-stock top sellers get ordered automatically overnight",
+  "distributorPhoneLabel": "Distributor's WhatsApp number",
   "distributorPhoneHint": "+91 98765 43210",
-  "save": "Save karo",
-  "settingsSaved": "Save ho gaya",
+  "save": "Save",
+  "settingsSaved": "Saved",
   "ordersTitle": "Orders",
-  "ordersEmpty": "Abhi koi order nahi. Forecast se Order banao.",
+  "ordersEmpty": "No orders yet. Build one from Forecast.",
   "orderAuto": "Auto",
   "orderManual": "Manual",
-  "orderPlaced": "Bheja",
-  "orderCancelled": "Cancel ho gaya",
-  "viewOrders": "Orders dekho",
-  "newOrdersNotice": "Raat ka auto order aaya",
-  "shopReRegistered": "Server restart hua, dukaan phir se register ki.",
+  "orderPlaced": "Placed",
+  "orderCancelled": "Cancelled",
+  "viewOrders": "View orders",
+  "newOrdersNotice": "Overnight auto order arrived",
+  "shopReRegistered": "The server restarted, so the shop was registered again.",
   "imageCredits": "Image credits",
   "sampleShelf": "Sample shelf",
   "takePhoto": "Camera",
   "sampleShelfTitle": "Sample shelf",
-  "sampleShelfHint": "Koi ek shelf chuno; photo waise hi scan hogi jaise camera se.",
-  "askYes": "Haan, add karo"
+  "sampleShelfHint": "Pick a shelf; it is scanned exactly like a camera photo.",
+  "askYes": "Yes, add",
+  "scanUnmatched": "Seen but not in the catalogue: {items}",
+  "@scanUnmatched": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  }
 }

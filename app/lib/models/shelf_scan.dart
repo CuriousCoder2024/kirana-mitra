@@ -49,6 +49,21 @@ class ScanLowStock {
       {'name': name, 'count': count, 'reorder_level': reorderLevel};
 }
 
+/// A product seen on the shelf that is not in the catalogue.
+class UnmatchedItem {
+  const UnmatchedItem({required this.name, required this.count});
+
+  final String name;
+  final num count;
+
+  factory UnmatchedItem.fromJson(Map<String, dynamic> json) => UnmatchedItem(
+        name: json['name'] as String? ?? '',
+        count: json['count'] as num? ?? 0,
+      );
+
+  Map<String, dynamic> toJson() => {'name': name, 'count': count};
+}
+
 /// Response of POST /shelf-scan.
 class ShelfScanResponse {
   const ShelfScanResponse({
@@ -57,6 +72,7 @@ class ShelfScanResponse {
     required this.lowStock,
     required this.replyText,
     this.quickActions = const [],
+    this.unmatched = const [],
   });
 
   final String messageId;
@@ -64,6 +80,7 @@ class ShelfScanResponse {
   final List<ScanLowStock> lowStock;
   final String replyText;
   final List<QuickAction> quickActions;
+  final List<UnmatchedItem> unmatched;
 
   factory ShelfScanResponse.fromJson(Map<String, dynamic> json) =>
       ShelfScanResponse(
@@ -79,6 +96,9 @@ class ShelfScanResponse {
         quickActions: (json['quick_actions'] as List? ?? const [])
             .map((e) => QuickAction.fromJson((e as Map).cast<String, dynamic>()))
             .toList(),
+        unmatched: (json['unmatched'] as List? ?? const [])
+            .map((e) => UnmatchedItem.fromJson((e as Map).cast<String, dynamic>()))
+            .toList(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -87,5 +107,6 @@ class ShelfScanResponse {
         'low_stock': lowStock.map((e) => e.toJson()).toList(),
         'reply_text': replyText,
         'quick_actions': quickActions.map((e) => e.toJson()).toList(),
+        'unmatched': unmatched.map((e) => e.toJson()).toList(),
       };
 }

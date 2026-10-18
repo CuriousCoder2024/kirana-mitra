@@ -568,6 +568,11 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get askYes => 'हाँ, जोड़ो';
+
+  @override
+  String scanUnmatched(String items) {
+    return 'दिखा पर कैटलॉग में नहीं: $items';
+  }
 }
 
 /// The translations for Hindi, using the Latin script (`hi_Latn`).
@@ -1136,4 +1141,9 @@ class AppLocalizationsHiLatn extends AppLocalizationsHi {
 
   @override
   String get askYes => 'Haan, add karo';
+
+  @override
+  String scanUnmatched(String items) {
+    return 'Dikha par catalogue mein nahi: $items';
+  }
 }

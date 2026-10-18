@@ -49,33 +49,31 @@ class ReplyCard extends StatelessWidget {
     final noLabel = denyChip == null || denyChip.label.isEmpty ? l.askNo : denyChip.label;
 
     if (message.kind == ChatKind.scan && message.scan != null) {
-      // Nothing recognised (or nothing to confirm): just the reply text.
-      if (message.scan!.items.isEmpty || (confirmLabel == null && message.status == CardStatus.pending)) {
-        return _PlainBubble(text: message.text);
-      }
-      return _Shell(
-        stripe: KmColors.saffron,
-        header: _Header(
-          icon: Icons.photo_camera_rounded,
-          color: KmColors.saffron,
-          text: l.scanHeader(message.scan!.items.length),
-        ),
-        body: _CountList(
-          scan: message.scan!,
-          l: l,
-          question: message.status == CardStatus.pending
-              ? l.scanQuestion
-              : null,
-        ),
-        footer: switch (message.status) {
-          CardStatus.pending => _AskFooter(
+      final scan = message.scan!;
+      final hasConfirm = confirmChip != null;
+      // The local Haan/Nahi footer exists only when the backend offers a
+      // confirm action; otherwise its own chips render with their labels.
+      final Widget? footer = switch (message.status) {
+        CardStatus.pending when hasConfirm => _AskFooter(
             confirmLabel: yesLabel,
             noLabel: noLabel,
             busy: busy,
             onConfirm: onConfirm,
             onDecline: onDecline,
           ),
-          CardStatus.applied => _ConfirmedFooter(
+        CardStatus.pending when message.quickActions.isNotEmpty => Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final a in message.quickActions)
+                KmChip(
+                  label: a.label,
+                  icon: KmChip.iconFor(a.action),
+                  onTap: () => _denyActions.contains(a.action) ? onDecline() : onChip(a),
+                ),
+            ],
+          ),
+        CardStatus.applied => _ConfirmedFooter(
             line: l.scanConfirmed,
             undoLabel: l.undo,
             busy: busy,
@@ -83,8 +81,25 @@ class ReplyCard extends StatelessWidget {
             chips: navChips,
             onChip: onChip,
           ),
-          _ => null,
-        },
+        _ => null,
+      };
+      if (scan.items.isEmpty && scan.unmatched.isEmpty && footer == null) {
+        return _PlainBubble(text: message.text);
+      }
+      return _Shell(
+        stripe: KmColors.saffron,
+        header: _Header(
+          icon: Icons.photo_camera_rounded,
+          color: KmColors.saffron,
+          text: l.scanHeader(scan.items.length),
+        ),
+        body: _CountList(
+          scan: scan,
+          l: l,
+          replyText: message.text,
+          question: message.status == CardStatus.pending && hasConfirm ? l.scanQuestion : null,
+        ),
+        footer: footer,
       );
     }
 
@@ -498,11 +513,12 @@ class _ConfirmedFooter extends StatelessWidget {
 
 /// Handoff §4.8: one row per scanned item, no table header.
 class _CountList extends StatelessWidget {
-  const _CountList({required this.scan, required this.l, this.question});
+  const _CountList({required this.scan, required this.l, this.question, this.replyText});
 
   final ShelfScanResponse scan;
   final AppLocalizations l;
   final String? question;
+  final String? replyText;
 
   @override
   Widget build(BuildContext context) {
@@ -559,6 +575,17 @@ class _CountList extends StatelessWidget {
               );
             },
           ),
+        ],
+        if (scan.unmatched.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Text(
+            l.scanUnmatched(scan.unmatched.map((u) => '${u.name} ${Fmt.qty(u.count)}').join(', ')),
+            style: KmText.caption,
+          ),
+        ],
+        if (replyText != null && replyText!.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Text(replyText!, style: KmText.body),
         ],
         if (question != null) ...[
           const SizedBox(height: 8),

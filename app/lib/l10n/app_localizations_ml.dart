@@ -553,7 +553,7 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get shopReRegistered =>
-      'Server restart hua, dukaan phir se register ki.';
+      'The server restarted, so the shop was registered again.';
 
   @override
   String get imageCredits => 'Image credits';
@@ -569,8 +569,13 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get sampleShelfHint =>
-      'Koi ek shelf chuno; photo waise hi scan hogi jaise camera se.';
+      'Pick a shelf; it is scanned exactly like a camera photo.';
 
   @override
-  String get askYes => 'Haan, add karo';
+  String get askYes => 'Yes, add';
+
+  @override
+  String scanUnmatched(String items) {
+    return 'Seen but not in the catalogue: $items';
+  }
 }

@@ -74,6 +74,8 @@ class KmChip extends StatelessWidget {
         'open_udhaar' => Icons.account_balance_wallet_outlined,
         'open_forecast' => Icons.trending_up_rounded,
         'open_orders' => Icons.receipt_long_outlined,
+        'confirm' => Icons.check_rounded,
+        'dismiss' || 'cancel' => Icons.close_rounded,
         'send_order' => Icons.send_rounded,
         _ => Icons.arrow_forward_rounded,
       };
