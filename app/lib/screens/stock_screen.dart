@@ -12,6 +12,7 @@ import '../widgets/async_body.dart';
 import '../widgets/km_app_bar.dart';
 import '../widgets/km_badge.dart';
 import '../widgets/km_button.dart';
+import '../widgets/item_photo.dart';
 import '../widgets/km_row.dart';
 import '../widgets/order_sheet.dart';
 import '../widgets/tab_scaffold.dart';
@@ -84,7 +85,7 @@ class _StockScreenState extends ConsumerState<StockScreen> {
                 children: [
                   for (var i = 0; i < items.length; i++)
                     KmRow(
-                      leading: ItemTile(name: items[i].name, index: i),
+                      leading: ItemPhoto(itemId: items[i].itemId, name: items[i].name, index: i),
                       title: items[i].packSize == null || items[i].packSize!.isEmpty
                           ? items[i].name
                           : '${items[i].name} ${items[i].packSize}',

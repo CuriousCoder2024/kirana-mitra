@@ -399,5 +399,10 @@
   "orderCancelled": "Cancel ho gaya",
   "viewOrders": "Orders dekho",
   "newOrdersNotice": "Raat ka auto order aaya",
-  "shopReRegistered": "Server restart hua, dukaan phir se register ki."
+  "shopReRegistered": "Server restart hua, dukaan phir se register ki.",
+  "imageCredits": "Image credits",
+  "sampleShelf": "Sample shelf",
+  "takePhoto": "Camera",
+  "sampleShelfTitle": "Sample shelf",
+  "sampleShelfHint": "Koi ek shelf chuno; photo waise hi scan hogi jaise camera se."
 }

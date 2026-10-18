@@ -1088,6 +1088,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Server restart hua, dukaan phir se register ki.'**
   String get shopReRegistered;
+
+  /// No description provided for @imageCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'Image credits'**
+  String get imageCredits;
+
+  /// No description provided for @sampleShelf.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample shelf'**
+  String get sampleShelf;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera'**
+  String get takePhoto;
+
+  /// No description provided for @sampleShelfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample shelf'**
+  String get sampleShelfTitle;
+
+  /// No description provided for @sampleShelfHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Koi ek shelf chuno; photo waise hi scan hogi jaise camera se.'**
+  String get sampleShelfHint;
 }
 
 class _AppLocalizationsDelegate

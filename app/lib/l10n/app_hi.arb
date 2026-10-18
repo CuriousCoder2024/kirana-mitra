@@ -399,5 +399,10 @@
   "orderCancelled": "कैंसल हो गया",
   "viewOrders": "ऑर्डर देखो",
   "newOrdersNotice": "रात का ऑटो ऑर्डर आया",
-  "shopReRegistered": "सर्वर रीस्टार्ट हुआ, दुकान फिर से रजिस्टर की।"
+  "shopReRegistered": "सर्वर रीस्टार्ट हुआ, दुकान फिर से रजिस्टर की।",
+  "imageCredits": "फोटो क्रेडिट",
+  "sampleShelf": "सैंपल शेल्फ",
+  "takePhoto": "कैमरा",
+  "sampleShelfTitle": "सैंपल शेल्फ",
+  "sampleShelfHint": "कोई एक शेल्फ चुनो; फोटो वैसे ही स्कैन होगी जैसे कैमरे से।"
 }

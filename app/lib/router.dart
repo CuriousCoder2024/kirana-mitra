@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'l10n/app_localizations.dart';
 import 'screens/chat_screen.dart';
+import 'screens/credits_screen.dart';
 import 'screens/customer_screen.dart';
 import 'screens/forecast_screen.dart';
 import 'screens/onboarding_screen.dart';
@@ -29,7 +30,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => _Shell(shell: shell),
         branches: [
-          StatefulShellBranch(routes: [GoRoute(path: '/chat', builder: (_, _) => const ChatScreen())]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: '/chat',
+              builder: (_, _) => const ChatScreen(),
+              routes: [GoRoute(path: 'credits', builder: (_, _) => const CreditsScreen())],
+            ),
+          ]),
           StatefulShellBranch(routes: [GoRoute(path: '/stock', builder: (_, _) => const StockScreen())]),
           StatefulShellBranch(routes: [
             GoRoute(

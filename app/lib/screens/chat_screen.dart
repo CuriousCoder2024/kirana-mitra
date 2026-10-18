@@ -27,6 +27,7 @@ import '../widgets/message_bubble.dart';
 import '../widgets/mic.dart';
 import '../widgets/order_sheet.dart';
 import '../widgets/reply_card.dart';
+import '../widgets/sample_shelf_sheet.dart';
 import '../widgets/typing_indicator.dart';
 import 'onboarding_screen.dart';
 
@@ -111,28 +112,37 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   Future<void> _pickPhoto() async {
     final l = AppLocalizations.of(context);
-    final XFile? file;
-    try {
-      file = await _picker.pickImage(
-        source: _hasCamera ? ImageSource.camera : ImageSource.gallery,
-        maxWidth: 1600,
-        imageQuality: 70,
-      );
-    } catch (_) {
-      _snack(l.scanFailed);
-      return;
+    // Web and desktop have no camera: offer the bundled sample shelves.
+    // Android keeps the camera first and adds the samples as a second choice.
+    String source = 'sample';
+    if (_hasCamera) {
+      final choice = await showPhotoSourceSheet(context);
+      if (choice == null || !mounted) return;
+      source = choice;
     }
-    if (file == null) return;
-    final bytes = await file.readAsBytes();
-    if (bytes.length > _maxImageBytes) {
-      _snack(l.imageTooLarge);
-      return;
+    UploadBlob? blob;
+    if (source == 'sample') {
+      blob = await showSampleShelfSheet(context);
+    } else {
+      final XFile? file;
+      try {
+        file = await _picker.pickImage(source: ImageSource.camera, maxWidth: 1600, imageQuality: 70);
+      } catch (_) {
+        _snack(l.scanFailed);
+        return;
+      }
+      if (file == null) return;
+      final bytes = await file.readAsBytes();
+      if (bytes.length > _maxImageBytes) {
+        _snack(l.imageTooLarge);
+        return;
+      }
+      final lowerName = file.name.toLowerCase();
+      final mime = file.mimeType ?? (lowerName.endsWith('.png') ? 'image/png' : 'image/jpeg');
+      blob = UploadBlob(bytes: bytes, filename: file.name.isEmpty ? 'shelf.jpg' : file.name, mimeType: mime);
     }
-    final lowerName = file.name.toLowerCase();
-    final mime = file.mimeType ?? (lowerName.endsWith('.png') ? 'image/png' : 'image/jpeg');
-    await ref.read(chatControllerProvider.notifier).sendImage(
-          UploadBlob(bytes: bytes, filename: file.name.isEmpty ? 'shelf.jpg' : file.name, mimeType: mime),
-        );
+    if (blob == null || !mounted) return;
+    await ref.read(chatControllerProvider.notifier).sendImage(blob);
   }
 
   Future<void> _chip(QuickAction a) async {
@@ -212,10 +222,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             constraints: const BoxConstraints(minWidth: 40),
             onSelected: (v) {
               if (v == 'hisaab') ref.read(chatControllerProvider.notifier).showHisaab();
+              if (v == 'credits') context.go('/chat/credits');
               if (v == 'change') _changeShop();
             },
             itemBuilder: (_) => [
               PopupMenuItem(value: 'hisaab', child: Text(l.hisaabTitle)),
+              PopupMenuItem(value: 'credits', child: Text(l.imageCredits)),
               PopupMenuItem(value: 'change', child: Text(l.changeShop)),
             ],
           ),

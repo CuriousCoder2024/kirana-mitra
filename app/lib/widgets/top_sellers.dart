@@ -4,6 +4,7 @@ import '../l10n/app_localizations.dart';
 import '../models/models.dart';
 import '../theme/theme.dart';
 import '../util/format.dart';
+import 'item_photo.dart';
 import 'km_badge.dart';
 import 'km_row.dart';
 
@@ -22,16 +23,12 @@ class TopSellersList extends StatelessWidget {
         for (var i = 0; i < items.length; i++)
           KmRow(
             minHeight: 64,
-            leading: Container(
-              width: 44,
-              height: 44,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: i < 3 ? KmColors.saffronTint : KmColors.cream,
-                borderRadius: BorderRadius.circular(KmRadius.tile),
-              ),
-              // Backends that omit `rank` still return the list sorted.
-              child: Text('#${items[i].rank > 0 ? items[i].rank : i + 1}', style: KmText.tileLetter.copyWith(fontSize: 18)),
+            // Backends that omit `rank` still return the list sorted.
+            leading: ItemPhoto(
+              itemId: items[i].itemId,
+              name: items[i].name,
+              index: i,
+              badge: '#${items[i].rank > 0 ? items[i].rank : i + 1}',
             ),
             title: items[i].name,
             caption: [

@@ -551,4 +551,20 @@ class AppLocalizationsDoi extends AppLocalizations {
   @override
   String get shopReRegistered =>
       'Server restart hua, dukaan phir se register ki.';
+
+  @override
+  String get imageCredits => 'Image credits';
+
+  @override
+  String get sampleShelf => 'Sample shelf';
+
+  @override
+  String get takePhoto => 'Camera';
+
+  @override
+  String get sampleShelfTitle => 'Sample shelf';
+
+  @override
+  String get sampleShelfHint =>
+      'Koi ek shelf chuno; photo waise hi scan hogi jaise camera se.';
 }

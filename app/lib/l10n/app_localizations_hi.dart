@@ -549,6 +549,22 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get shopReRegistered =>
       'सर्वर रीस्टार्ट हुआ, दुकान फिर से रजिस्टर की।';
+
+  @override
+  String get imageCredits => 'फोटो क्रेडिट';
+
+  @override
+  String get sampleShelf => 'सैंपल शेल्फ';
+
+  @override
+  String get takePhoto => 'कैमरा';
+
+  @override
+  String get sampleShelfTitle => 'सैंपल शेल्फ';
+
+  @override
+  String get sampleShelfHint =>
+      'कोई एक शेल्फ चुनो; फोटो वैसे ही स्कैन होगी जैसे कैमरे से।';
 }
 
 /// The translations for Hindi, using the Latin script (`hi_Latn`).
@@ -1098,4 +1114,20 @@ class AppLocalizationsHiLatn extends AppLocalizationsHi {
   @override
   String get shopReRegistered =>
       'Server restart hua, dukaan phir se register ki.';
+
+  @override
+  String get imageCredits => 'Image credits';
+
+  @override
+  String get sampleShelf => 'Sample shelf';
+
+  @override
+  String get takePhoto => 'Camera';
+
+  @override
+  String get sampleShelfTitle => 'Sample shelf';
+
+  @override
+  String get sampleShelfHint =>
+      'Koi ek shelf chuno; photo waise hi scan hogi jaise camera se.';
 }

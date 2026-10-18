@@ -5,6 +5,7 @@ import '../models/models.dart';
 import '../state/chat_controller.dart';
 import '../theme/theme.dart';
 import '../util/format.dart';
+import 'item_photo.dart';
 import 'km_badge.dart';
 import 'km_button.dart';
 import 'km_chip.dart';
@@ -41,6 +42,10 @@ class ReplyCard extends StatelessWidget {
         .firstOrNull;
 
     if (message.kind == ChatKind.scan && message.scan != null) {
+      // Nothing recognised (or nothing to confirm): just the reply text.
+      if (message.scan!.items.isEmpty || (confirmLabel == null && message.status == CardStatus.pending)) {
+        return _PlainBubble(text: message.text);
+      }
       return _Shell(
         stripe: KmColors.saffron,
         header: _Header(
@@ -508,6 +513,8 @@ class _CountList extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Row(
                   children: [
+                    ItemPhoto(itemId: '', name: it.name, index: i, size: 36),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
