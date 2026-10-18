@@ -68,15 +68,32 @@ Serve `build/web/` from any static host (Firebase Hosting, Cloud Storage bucket,
 |---|---|
 | `lib/api/` | `ApiClient` interface, `DioApiClient` (real), `MockApiClient` (fixtures), Riverpod provider that picks one |
 | `lib/models/` | Plain Dart classes with `fromJson`/`toJson` matching the contract |
-| `lib/state/` | Shop prefs (shared_preferences), chat controller, data providers, voice recorder |
-| `lib/screens/` | Onboarding, Chat, Stock, Udhaar, Forecast |
-| `lib/widgets/` | Mic button, message bubble + chips, typing indicator, async list body |
-| `lib/l10n/` | `app_en.arb`, `app_hi.arb`; generated `app_localizations*.dart` |
-| `lib/theme.dart` | Warm palette, 18 sp body, 48 dp+ tap targets |
+| `lib/state/` | Shop prefs, chat controller, data providers, voice recorder, mic state, local history cache |
+| `lib/screens/` | Onboarding, Chat, Stock, Udhaar, Customer history, Forecast |
+| `lib/widgets/` | Design-system components from `docs/design/handoff.md`: `KmButton`, `KmChip`, `KmBadge`, `KmRow`, `KhataCard`, `ReplyCard` (Samjha / Pakka nahi / scan), `DemandChart`, mic dock + recording sheet + FAB, `LangChip`, app bar, nav bar, order sheet, hisaab card |
+| `lib/theme/` | `tokens.dart` (colours, spacing, radii, sizes), `typography.dart` (type scale), `theme.dart` (Material theme) |
+| `lib/util/format.dart` | Indian rupee grouping, dates, times |
+| `lib/l10n/` | `app_en.arb` (Hinglish-leaning), `app_hi.arb` (Devanagari); generated `app_localizations*.dart` |
 | `lib/router.dart` | go_router with a 4-tab stateful shell |
+| `fonts/` | Baloo 2, Noto Sans, Noto Sans Devanagari (variable TTFs, OFL) bundled so the app renders offline |
 
 Language: Hindi switches the UI to Devanagari strings; English and Hinglish use
 the English UI, and the chosen code (`hi`, `en`, `hi-Latn`) is sent to
-`POST /shops` so replies come back in that mix.
+`POST /shops` so replies come back in that mix. The language chip in every app
+bar changes it later; the choice is stored locally.
+
+## Design v2
+
+The UI follows `docs/design/handoff.md`. Every colour, size and radius used by a
+screen comes from `lib/theme/tokens.dart`; every user-visible string comes from
+the ARB files. Known gaps against the handoff:
+
+- Evening hisaab is reachable from the chat overflow menu; the 21:30 local
+  notification is not wired (needs a notifications package and permissions).
+- Customer history is built from a local cache of the last 50 applied replies
+  (`lib/state/history_store.dart`) because the contract has no per-customer
+  endpoint yet.
+- The logo mark is painted in Dart (`lib/widgets/logo_mark.dart`) rather than
+  loaded from an SVG asset.
 
 After editing an `.arb` file run `flutter gen-l10n` (also runs on `flutter run`).
