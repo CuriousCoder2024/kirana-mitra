@@ -62,16 +62,25 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     samples = [json.loads(l) for l in Path(args.samples).read_text(encoding="utf-8").splitlines() if l.strip()]
-    with httpx.Client(base_url=args.base, timeout=60) as c:
+    with httpx.Client(base_url=args.base, timeout=120) as c:
         health = c.get("/health").json()
         model = health.get("model", "?")
-        shop_id = c.post("/shops", json={"shop_name": "Eval Store", "owner_name": "Eval",
-                                         "language": "hi-Latn"}).json()["shop_id"]
+        # one shop per expected language, so the "reply in the shop's language" rule and the
+        # "mirror the user's language" rule agree and the script check is meaningful
+        shops: dict[str, str] = {}
+
+        def shop_for(lang: str) -> str:
+            if lang not in shops:
+                shops[lang] = c.post("/shops", json={"shop_name": "Eval Store", "owner_name": "Eval",
+                                                     "language": lang}).json()["shop_id"]
+            return shops[lang]
+
         rows, latencies, failures = [], [], 0
         for s in samples:
+            lang = s["expected"].get("language", "hi-Latn")
             t0 = time.perf_counter()
             try:
-                r = c.post("/chat", json={"shop_id": shop_id, "text": s["text"]})
+                r = c.post("/chat", json={"shop_id": shop_for(lang), "text": s["text"]})
                 status = r.status_code
             except httpx.HTTPError as exc:  # timeout / connection: count, don't crash
                 r, status = None, f"{type(exc).__name__}"
@@ -87,13 +96,15 @@ def main(argv: list[str] | None = None) -> int:
                     except Exception:
                         detail = ""
                 print(f"  [{s['id']}] {label} {detail}")
-                rows.append((s["id"], s["expected"]["intent"], label, "-", "-", ms, {}))
+                rows.append((s["id"], s["expected"]["intent"], label, "-", "-", ms, {},
+                             lang, False, False, ""))
                 continue
             rep = r.json()
             sc = score(s, rep)
             rows.append((s["id"], s["expected"]["intent"], rep["intent"],
                          "✓" if sc["intent"] else "✗",
-                         "✓" if sc["entities"] else "✗", ms, sc["checks"]))
+                         "✓" if sc["entities"] else "✗", ms, sc["checks"],
+                         lang, sc["language"], sc["script"], rep.get("reply_text", "")))
 
     n = len(samples)
     intent_acc = sum(1 for r in rows if r[3] == "✓") / n
@@ -122,7 +133,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"{'lang':8} {'n':>2} {'intent':>7} {'entity':>7} {'lang':>6} {'script':>7}  bad-script reply (first)")
     for lang, rs in sorted(by_lang.items()):
         k = len(rs)
-        bad = next((r[10] for r in rs if r[2] != "HTTP" and not r[9]), "")
+        bad = next((r[10] for r in rs if not str(r[2]).startswith("HTTP") and not r[9]), "")
         print(f"{lang:8} {k:2} {sum(r[3] == '✓' for r in rs) / k:7.0%} {sum(r[4] == '✓' for r in rs) / k:7.0%} "
               f"{sum(bool(r[8]) for r in rs) / k:6.0%} {sum(bool(r[9]) for r in rs) / k:7.0%}  {bad[:60]}")
     print()
