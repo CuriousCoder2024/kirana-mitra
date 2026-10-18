@@ -12,7 +12,7 @@ Intent = Literal["stock_in", "sale", "udhaar_given", "udhaar_paid", "question", 
 Language = Literal[LANGUAGE_CODES]  # type: ignore[valid-type]  # the 22 scheduled + en + hi-Latn
 Unit = Literal["carton", "piece", "kg", "litre", "packet", "box"]
 QuickActionKind = Literal["undo", "confirm", "open_stock", "open_udhaar", "open_forecast", "send_order",
-                          "open_orders"]
+                          "open_orders", "dismiss"]
 
 
 # ---- requests -------------------------------------------------------------

@@ -220,7 +220,14 @@ def resolve_shelf_items(repo: Repository, shop_id: str, scan: ShelfScan) -> Shel
     """Snap Gemini's product names onto the catalogue and merge duplicates."""
     catalogue = repo.list_items(shop_id)
     merged: dict[str, ShelfItem] = {}
-    unmatched = list(scan.unmatched)
+    unmatched = []
+    for u in scan.unmatched:
+        hit = match_item(u.name, catalogue)
+        if hit is None:
+            unmatched.append(u)
+        else:  # Gemini called a catalogue product "unmatched": count it as that item
+            scan = scan.model_copy(update={"items": [*scan.items, ShelfItem(
+                name=hit.name, pack_size=hit.pack_size, count=u.count, confidence=0.6)]})
     for raw in scan.items:
         hit = match_item(raw.name, catalogue)
         if hit is None:
@@ -241,9 +248,17 @@ def resolve_shelf_items(repo: Repository, shop_id: str, scan: ShelfScan) -> Shel
     return scan.model_copy(update={"items": list(merged.values()), "unmatched": unmatched})
 
 
+def _units_list(entries) -> str:
+    return ", ".join(f"{e.name} {e.count}" for e in entries)
+
+
 def build_shelf_reply(repo: Repository, shop: ShopRecord, scan: ShelfScan,
                       message_id: str | None = None) -> ShelfScanReply:
-    """Hold the counted stock under message_id (applied=false) and offer a confirm chip."""
+    """Hold the counted stock under message_id (applied=false) and offer a confirm chip.
+
+    Three cases: catalogue items seen (confirm sets their stock); products seen that are
+    not in the catalogue (confirm adds them as items and sets their stock, deny dismisses);
+    nothing recognised (no chips, ask for a closer photo)."""
     message_id = message_id or new_id("msg")
     scan = resolve_shelf_items(repo, shop.shop_id, scan)
     lang = shop.language
@@ -254,13 +269,19 @@ def build_shelf_reply(repo: Repository, shop: ShopRecord, scan: ShelfScan,
         if rec and it.count <= rec.reorder_level:
             low.append(ShelfLowStock(name=it.name, count=it.count, reorder_level=rec.reorder_level))
 
-    reply = scan.reply_text.strip()
-    if not scan.items:
-        reply = reply or _localized(lang, "शेल्फ पर कोई सामान नहीं दिखा।",
-                                    "Nothing recognisable on the shelf.",
-                                    "Shelf pe koi item nahi dikha.")
+    if not scan.items and not scan.unmatched:
+        reply = _localized(lang,
+                           "शेल्फ पर कोई प्रोडक्ट समझ नहीं आया, थोड़ा पास से फ़ोटो लें।",
+                           "Could not make out any product on the shelf, please take the photo a bit closer.",
+                           "Shelf pe koi product samajh nahi aaya, thoda paas se photo lo.")
         return ShelfScanReply(message_id=message_id, items=[], low_stock=[], reply_text=reply,
-                              quick_actions=[], unmatched=scan.unmatched)
+                              quick_actions=[], unmatched=[])
+
+    head = _localized(lang, "शेल्फ पर दिखा:", "On the shelf:", "Shelf pe dikha:")
+    if scan.items:
+        reply = scan.reply_text.strip() or f"{head} {_units_list(scan.items)}."
+    else:
+        reply = f"{head} {_units_list(scan.unmatched)}."
     if low:
         kam = "; ".join(
             _localized(lang, f"{x.name} कम है (reorder {_fmt_qty(x.reorder_level)})",
@@ -268,16 +289,31 @@ def build_shelf_reply(repo: Repository, shop: ShopRecord, scan: ShelfScan,
                        f"{x.name} kam hai (reorder {_fmt_qty(x.reorder_level)})")
             for x in low)
         reply = f"{reply} {kam}."
-    reply = f"{reply} {_localized(lang, 'स्टॉक अपडेट करूँ?', 'Update stock?', 'Update karoon?')}"
+    if scan.unmatched:
+        listed = "" if not scan.items else f" {_units_list(scan.unmatched)}:"
+        reply = f"{reply}" + _localized(
+            lang,
+            f"{listed} ये कैटलॉग में नहीं हैं। नए आइटम जोड़कर स्टॉक सेट करूँ?",
+            f"{listed} These are not in your catalogue yet. Add them and set stock?",
+            f"{listed} Ye catalogue mein nahi hain. Naye item add karke stock set karoon?",
+        ).replace("  ", " ")
+        if not reply.startswith(head) and not scan.items:
+            reply = f"{head} {reply}"
+        actions = [
+            QuickAction(label=_localized(lang, "हाँ, जोड़ दो", "Yes, add", "Haan, add karo"),
+                        action="confirm", payload={"message_id": message_id}),
+            QuickAction(label=_localized(lang, "नहीं", "No", "Nahi"), action="dismiss",
+                        payload={"message_id": message_id}),
+        ]
+    else:
+        reply = f"{reply} {_localized(lang, 'स्टॉक अपडेट करूँ?', 'Update stock?', 'Update karoon?')}"
+        actions = [QuickAction(
+            label=_localized(lang, "हाँ, अपडेट करो", "Yes, update", "Haan, update karo"),
+            action="confirm", payload={"message_id": message_id})]
 
     repo.put_pending(shop.shop_id, message_id, {"kind": "shelf_scan", "scan": scan.model_dump()})
-    return ShelfScanReply(
-        message_id=message_id, items=scan.items, low_stock=low, reply_text=reply,
-        unmatched=scan.unmatched,
-        quick_actions=[QuickAction(
-            label=_localized(lang, "हाँ, अपडेट करो", "Yes, update", "Haan, update karo"),
-            action="confirm", payload={"message_id": message_id})],
-    )
+    return ShelfScanReply(message_id=message_id, items=scan.items, low_stock=low, reply_text=reply,
+                          unmatched=scan.unmatched, quick_actions=actions)
 
 
 def apply_shelf_scan(repo: Repository, shop: ShopRecord, message_id: str,
@@ -288,24 +324,27 @@ def apply_shelf_scan(repo: Repository, shop: ShopRecord, message_id: str,
     catalogue = {i.name: i for i in repo.list_items(shop.shop_id)}
     items: list[ExtractedItem] = []
     totals: list[str] = []
-    for it in scan.items:
-        rec = catalogue.get(it.name)
+    to_set = [(it.name, it.pack_size, it.count) for it in scan.items]
+    # unmatched products become new catalogue items (unit packet, reorder 6) with their counts
+    to_set += [(u.name, None, u.count) for u in scan.unmatched]
+    for name, pack_size, count in to_set:
+        rec = catalogue.get(name)
         if rec is None:
-            rec = repo.add_item(shop.shop_id, it.name, it.pack_size, "piece", reorder_level=5)
+            rec = repo.add_item(shop.shop_id, name, pack_size, "packet", reorder_level=6)
             catalogue[rec.name] = rec
-        delta = it.count - rec.quantity  # previous quantity = count - delta, restored by undo
+        delta = count - rec.quantity  # previous quantity = count - delta, restored by undo
         if delta:
             rec = repo.adjust_stock(shop.shop_id, rec.item_id, delta)
             catalogue[rec.name] = rec
             applied.stock_moves.append(StockMove(rec.item_id, delta))
-        items.append(ExtractedItem(name=rec.name, pack_size=rec.pack_size, quantity=it.count,
+        items.append(ExtractedItem(name=rec.name, pack_size=rec.pack_size, quantity=count,
                                    unit=rec.unit))
         totals.append(f"{rec.name} {_fmt_qty(rec.quantity)} {rec.unit}")
     repo.record_applied(applied)
     head = _localized(lang, "स्टॉक अपडेट किया:", "Stock updated:", "Stock update kiya:")
     return ExtractionReply(
-        message_id=message_id, intent="stock_in", confidence=min((i.confidence for i in scan.items),
-                                                                  default=1.0),
+        message_id=message_id, intent="stock_in",
+        confidence=min((i.confidence for i in scan.items), default=1.0),
         transcript=None, language=lang,
         entities=Entities(items=items), applied=True,
         reply_text=f"{head} {', '.join(totals)}.",

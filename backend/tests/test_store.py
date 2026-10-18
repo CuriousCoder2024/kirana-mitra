@@ -15,7 +15,7 @@ def test_create_shop_seeds_catalogue_and_defaults(repo):
     got = repo.get_shop(shop.shop_id)
     assert got is not None and got.shop_name == "Gupta General Store" and got.language == "hi-Latn"
     items = repo.list_items(shop.shop_id)
-    assert len(items) == 15
+    assert len(items) == 40
     parle = next(i for i in items if i.name == "Parle-G")
     assert parle.quantity == 42 and parle.reorder_level == 24 and parle.carton_size == 24 and parle.price == 10
     assert "parle ji" in parle.aliases
@@ -40,7 +40,7 @@ def test_stock_adjustments_clamp_at_zero_and_touch_updated_at(repo):
     assert repo.adjust_stock(shop.shop_id, nescafe.item_id, -25).quantity == 0
     new = repo.add_item(shop.shop_id, "Kurkure", "90g", "packet", reorder_level=5)
     assert new.quantity == 0 and repo.get_item(shop.shop_id, new.item_id).name == "Kurkure"
-    assert len(repo.list_items(shop.shop_id)) == 16
+    assert len(repo.list_items(shop.shop_id)) == 41
 
 
 def test_ledger_balances_and_customer_names(repo):

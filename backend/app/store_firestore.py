@@ -38,8 +38,8 @@ from datetime import datetime, timezone
 from google.cloud import firestore
 
 from app.store import (
+    ALL_SEED_ITEMS,
     IST,
-    SEED_ITEMS,
     AppliedMessage,
     BotMessageRecord,
     FeedbackRecord,
@@ -138,7 +138,7 @@ class FirestoreRepository(Repository):
             "created_at": now, "auto_restock": False, "distributor_phone": None,
         })
         if self.seed:
-            for name, pack, unit, qty, reorder, aliases, carton, price in SEED_ITEMS:
+            for name, pack, unit, qty, reorder, aliases, carton, price in ALL_SEED_ITEMS:
                 batch.set(self._sub(shop_id, "items").document(new_id("itm")), {
                     "name": name, "pack_size": pack, "unit": unit, "quantity": float(qty),
                     "reorder_level": float(reorder), "updated_at": now, "aliases": list(aliases),
@@ -169,7 +169,7 @@ class FirestoreRepository(Repository):
     def list_items(self, shop_id: str) -> list[ItemRecord]:
         items = [self._item_record(shop_id, d) for d in self._sub(shop_id, "items").stream()]
         # Seed order is what the in-memory store returns; keep it stable by name order of SEED_ITEMS
-        seed_order = {name: i for i, (name, *_rest) in enumerate(SEED_ITEMS)}
+        seed_order = {name: i for i, (name, *_rest) in enumerate(ALL_SEED_ITEMS)}
         items.sort(key=lambda i: (seed_order.get(i.name, len(seed_order)), i.updated_at, i.name))
         return items
 

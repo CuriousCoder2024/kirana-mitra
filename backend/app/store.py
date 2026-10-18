@@ -150,6 +150,11 @@ SEED_ITEMS: list[tuple[str, str | None, str, float, float, list[str], int, int]]
 ]
 
 
+from app.seed_catalogue import EXTRA_SEED_ITEMS  # noqa: E402
+
+ALL_SEED_ITEMS = SEED_ITEMS + EXTRA_SEED_ITEMS  # 40 items, matching data/catalogue.csv
+
+
 # ---- interface -----------------------------------------------------------------
 
 
@@ -279,7 +284,7 @@ class InMemoryRepository(Repository):
         self._bot_messages[shop.shop_id] = []
         self._feedback[shop.shop_id] = []
         if self.seed:
-            for name, pack, unit, qty, reorder, aliases, carton, price in SEED_ITEMS:
+            for name, pack, unit, qty, reorder, aliases, carton, price in ALL_SEED_ITEMS:
                 item = self.add_item(shop.shop_id, name, pack, unit, reorder)
                 item.quantity = qty
                 item.aliases = list(aliases)

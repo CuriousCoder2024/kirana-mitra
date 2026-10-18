@@ -144,7 +144,8 @@ def test_catalogue_join_claims_each_shop_item_once():
     assert got["Parle-G"] == "Parle-G"
     assert got["Maggi Masala Noodles"] == "Maggi"
     assert got["Amul Taaza Milk"] == "Amul Milk"
-    assert "Amul Cow Ghee" not in got
+    assert got["Amul Cow Ghee"] == "Amul Cow Ghee"  # seeded from the full catalogue now
+    assert len(joined) == 40
 
 
 def test_local_source_reads_csvs_and_caches():
@@ -264,4 +265,4 @@ def test_bigquery_source_live():
     assert raw.forecast and all(len(v) == 35 for v in raw.forecast.values())
     repo, shop, items = shop_items()
     weeks, fests, out = shape_forecast(raw, items, "en")
-    assert len(out) == 15 and all(len(i.forecast_weekly) == 4 for i in out)
+    assert len(out) == 40 and all(len(i.forecast_weekly) == 4 for i in out)

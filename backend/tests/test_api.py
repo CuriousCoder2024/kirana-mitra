@@ -17,9 +17,9 @@ def test_health_and_healthz_alias(client):
 
 def test_shop_is_seeded_with_catalogue(client, shop_id):
     items = client.get(f"/stock/{shop_id}").json()["items"]
-    assert len(items) == 15
+    assert len(items) == 40  # the full data/catalogue.csv
     names = {i["name"] for i in items}
-    assert {"Parle-G", "Maggi", "Tata Salt", "Dettol"} <= names
+    assert {"Parle-G", "Maggi", "Tata Salt", "Dettol", "Horlicks Classic", "Kurkure Masala Munch"} <= names
     assert all({"item_id", "quantity", "reorder_level", "low_stock", "updated_at"} <= i.keys()
                for i in items)
 
