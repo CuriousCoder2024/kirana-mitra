@@ -67,7 +67,10 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
                forecast_source: ForecastSource | None = None,
                feedback_sink: FeedbackSink | None = None) -> FastAPI:
     settings = settings or get_settings()
-    repo = repo or InMemoryRepository(undo_window=settings.undo_window)
+    if repo is None:
+        from app.store_firestore import make_repository
+
+        repo = make_repository(settings)  # STORE=firestore|memory
     app = FastAPI(title="Kirana Mitra API", version="1.0.0")
     # The Flutter web build runs on another origin (flutter run -d chrome picks a
     # random port), so allow any origin for the demo; tighten before production.

@@ -17,6 +17,8 @@ class Settings(BaseModel):
     undo_window: int = 10
     timezone: str = "Asia/Kolkata"
     scheduler_token: str | None = None  # X-Scheduler-Token for POST /auto-restock/run
+    store: str = "memory"  # firestore | memory
+    firestore_database: str = "(default)"
     forecast_source: str = "local"  # bigquery | local
     bq_dataset: str = "kirana"
     bq_location: str = "asia-south1"
@@ -32,6 +34,8 @@ class Settings(BaseModel):
             mock_gemini=os.getenv("MOCK_GEMINI", "0").lower() in {"1", "true", "yes"},
             confirm_threshold=float(os.getenv("CONFIRM_THRESHOLD", "0.7")),
             scheduler_token=os.getenv("SCHEDULER_TOKEN") or None,
+            store=(os.getenv("STORE") or ("firestore" if os.getenv("GOOGLE_CLOUD_PROJECT") else "memory")).lower(),
+            firestore_database=os.getenv("FIRESTORE_DATABASE", "(default)"),
             forecast_source=os.getenv(
                 "FORECAST_SOURCE",
                 "bigquery" if os.getenv("GOOGLE_CLOUD_PROJECT") and mock not in {"1", "true", "yes"}

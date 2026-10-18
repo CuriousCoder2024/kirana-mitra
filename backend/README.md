@@ -5,7 +5,8 @@ stock or udhaar (credit) entry, using Gemini on Vertex AI through the official `
 SDK with structured JSON output. Implements [`docs/api-contract.md`](../docs/api-contract.md) v1.
 
 Phase 1 ships `/shops`, `/chat`, `/voice-note`, `/confirm`, `/undo`, `/stock`, `/ledger`,
-`/health` (alias `/healthz`). Phase 3 adds `/shelf-scan` (Gemini vision counts units on a shelf photo). Phase 5
+`/health` (alias `/healthz`). Persistence is Firestore (`STORE=firestore`) with the in-memory
+store kept for local dev and tests; BigQuery stays the analytics store (forecast, feedback). Phase 3 adds `/shelf-scan` (Gemini vision counts units on a shelf photo). Phase 5
 adds `/forecast` (BigQuery ML ARIMA_PLUS, festival-aware), `/summary` (evening hisaab) and
 `/reorder` (order text plus WhatsApp link). Phase 7 adds `/top-items`, per-shop settings
 (`PATCH /shops/{id}`), `/auto-restock/run` for Cloud Scheduler, `/orders`, `/messages`,
@@ -49,6 +50,8 @@ for Phase 1.
 | `BQ_LOCATION` | `asia-south1`, the dataset's location |
 | `DATA_DIR` | folder with `catalogue.csv`, `sales_history.csv`, `festivals.csv`, `festival_uplift.csv` for the local source; default `../data` |
 | `SCHEDULER_TOKEN` | shared secret; `POST /auto-restock/run` requires header `X-Scheduler-Token` equal to it, else 401. Unset = always 401 |
+| `STORE` | `firestore` or `memory`. Default `firestore` when `GOOGLE_CLOUD_PROJECT` is set, else `memory` (no credentials needed) |
+| `FIRESTORE_DATABASE` | Firestore database id, default `(default)` (Native mode, asia-south1) |
 
 Mock mode:
 
@@ -199,6 +202,35 @@ are copied to `tests/eval/forecast_results.csv`: over 40 items the 14-day volume
 11.0%, the median per-item MAPE is 43.9% and the median per-item WAPE 50.9% (daily demand of
 0 to 20 units is noisy, so per-item daily errors are high while totals over two weeks are close).
 
+## Persistence: Firestore
+
+`app/store_firestore.py` implements the same `Repository` interface as the in-memory store,
+selected by `STORE`. Layout, one document per shop with subcollections:
+
+| Path | Fields |
+|---|---|
+| `shops/{shop_id}` | shop_name, owner_name, language, created_at, auto_restock, distributor_phone |
+| `shops/{shop_id}/items/{item_id}` | name, pack_size, unit, quantity, reorder_level, updated_at, aliases, carton_size, price (15 seeded on create) |
+| `shops/{shop_id}/ledger/{entry_id}` | customer_name, delta, kind, message_id, at |
+| `shops/{shop_id}/messages/{message_id}` | `kind` = `applied` (intent, stock_moves, ledger_entry_ids, sale_amount, order_id, created_at, undone), `pending` (held extraction payload) or `bot` (reply_text, quick_actions, order_id) |
+| `shops/{shop_id}/orders/{order_id}` | created_at, status, source, lines, text, whatsapp_url |
+| `shops/{shop_id}/feedback/{feedback_id}` | screen, rating, comment, language, app_version, platform, created_at |
+
+Timestamps are Firestore timestamps and come out of the API as ISO-8601 in Asia/Kolkata as
+before. Stock changes and undo run in transactions (`adjust_stock` reads and writes the item
+atomically; `pop_applied` flips `undone` atomically, so a second Undo tap gets a 409). The undo
+window is the 10 most recent applied, not-undone messages. Queries use one equality filter and
+sort in Python, so no composite index is needed. The 10-minute forecast cache stays in memory
+per instance. The daily `/auto-restock/run` lists shops from Firestore, so the 06:00 scheduler
+now sees every shop. BigQuery remains the analytics store: forecasts are read from it and
+feedback is streamed into it as well as stored here.
+
+Smoke test against a real database (creates, applies a sale, undoes, deletes):
+
+```bash
+uv run python scripts/smoke_store.py
+```
+
 ## Top items, auto-restock, orders, messages
 
 - `GET /top-items/{shop_id}?weeks=2&limit=10` ranks the shop's items by forecast demand over the
@@ -258,6 +290,15 @@ Fast unit tests (Gemini scripted, no network):
 
 ```bash
 uv run pytest -q
+```
+
+`tests/test_store.py` and the API tests run against the in-memory store always, and against
+Firestore as well when `FIRESTORE_EMULATOR_HOST` is set (`gcloud emulators firestore start`) or
+`FIRESTORE_INTEGRATION=1` points them at the real database (they write under `shops_test`, not
+`shops`):
+
+```bash
+FIRESTORE_INTEGRATION=1 uv run pytest -q tests/test_store.py
 ```
 
 The BigQuery integration test is marked `slow` and skips itself unless `FORECAST_SOURCE=bigquery`
