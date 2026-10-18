@@ -5,8 +5,9 @@ stock or udhaar (credit) entry, using Gemini on Vertex AI through the official `
 SDK with structured JSON output. Implements [`docs/api-contract.md`](../docs/api-contract.md) v1.
 
 Phase 1 ships `/shops`, `/chat`, `/voice-note`, `/confirm`, `/undo`, `/stock`, `/ledger`,
-`/healthz`. Phase 3 adds `/shelf-scan` (Gemini vision counts units on a shelf photo). 501 stubs
-with the final shapes in their docstrings remain for `/forecast`, `/summary`, `/reorder`. Storage is an in-memory repository seeded with 15 common
+`/healthz`. Phase 3 adds `/shelf-scan` (Gemini vision counts units on a shelf photo). Phase 5
+adds `/forecast` (BigQuery ML ARIMA_PLUS, festival-aware), `/summary` (evening hisaab) and
+`/reorder` (order text plus WhatsApp link). Storage is an in-memory repository seeded with 15 common
 kirana items; Phase 4 swaps in Cloud SQL behind the same `Repository` interface.
 
 ## Run locally
@@ -41,6 +42,10 @@ for Phase 1.
 | `GEMINI_MODEL` | `gemini-3.8-flash` (GA, audio in + structured output; [model page](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-8-flash)) |
 | `MOCK_GEMINI` | `1`: offline regex extractor, no credentials, no cost. Use this to integrate the app without a project |
 | `CONFIRM_THRESHOLD` | default `0.7`; below it the entry waits for a confirm tap |
+| `FORECAST_SOURCE` | `bigquery` or `local`. Default `bigquery` when `GOOGLE_CLOUD_PROJECT` is set and `MOCK_GEMINI` is off, else `local` |
+| `BQ_DATASET` | `kirana` (created by `data/load_bigquery.sh`) |
+| `BQ_LOCATION` | `asia-south1`, the dataset's location |
+| `DATA_DIR` | folder with `catalogue.csv`, `sales_history.csv`, `festivals.csv`, `festival_uplift.csv` for the local source; default `../data` |
 
 Mock mode:
 
@@ -84,6 +89,20 @@ curl -s -X POST localhost:8080/undo -H 'content-type: application/json' \
   -d '{"shop_id":"shp_...","message_id":"msg_..."}'
 ```
 
+Forecast, evening summary and reorder list:
+
+```bash
+curl -s localhost:8080/forecast/shp_...
+```
+
+```bash
+curl -s "localhost:8080/summary/shp_...?date=2026-10-18"
+```
+
+```bash
+curl -s -X POST localhost:8080/reorder/shp_...
+```
+
 Interactive docs: http://localhost:8080/docs
 
 ## How a message is handled
@@ -103,12 +122,55 @@ Interactive docs: http://localhost:8080/docs
    result is held under `message_id`. `/confirm` then sets each item's stock to the counted
    quantity (an absolute set, not an add); `/undo` restores the previous quantities.
 
+## Forecast, summary, reorder
+
+`app/forecast.py` has a `ForecastSource` interface with two implementations that return the
+same raw material (catalogue, 35 daily forecast points per item, 6 weeks of daily history,
+festivals, uplift table); the shaping into the contract is shared and unit-tested:
+
+- **BigQuery** (`FORECAST_SOURCE=bigquery`): `ML.FORECAST` on `kirana.item_demand_arima`, the
+  ARIMA_PLUS model trained by `data/bqml/train_arima.sql`, plus the `sales_daily`, `catalogue`,
+  `festivals` and `festival_uplift` tables. Results are cached for 10 minutes per series. Only
+  `shp_demo` has history in BigQuery, so any other shop id (for example one created in the app)
+  is served the demo series while its `on_hand` still comes from its own stock.
+- **Local** (`FORECAST_SOURCE=local`, or automatically with `MOCK_GEMINI=1`): reads the CSVs in
+  `data/` and makes a seasonal-naive forecast (same-weekday mean of the last 4 weeks), so the
+  forecast screen works offline.
+
+Shaping: 4 Monday-start weeks beginning on or after today; the festival multiplier from
+`festival_uplift.csv` ramps over `pre_days` and holds through `post_days` (mirrors
+`data/bqml/forecast.sql`). All 4 weeks are returned for the chart, but
+`reorder_qty = max(0, round(sum of the next REORDER_COVER_WEEKS = 2 forecast weeks) - on_hand)`
+rounded up to the item's carton size, so stock that already covers 2 weeks gets 0 and is left out
+of `/reorder`; `reorder_reason` names a festival only when it falls inside those 2 weeks and is in
+the shop's language. Only items the shop actually stocks are returned, joined to the data
+catalogue by name and alias.
+
+`/summary` sums the day's applied messages (sales at MRP, or the amount the user quoted),
+the ledger's udhaar given and received, the outstanding total and the low-stock list.
+`reply_text` is written by Gemini from those numbers, with a fixed template fallback so the
+endpoint never fails because of Gemini. `/reorder` lists the forecast items with
+`reorder_qty > 0` and returns a `wa.me` share link; nothing is sent.
+
+Forecast accuracy: `data/bqml/evaluate.sql` retrains on history minus 14 days and compares the
+forecast with the held-out actuals, per item, into `kirana.forecast_eval`. The headline numbers
+are copied to `tests/eval/forecast_results.csv`: over 40 items the 14-day volume-weighted WAPE is
+11.0%, the median per-item MAPE is 43.9% and the median per-item WAPE 50.9% (daily demand of
+0 to 20 units is noisy, so per-item daily errors are high while totals over two weeks are close).
+
 ## Tests and eval
 
 Fast unit tests (Gemini scripted, no network):
 
 ```bash
 uv run pytest -q
+```
+
+The BigQuery integration test is marked `slow` and skips itself unless `FORECAST_SOURCE=bigquery`
+and the dataset and model exist:
+
+```bash
+uv run pytest -q -m slow
 ```
 
 Eval harness: 26 utterances in `tests/eval/samples.jsonl` (Hindi script, Hinglish, English,
