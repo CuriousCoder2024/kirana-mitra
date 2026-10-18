@@ -76,8 +76,28 @@ class RecordingSink:
         self.sent.append(fb)
 
 
-@pytest.fixture
-def repo():
+import os
+
+
+def _store_params():
+    """memory always; firestore too when an emulator or FIRESTORE_INTEGRATION=1 is available."""
+    params = ["memory"]
+    if os.getenv("FIRESTORE_EMULATOR_HOST") or os.getenv("FIRESTORE_INTEGRATION") == "1":
+        params.append("firestore")
+    return params
+
+
+@pytest.fixture(params=_store_params())
+def repo(request):
+    if request.param == "firestore":
+        from app.config import get_settings
+        from app.store_firestore import FirestoreRepository
+
+        settings = get_settings()
+        project = os.getenv("GOOGLE_CLOUD_PROJECT") or settings.google_cloud_project or "demo-kirana"
+        # a separate root collection keeps test shops out of the production "shops" collection
+        return FirestoreRepository(project=project, database=settings.firestore_database,
+                                   root="shops_test", undo_window=10)
     return InMemoryRepository(undo_window=10)
 
 
