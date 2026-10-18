@@ -91,7 +91,9 @@ def apply_extraction(
             base_qty = qty
             if it.unit in {"carton", "box"} and rec.unit not in {"carton", "box"}:
                 base_qty = qty * rec.carton_size
-            repo.adjust_stock(shop.shop_id, rec.item_id, sign * base_qty)
+            # use the record the store returns: a persistent store does not mutate `rec` in place
+            rec = repo.adjust_stock(shop.shop_id, rec.item_id, sign * base_qty)
+            catalogue[rec.name] = rec
             applied.stock_moves.append(StockMove(rec.item_id, sign * base_qty))
             conv = (f" ({_fmt_qty(qty)} {it.unit} = {_fmt_qty(base_qty)} {rec.unit})"
                     if base_qty != qty else "")
@@ -293,7 +295,8 @@ def apply_shelf_scan(repo: Repository, shop: ShopRecord, message_id: str,
             catalogue[rec.name] = rec
         delta = it.count - rec.quantity  # previous quantity = count - delta, restored by undo
         if delta:
-            repo.adjust_stock(shop.shop_id, rec.item_id, delta)
+            rec = repo.adjust_stock(shop.shop_id, rec.item_id, delta)
+            catalogue[rec.name] = rec
             applied.stock_moves.append(StockMove(rec.item_id, delta))
         items.append(ExtractedItem(name=rec.name, pack_size=rec.pack_size, quantity=it.count,
                                    unit=rec.unit))
