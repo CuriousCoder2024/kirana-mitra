@@ -6,6 +6,7 @@ from fastapi import FastAPI, File, Form, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from starlette.concurrency import run_in_threadpool
 
 from app.config import Settings, get_settings
 from app.gemini import Extractor, GeminiFailed, make_extractor
@@ -119,7 +120,7 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
         if mime == "audio/x-wav":
             mime = "audio/wav"
         try:
-            extraction = get_extractor().extract(
+            extraction = await run_in_threadpool(get_extractor().extract,
                 None, (data, mime), repo.list_items(shop.shop_id), shop.language)
         except GeminiFailed as exc:
             raise ApiError(502, "gemini_failed", str(exc))
@@ -195,7 +196,7 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
         if mime == "image/jpg":
             mime = "image/jpeg"
         try:
-            scan = get_extractor().scan_shelf((data, mime), repo.list_items(shop.shop_id),
+            scan = await run_in_threadpool(get_extractor().scan_shelf, (data, mime), repo.list_items(shop.shop_id),
                                               shop.language)
         except GeminiFailed as exc:
             raise ApiError(502, "gemini_failed", str(exc))
