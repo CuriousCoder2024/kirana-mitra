@@ -63,10 +63,9 @@ echo "project: $PROJECT_ID   target: $TARGET   api: $API_BASE_URL   dry-run: $DR
 if [[ "$SKIP_BUILD" == "1" ]]; then
   echo "skipping flutter build (--skip-build); using $BUILD_DIR as is"
 else
-  run flutter --no-version-check build web --release \
+  (cd "$APP_DIR" && run flutter --no-version-check build web --release \
     --dart-define "API_BASE_URL=$API_BASE_URL" \
-    --base-href "$BASE_HREF" \
-    --project-directory "$APP_DIR"
+    --base-href "$BASE_HREF")
 fi
 if [[ "$DRY_RUN" != "1" && ! -f "$BUILD_DIR/index.html" ]]; then
   echo "$BUILD_DIR/index.html not found; the flutter build did not produce output" >&2
