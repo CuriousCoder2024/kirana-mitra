@@ -3,9 +3,12 @@
 # anything that already exists. Every step that costs money asks first and
 # prints the estimated monthly cost.
 #
-# Usage:  infra/setup.sh [--dry-run] [--yes]
-#   --dry-run  print every gcloud command instead of running it (no PROJECT_ID needed)
-#   --yes      skip the confirmation prompts (CI / you already read the costs)
+# Usage:  infra/setup.sh [--dry-run] [--yes] [--with-cloudsql]
+#   --dry-run        print every gcloud command instead of running it (no PROJECT_ID needed)
+#   --yes            skip the confirmation prompts (CI / you already read the costs)
+#   --with-cloudsql  also create the Cloud SQL instance (ON HOLD: nothing Cloud SQL
+#                    related runs without this flag; the backend uses BigQuery +
+#                    its own store for now)
 #
 # Reads infra/.env (copy infra/.env.example). Requires PROJECT_ID.
 #
@@ -13,13 +16,18 @@
 #   1. APIs: aiplatform, run, cloudbuild, artifactregistry, sqladmin, bigquery, storage   (free)
 #   2. Artifact Registry docker repo $AR_REPO in $REGION                                  (~free)
 #   3. GCS bucket gs://$GCS_BUCKET in $REGION                                             (~free)
-#   4. Cloud SQL for PostgreSQL instance $CLOUDSQL_INSTANCE, db-f1-micro, + database + user (~$10-17/month)
+#   5. service account $CLOUD_RUN_SA with aiplatform.user, bigquery.jobUser,
+#      bigquery.dataViewer on the dataset and storage.objectUser on the bucket (free)
+#   4. (only with --with-cloudsql) Cloud SQL for PostgreSQL instance $CLOUDSQL_INSTANCE,
+#      db-f1-micro, + database + user (~$10-17/month)
 # The BigQuery dataset is created by data/load_bigquery.sh.
 set -euo pipefail
 # shellcheck source=infra/common.sh
 . "$(dirname "${BASH_SOURCE[0]}")/common.sh"
 parse_common_flags "$@"
 load_env
+WITH_CLOUDSQL=0
+for arg in "$@"; do [[ "$arg" == "--with-cloudsql" ]] && WITH_CLOUDSQL=1; done
 
 echo "project: $PROJECT_ID   region: $REGION   dry-run: $DRY_RUN"
 
@@ -62,7 +70,12 @@ else
   fi
 fi
 
-# 4. Cloud SQL for PostgreSQL: smallest shared-core tier.
+# 4. Cloud SQL for PostgreSQL: smallest shared-core tier. ON HOLD: skipped
+#    unless --with-cloudsql is given.
+if [[ "$WITH_CLOUDSQL" != "1" ]]; then
+  echo "cloud sql: skipped (on hold; pass --with-cloudsql to create it)"
+else
+
 #    db-f1-micro (shared vCPU, 0.6 GB) is the smallest machine type listed under
 #    "Instance pricing" on https://cloud.google.com/sql/pricing (checked
 #    2026-10-18; Iowa list price $0.0105/h ~ $7.70/month, Mumbai is a little
@@ -111,6 +124,47 @@ if [[ "$DRY_RUN" == "1" ]] || gcloud sql instances describe "$CLOUDSQL_INSTANCE"
       --project "$PROJECT_ID" --password "${CLOUDSQL_PASSWORD:-<CLOUDSQL_PASSWORD>}"
   fi
 fi
+fi  # WITH_CLOUDSQL
+
+# 5. Runtime service account for Cloud Run (free). Least privilege: call
+#    Gemini on Vertex AI, run BigQuery jobs, read the kirana dataset, and
+#    read/write the media bucket.
+SA_NAME="${CLOUD_RUN_SA:-kirana-mitra-api}"
+SA_EMAIL="$SA_NAME@$PROJECT_ID.iam.gserviceaccount.com"
+if [[ "$DRY_RUN" != "1" ]] && gcloud iam service-accounts describe "$SA_EMAIL" \
+     --project "$PROJECT_ID" >/dev/null 2>&1; then
+  echo "service account $SA_EMAIL exists, skipping create"
+else
+  run gcloud iam service-accounts create "$SA_NAME" --project "$PROJECT_ID" \
+    --display-name "Kirana Mitra API (Cloud Run)"
+fi
+for role in roles/aiplatform.user roles/bigquery.jobUser; do
+  run gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+    --member "serviceAccount:$SA_EMAIL" --role "$role" --condition None --quiet
+done
+# Dataset-level read access (READER = bigquery.dataViewer on the dataset).
+# `bq add-iam-policy-binding` needs allowlisting, so patch the access list.
+if [[ "$DRY_RUN" == "1" ]]; then
+  echo "DRY RUN: bq update --source <access.json with READER $SA_EMAIL> $PROJECT_ID:$BQ_DATASET"
+elif bq --project_id="$PROJECT_ID" show --dataset "$BQ_DATASET" >/dev/null 2>&1; then
+  ACCESS_JSON="$(mktemp)"
+  bq --project_id="$PROJECT_ID" show --format=prettyjson "$PROJECT_ID:$BQ_DATASET" \
+    | python3 -c '
+import json, sys
+sa = sys.argv[1]
+ds = json.load(sys.stdin)
+access = ds.get("access", [])
+if not any(a.get("userByEmail") == sa and a.get("role") == "READER" for a in access):
+    access.append({"role": "READER", "userByEmail": sa})
+json.dump({"access": access}, sys.stdout)
+' "$SA_EMAIL" > "$ACCESS_JSON"
+  run bq --project_id="$PROJECT_ID" update --source "$ACCESS_JSON" "$PROJECT_ID:$BQ_DATASET"
+  rm -f "$ACCESS_JSON"
+else
+  echo "dataset $BQ_DATASET not found yet; run data/load_bigquery.sh load, then re-run setup for the dataset grant"
+fi
+run gcloud storage buckets add-iam-policy-binding "gs://$GCS_BUCKET" --project "$PROJECT_ID" \
+  --member "serviceAccount:$SA_EMAIL" --role roles/storage.objectUser
 
 echo
 echo "setup done. Next: uv run data/generate_sales.py && data/load_bigquery.sh all && infra/deploy.sh"

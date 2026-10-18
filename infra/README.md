@@ -10,15 +10,29 @@ cp infra/.env.example infra/.env   # fill in PROJECT_ID, GCS_BUCKET, CLOUDSQL_PA
 
 `.env` is git-ignored. Never commit it.
 
+## Status (2026-10-18)
+
+Done for real on project `kirana-mitra-app` with the `kirana` gcloud
+configuration: APIs enabled, Artifact Registry repo `kirana-mitra`, bucket
+`gs://kirana-mitra-app-media`, service account `kirana-mitra-api@...` with
+its roles, BigQuery dataset loaded and trained, and the backend deployed:
+
+    https://kirana-mitra-api-hm57brg65q-el.a.run.app
+
+Cloud SQL is **on hold**: nothing Cloud SQL related runs unless you pass
+`--with-cloudsql` to `setup.sh` / `deploy.sh`. The web app is not published
+yet (`deploy_web.sh` is ready, the app is mid-redesign).
+
 ## Order
 
 | Step | Command | Costs money? |
 |---|---|---|
-| 1 | `infra/setup.sh --dry-run` then `infra/setup.sh` | APIs: no. Artifact Registry repo and GCS bucket: cents. Cloud SQL db-f1-micro: **~$10-17/month** while running (asks first). |
+| 1 | `infra/setup.sh --dry-run` then `infra/setup.sh` | APIs: no. Artifact Registry repo and GCS bucket: cents. Service account + IAM: no. Cloud SQL (only with `--with-cloudsql`): **~$10-17/month** while running, asks first. |
 | 2 | `uv run data/generate_sales.py` | no |
 | 3 | `data/load_bigquery.sh all` | under 1 cent per run (ARIMA_PLUS training); everything else inside the BigQuery free tier. See `data/README.md`. |
-| 4 | `infra/deploy.sh --dry-run` then `infra/deploy.sh` | Cloud Build minutes (120 free/day) + Cloud Run with `min-instances 0`: free at demo traffic. |
+| 4 | `infra/deploy.sh --dry-run` then `infra/deploy.sh` | Cloud Build minutes (120 free/day) + Cloud Run with `min-instances 0`: free at demo traffic. First deploy took ~4 min. |
 | 5 | Put the printed URL in `API_BASE_URL` (infra/.env and the app) | no |
+| 6 | `infra/deploy_web.sh --dry-run` then `infra/deploy_web.sh` | public GCS bucket with the Flutter web build: cents. Not run yet. |
 
 Gemini on Vertex AI is billed per token when the backend runs; a demo day is
 a few rupees. `GEMINI_MODEL` is owned by `backend/.env.example`; copy the value.
@@ -28,26 +42,49 @@ a few rupees. `GEMINI_MODEL` is owned by `backend/.env.example`; copy the value.
 - Enables: aiplatform, run, cloudbuild, artifactregistry, sqladmin, bigquery, storage.
 - Artifact Registry docker repo `$AR_REPO` in asia-south1 (deploy.sh pushes the backend image there).
 - GCS bucket `gs://$GCS_BUCKET` in asia-south1, uniform access, public access prevented.
-- Cloud SQL for PostgreSQL 16, Enterprise edition, `db-f1-micro` (shared core,
-  smallest tier on the [pricing page](https://cloud.google.com/sql/pricing);
-  not SLA-covered, fine for a demo), zonal, 10 GB, backups off, plus database
-  `kirana` and user `kirana` with `CLOUDSQL_PASSWORD`.
+- Service account `$CLOUD_RUN_SA` (default `kirana-mitra-api`) with
+  `roles/aiplatform.user` and `roles/bigquery.jobUser` on the project, READER
+  (= dataViewer) on the `kirana` dataset, `roles/storage.objectUser` on the
+  media bucket. Cloud Run runs as this account.
+- Only with `--with-cloudsql`: Cloud SQL for PostgreSQL 16, Enterprise
+  edition, `db-f1-micro` (shared core, smallest tier on the
+  [pricing page](https://cloud.google.com/sql/pricing); not SLA-covered, fine
+  for a demo), zonal, 10 GB, backups off, plus database `kirana` and user
+  `kirana` with `CLOUDSQL_PASSWORD`. Not created; on hold.
 
 Each step is idempotent: it checks `describe` first and skips what exists.
 
 ## deploy.sh
 
-`gcloud run deploy` from `backend/` source, region asia-south1,
-`--allow-unauthenticated --min-instances 0 --max-instances 3 --timeout 120`,
-Cloud SQL attached via `--add-cloudsql-instances`, and these env vars on the
-service: `GOOGLE_CLOUD_PROJECT, GOOGLE_GENAI_USE_VERTEXAI, GOOGLE_CLOUD_LOCATION`
-(`global`, where Gemini 3.x Flash is served), `GEMINI_MODEL, MOCK_GEMINI,
-CONFIRM_THRESHOLD, GCS_BUCKET, BQ_DATASET, CLOUDSQL_INSTANCE` (connection name
-`project:region:instance`), `DB_NAME, DB_USER, DB_PASSWORD`. If `backend/.env.example` uses different
-names, change the `ENV_VARS` block in `deploy.sh` in the same commit.
+`gcloud run deploy` from `backend/` source (Cloud Build, image pushed to the
+Artifact Registry repo), region asia-south1, service account
+`kirana-mitra-api`, `--allow-unauthenticated --min-instances 0
+--max-instances 2 --concurrency 20 --cpu 1 --memory 1Gi --timeout 120`, and
+these env vars on the service: `GOOGLE_CLOUD_PROJECT,
+GOOGLE_GENAI_USE_VERTEXAI=true, GOOGLE_CLOUD_LOCATION=global` (where Gemini
+3.x Flash is served), `GEMINI_MODEL, MOCK_GEMINI, CONFIRM_THRESHOLD,
+GCS_BUCKET, BQ_DATASET, FORECAST_SOURCE=bigquery`. With `--with-cloudsql` it
+also attaches the instance and adds `CLOUDSQL_INSTANCE, DB_NAME, DB_USER,
+DB_PASSWORD` (plain env var; use Secret Manager for anything longer-lived).
+If `backend/.env.example` changes names, change the `ENV_VARS` block in the
+same commit.
 
-The DB password is passed as a plain env var for the hackathon. For anything
-longer-lived, put it in Secret Manager and use `--set-secrets`.
+Verified on the first deploy: `POST /shops`, `POST /chat` (live Gemini,
+4.1 s) and `GET /forecast` (BigQuery, with the Diwali bump) all work.
+**Known quirk:** `GET /healthz` returns a Google 404 page without reaching
+the container, while `GET /healthz/` reaches FastAPI; the exact path
+`/healthz` appears to be intercepted by the run.app frontend. The backend
+should expose `/health` (or the app should call `/healthz/`).
+
+## deploy_web.sh
+
+Builds the Flutter web app with `--dart-define API_BASE_URL=<Cloud Run URL>`
+and `--base-href /<bucket>/`, then publishes `app/build/web` to a **public**
+bucket `$WEB_BUCKET` (default `<project>-web`) with `index.html` as main and
+404 page. URL: `https://storage.googleapis.com/<bucket>/index.html`. Asks
+before creating the public bucket. The backend must allow CORS from
+`https://storage.googleapis.com`. A custom domain would need a load balancer
+and is not set up.
 
 ## Stopping the bill
 
@@ -59,8 +96,8 @@ longer-lived, put it in Secret Manager and use `--set-secrets`.
 
 ## Not verified
 
-The scripts pass shellcheck and their dry runs print the expected commands,
-but none has been executed against a project (owner's rule: ask before
-creating paid resources). Flags were checked against the current gcloud docs;
-if `gcloud sql instances create` rejects `--edition ENTERPRISE` with
-`--tier db-f1-micro` on your gcloud version, run `gcloud components update`.
+- `setup.sh --with-cloudsql` (the Cloud SQL block) and `teardown.sh` have only
+  been dry-run. If `gcloud sql instances create` rejects `--edition ENTERPRISE`
+  with `--tier db-f1-micro` on your gcloud version, run `gcloud components update`.
+- `deploy_web.sh` has only been dry-run; a `constraints/storage.publicAccessPrevention`
+  org policy would block the public bucket.
