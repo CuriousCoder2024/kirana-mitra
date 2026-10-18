@@ -2,7 +2,7 @@
 
 Calls the live /chat endpoint for every utterance in samples.jsonl, scores
 intent / entity accuracy and latency, prints a table and appends a row to
-tests/eval/results.csv tagged with the date and the model id from /healthz.
+tests/eval/results.csv tagged with the date and the model id from /health.
 """
 
 from __future__ import annotations
@@ -59,7 +59,7 @@ def main(argv: list[str] | None = None) -> int:
 
     samples = [json.loads(l) for l in Path(args.samples).read_text(encoding="utf-8").splitlines() if l.strip()]
     with httpx.Client(base_url=args.base, timeout=60) as c:
-        health = c.get("/healthz").json()
+        health = c.get("/health").json()
         model = health.get("model", "?")
         shop_id = c.post("/shops", json={"shop_name": "Eval Store", "owner_name": "Eval",
                                          "language": "hi-Latn"}).json()["shop_id"]

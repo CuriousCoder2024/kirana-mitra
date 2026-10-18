@@ -5,7 +5,7 @@ stock or udhaar (credit) entry, using Gemini on Vertex AI through the official `
 SDK with structured JSON output. Implements [`docs/api-contract.md`](../docs/api-contract.md) v1.
 
 Phase 1 ships `/shops`, `/chat`, `/voice-note`, `/confirm`, `/undo`, `/stock`, `/ledger`,
-`/healthz`. Phase 3 adds `/shelf-scan` (Gemini vision counts units on a shelf photo). Phase 5
+`/health` (alias `/healthz`). Phase 3 adds `/shelf-scan` (Gemini vision counts units on a shelf photo). Phase 5
 adds `/forecast` (BigQuery ML ARIMA_PLUS, festival-aware), `/summary` (evening hisaab) and
 `/reorder` (order text plus WhatsApp link). Storage is an in-memory repository seeded with 15 common
 kirana items; Phase 4 swaps in Cloud SQL behind the same `Repository` interface.
@@ -103,8 +103,8 @@ curl -s "localhost:8080/summary/shp_...?date=2026-10-18"
 curl -s -X POST localhost:8080/reorder/shp_...
 ```
 
-Health: `GET /healthz`, or `GET /health` on Cloud Run, where the run.app frontend answers the exact
-path `/healthz` with its own 404 before the container sees it.
+Health: `GET /health` (canonical; `/healthz` is an alias). On Cloud Run the run.app edge answers the
+exact path `/healthz` with its own 404 before the container sees it, so clients must probe `/health`.
 
 Interactive docs: http://localhost:8080/docs
 

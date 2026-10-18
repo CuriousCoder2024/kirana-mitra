@@ -37,7 +37,7 @@ def main(argv: list[str] | None = None) -> int:
     labels: dict = json.loads(Path(args.labels).read_text(encoding="utf-8"))
     rows = []
     with httpx.Client(base_url=args.base, timeout=120) as c:
-        model = c.get("/healthz").json().get("model", "?")
+        model = c.get("/health").json().get("model", "?")
         shop_id = c.post("/shops", json={"shop_name": "Shelf Eval", "owner_name": "Eval",
                                          "language": "hi-Latn"}).json()["shop_id"]
         for fname, meta in labels.items():

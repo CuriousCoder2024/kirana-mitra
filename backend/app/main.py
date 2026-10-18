@@ -96,12 +96,13 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
 
     # ---- health -----------------------------------------------------------------
 
-    # /health is an alias: the run.app frontend answers the exact path /healthz itself
-    # with a 404 before the request reaches the container, so uptime checks and the
-    # app use /health on Cloud Run. Both return the contract's shape.
-    @app.get("/healthz")
+    # /health is the canonical health route (docs/api-contract.md): the run.app edge
+    # answers the exact path /healthz with its own 404 before the request reaches the
+    # container, which would make the app fall back to its mock in production.
+    # /healthz stays as an alias for local use and older clients. Same JSON on both.
     @app.get("/health")
-    def healthz():
+    @app.get("/healthz")
+    def health():
         return {"ok": True, "model": model_id()}
 
     # ---- shops ------------------------------------------------------------------

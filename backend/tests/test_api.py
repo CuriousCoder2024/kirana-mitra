@@ -7,12 +7,12 @@ def chat(client, shop_id, text="x"):
     return r.json()
 
 
-def test_healthz(client):
-    r = client.get("/healthz")
+def test_health_and_healthz_alias(client):
+    r = client.get("/health")
     assert r.status_code == 200
     assert r.json()["ok"] is True
     assert r.json()["model"]
-    assert client.get("/health").json() == r.json()  # Cloud Run alias
+    assert client.get("/healthz").json() == r.json()  # alias; run.app intercepts /healthz
 
 
 def test_shop_is_seeded_with_catalogue(client, shop_id):
