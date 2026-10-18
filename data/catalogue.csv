@@ -1,0 +1,41 @@
+item_id,name,brand,pack_size,unit,mrp_rupees,reorder_level,category,aliases
+itm_001,Parle-G,Parle,70g,packet,10,48,biscuits,parle ji|parle g|पारले जी|parle biscuit
+itm_002,Maggi Masala Noodles,Nestle,70g,packet,14,36,noodles,maggi|मैगी|maggie
+itm_003,Tata Salt,Tata,1kg,packet,28,20,staples,namak|नमक|tata namak
+itm_004,Aashirvaad Atta,ITC,5kg,packet,260,10,staples,atta|आटा|aashirwad aata
+itm_005,Surf Excel Detergent Powder,HUL,1kg,packet,145,12,household,surf|सर्फ|washing powder
+itm_006,Amul Taaza Milk,Amul,500ml,packet,27,30,dairy,doodh|दूध|amul milk
+itm_007,Amul Butter,Amul,100g,packet,60,12,dairy,makhan|मक्खन|amul butter
+itm_008,Britannia Good Day,Britannia,75g,packet,10,36,biscuits,good day|गुड डे|goodday
+itm_009,Colgate Strong Teeth,Colgate,100g,piece,65,12,personal_care,colgate|कोलगेट|toothpaste
+itm_010,Lifebuoy Soap,HUL,100g,piece,22,24,personal_care,lifebuoy|लाइफबॉय|lifeboy sabun
+itm_011,Fortune Sunflower Oil,Adani Wilmar,1L,litre,150,12,staples,tel|तेल|fortune oil
+itm_012,Red Label Tea,Brooke Bond,250g,packet,150,10,beverages,chai patti|चाय|red label chai
+itm_013,Nescafe Classic,Nestle,50g,piece,195,6,beverages,nescafe|नेस्कैफे|coffee
+itm_014,Haldiram Aloo Bhujia,Haldiram,200g,packet,52,18,snacks,bhujia|हल्दीराम|namkeen
+itm_015,Dettol Antiseptic Liquid,Reckitt,110ml,piece,80,8,personal_care,dettol|डेटॉल|detol
+itm_016,Vim Dishwash Bar,HUL,200g,piece,20,24,household,vim bar|विम|bartan sabun
+itm_017,Clinic Plus Shampoo,HUL,80ml,piece,55,12,personal_care,clinic plus|क्लिनिक प्लस|shampoo
+itm_018,Kurkure Masala Munch,PepsiCo,90g,packet,20,30,snacks,kurkure|कुरकुरे|kurkurey
+itm_019,Lays Magic Masala,PepsiCo,52g,packet,20,30,snacks,lays|लेज़|chips
+itm_020,Thums Up,Coca-Cola,750ml,piece,45,18,cold_drinks,thums up|थम्स अप|thumbs up|cold drink
+itm_021,Frooti Mango,Parle Agro,160ml,piece,10,36,cold_drinks,frooti|फ्रूटी|mango drink
+itm_022,Cadbury Dairy Milk,Mondelez,24g,piece,10,48,confectionery,dairy milk|डेयरी मिल्क|chocolate
+itm_023,Kissan Tomato Ketchup,HUL,500g,piece,120,6,condiments,ketchup|किसान|tomato sauce
+itm_024,MDH Garam Masala,MDH,100g,packet,85,8,spices,mdh|एमडीएच|garam masala
+itm_025,Everest Chhole Masala,Everest,100g,packet,72,8,spices,everest|एवरेस्ट|chole masala
+itm_026,Toor Dal,Loose,1kg,kg,160,15,staples,arhar dal|तूर दाल|toor daal
+itm_027,India Gate Basmati Rice,KRBL,5kg,packet,520,6,staples,basmati|बासमती|chawal
+itm_028,Sugar,Loose,1kg,kg,45,20,staples,cheeni|चीनी|shakkar
+itm_029,Rin Detergent Bar,HUL,250g,piece,20,24,household,rin|रिन|rin sabun
+itm_030,Harpic Toilet Cleaner,Reckitt,500ml,piece,98,6,household,harpic|हार्पिक|toilet cleaner
+itm_031,Good Knight Refill,Godrej,45ml,piece,85,8,household,good knight|गुड नाइट|machhar refill
+itm_032,Dove Cream Beauty Bar,HUL,100g,piece,65,12,personal_care,dove|डव|dove sabun
+itm_033,Pampers Baby Dry Pants M,P&G,10 pcs,packet,220,6,baby_care,pampers|पैंपर्स|diaper
+itm_034,Whisper Ultra Clean XL,P&G,7 pads,packet,60,10,personal_care,whisper|व्हिस्पर|pads
+itm_035,Bisleri Water,Bisleri,1L,piece,20,36,cold_drinks,bisleri|बिसलेरी|paani bottle
+itm_036,Bournvita,Mondelez,500g,piece,245,6,beverages,bournvita|बोर्नविटा|bornvita
+itm_037,Horlicks Classic,HUL,500g,piece,285,6,beverages,horlicks|हॉर्लिक्स|horlics
+itm_038,Amul Cow Ghee,Amul,500ml,piece,340,8,dairy,ghee|घी|amul ghee
+itm_039,Besan,Loose,500g,packet,45,15,staples,besan|बेसन|gram flour
+itm_040,Cycle Pure Agarbatti,Cycle,100 sticks,packet,50,12,pooja,agarbatti|अगरबत्ती|dhoop

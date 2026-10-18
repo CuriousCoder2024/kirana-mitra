@@ -1,0 +1,12 @@
+name,date,pre_days,post_days,profile
+Holi,2026-03-04,3,1,holi
+Eid al-Fitr,2026-03-21,3,1,eid
+Eid al-Adha,2026-05-28,3,1,eid
+Independence Day,2026-08-15,2,0,national
+Onam,2026-08-26,4,1,onam
+Raksha Bandhan,2026-08-28,4,0,rakhi
+Janmashtami,2026-09-04,3,1,janmashtami
+Ganesh Chaturthi,2026-09-14,5,2,ganesh
+Navratri,2026-10-11,3,8,navratri
+Dussehra,2026-10-20,3,1,dussehra
+Diwali,2026-11-08,5,2,diwali
