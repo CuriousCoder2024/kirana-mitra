@@ -23,6 +23,13 @@ def match_item(spoken: str, items: list[ItemRecord], threshold: int = 70) -> Ite
     Each item is indexed by its name, "name pack_size", and every alias, so
     "parle ji", "Parle G 70g" and "पारले जी" all resolve to Parle-G.
     """
+    hit = match_item_scored(spoken, items, threshold)
+    return hit[0] if hit else None
+
+
+def match_item_scored(spoken: str, items: list[ItemRecord],
+                      threshold: int = 70) -> tuple[ItemRecord, int] | None:
+    """Like match_item but also returns the 0-100 similarity of the winning key."""
     if not spoken or not items:
         return None
     query = normalise(spoken)
@@ -42,9 +49,9 @@ def match_item(spoken: str, items: list[ItemRecord], threshold: int = 70) -> Ite
             query, [normalise(i.name) for i in items], scorer=fuzz.WRatio
         )
         if best2 and best2[1] >= threshold + 10:
-            return next(i for i in items if normalise(i.name) == best2[0])
+            return next(i for i in items if normalise(i.name) == best2[0]), int(best2[1])
         return None
-    return choices[key]
+    return choices[key], int(score)
 
 
 def match_customer(spoken: str, known: list[str], threshold: int = 88) -> str:

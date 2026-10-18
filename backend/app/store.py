@@ -49,6 +49,7 @@ class ItemRecord:
     updated_at: str
     aliases: list[str] = field(default_factory=list)
     carton_size: int = 12  # base units per carton/box, used to convert spoken cartons
+    price: int = 0  # MRP in rupees, for the evening sales total
 
     @property
     def low_stock(self) -> bool:
@@ -81,28 +82,30 @@ class AppliedMessage:
     intent: str
     stock_moves: list[StockMove] = field(default_factory=list)
     ledger_entry_ids: list[str] = field(default_factory=list)
+    sale_amount: int | None = None  # rupees the user quoted for a sale, if any
     at: str = field(default_factory=now_iso)
 
 
 # ---- seed catalogue ---------------------------------------------------------
 
-# (name, pack_size, unit, opening qty, reorder level, aliases heard in voice notes, units per carton)
-SEED_ITEMS: list[tuple[str, str | None, str, float, float, list[str], int]] = [
-    ("Parle-G", "70g", "packet", 42, 24, ["parle g", "parle ji", "parle", "पारले जी", "पारले"], 24),
-    ("Maggi", "70g", "packet", 30, 12, ["maggie", "मैगी"], 48),
-    ("Tata Salt", "1kg", "packet", 20, 10, ["tata namak", "namak", "टाटा नमक", "नमक"], 20),
-    ("Aashirvaad Atta", "5kg", "packet", 8, 5, ["atta", "ashirwad atta", "आटा", "आशीर्वाद आटा"], 4),
-    ("Surf Excel", "1kg", "packet", 12, 6, ["surf", "सर्फ एक्सेल", "सर्फ"], 12),
-    ("Amul Milk", "500ml", "packet", 25, 15, ["doodh", "milk", "अमूल दूध", "दूध"], 24),
-    ("Amul Butter", "100g", "piece", 10, 5, ["butter", "makkhan", "अमूल बटर", "मक्खन"], 20),
-    ("Britannia Good Day", "100g", "packet", 18, 10, ["good day", "गुड डे"], 24),
-    ("Colgate", "100g", "piece", 15, 8, ["colgate paste", "toothpaste", "कोलगेट"], 24),
-    ("Lifebuoy", "100g", "piece", 24, 12, ["lifebuoy soap", "sabun", "लाइफबॉय", "साबुन"], 48),
-    ("Fortune Oil", "1L", "litre", 14, 6, ["fortune tel", "tel", "oil", "फॉर्च्यून तेल", "तेल"], 12),
-    ("Red Label", "250g", "packet", 9, 5, ["red label chai", "chai", "रेड लेबल", "चाय"], 24),
-    ("Nescafe", "50g", "piece", 6, 3, ["coffee", "नेस्कैफे", "कॉफी"], 24),
-    ("Haldiram Namkeen", "200g", "packet", 16, 8, ["haldiram", "namkeen", "हल्दीराम", "नमकीन"], 20),
-    ("Dettol", "125g", "piece", 11, 6, ["dettol soap", "डेटॉल"], 36),
+# (name, pack_size, unit, opening qty, reorder level, aliases heard in voice notes,
+#  units per carton, MRP rupees as in data/catalogue.csv)
+SEED_ITEMS: list[tuple[str, str | None, str, float, float, list[str], int, int]] = [
+    ("Parle-G", "70g", "packet", 42, 24, ["parle g", "parle ji", "parle", "पारले जी", "पारले"], 24, 10),
+    ("Maggi", "70g", "packet", 30, 12, ["maggie", "मैगी"], 48, 14),
+    ("Tata Salt", "1kg", "packet", 20, 10, ["tata namak", "namak", "टाटा नमक", "नमक"], 20, 28),
+    ("Aashirvaad Atta", "5kg", "packet", 8, 5, ["atta", "ashirwad atta", "आटा", "आशीर्वाद आटा"], 4, 260),
+    ("Surf Excel", "1kg", "packet", 12, 6, ["surf", "सर्फ एक्सेल", "सर्फ"], 12, 145),
+    ("Amul Milk", "500ml", "packet", 25, 15, ["doodh", "milk", "अमूल दूध", "दूध"], 24, 27),
+    ("Amul Butter", "100g", "piece", 10, 5, ["butter", "makkhan", "अमूल बटर", "मक्खन"], 20, 60),
+    ("Britannia Good Day", "100g", "packet", 18, 10, ["good day", "गुड डे"], 24, 10),
+    ("Colgate", "100g", "piece", 15, 8, ["colgate paste", "toothpaste", "कोलगेट"], 24, 65),
+    ("Lifebuoy", "100g", "piece", 24, 12, ["lifebuoy soap", "sabun", "लाइफबॉय", "साबुन"], 48, 22),
+    ("Fortune Oil", "1L", "litre", 14, 6, ["fortune tel", "tel", "oil", "फॉर्च्यून तेल", "तेल"], 12, 150),
+    ("Red Label", "250g", "packet", 9, 5, ["red label chai", "chai", "रेड लेबल", "चाय"], 24, 150),
+    ("Nescafe", "50g", "piece", 6, 3, ["coffee", "नेस्कैफे", "कॉफी"], 24, 195),
+    ("Haldiram Namkeen", "200g", "packet", 16, 8, ["haldiram", "namkeen", "हल्दीराम", "नमकीन"], 20, 52),
+    ("Dettol", "125g", "piece", 11, 6, ["dettol soap", "डेटॉल"], 36, 80),
 ]
 
 
@@ -157,6 +160,10 @@ class Repository(ABC):
     @abstractmethod
     def pop_applied(self, shop_id: str, message_id: str) -> AppliedMessage | None: ...
 
+    @abstractmethod
+    def list_applied_on(self, shop_id: str, day: str) -> list[AppliedMessage]:
+        """Applied (not undone) messages whose `at` falls on the ISO date `day`."""
+
     # pending (low-confidence) extractions awaiting /confirm
     @abstractmethod
     def put_pending(self, shop_id: str, message_id: str, payload: dict) -> None: ...
@@ -176,6 +183,7 @@ class InMemoryRepository(Repository):
         self._items: dict[str, dict[str, ItemRecord]] = {}
         self._ledger: dict[str, dict[str, LedgerEntry]] = {}
         self._applied: dict[str, deque[AppliedMessage]] = {}
+        self._journal: dict[str, list[AppliedMessage]] = {}  # all applied, for /summary
         self._pending: dict[str, dict[str, dict]] = {}
 
     # shops
@@ -185,13 +193,15 @@ class InMemoryRepository(Repository):
         self._items[shop.shop_id] = {}
         self._ledger[shop.shop_id] = {}
         self._applied[shop.shop_id] = deque(maxlen=self.undo_window)
+        self._journal[shop.shop_id] = []
         self._pending[shop.shop_id] = {}
         if self.seed:
-            for name, pack, unit, qty, reorder, aliases, carton in SEED_ITEMS:
+            for name, pack, unit, qty, reorder, aliases, carton, price in SEED_ITEMS:
                 item = self.add_item(shop.shop_id, name, pack, unit, reorder)
                 item.quantity = qty
                 item.aliases = list(aliases)
                 item.carton_size = carton
+                item.price = price
         return shop
 
     def get_shop(self, shop_id: str) -> ShopRecord | None:
@@ -247,6 +257,10 @@ class InMemoryRepository(Repository):
     # applied
     def record_applied(self, applied: AppliedMessage) -> None:
         self._applied[applied.shop_id].append(applied)
+        self._journal[applied.shop_id].append(applied)
+
+    def list_applied_on(self, shop_id: str, day: str) -> list[AppliedMessage]:
+        return [m for m in self._journal.get(shop_id, []) if m.at[:10] == day]
 
     def pop_applied(self, shop_id: str, message_id: str) -> AppliedMessage | None:
         window = self._applied.get(shop_id)
@@ -255,6 +269,8 @@ class InMemoryRepository(Repository):
         for entry in window:
             if entry.message_id == message_id:
                 window.remove(entry)
+                self._journal[shop_id] = [m for m in self._journal[shop_id]
+                                          if m.message_id != message_id]
                 return entry
         return None
 

@@ -151,6 +151,58 @@ class ShelfScanReply(BaseModel):
     quick_actions: list[QuickAction] = Field(default_factory=list)
 
 
+# ---- forecast / summary / reorder (Phase 5) ------------------------------------
+
+
+class ForecastItem(BaseModel):
+    item_id: str
+    name: str
+    unit: Unit
+    history_weekly: list[int]
+    forecast_weekly: list[int]
+    lower: list[int]
+    upper: list[int]
+    on_hand: int
+    reorder_qty: int
+    reorder_reason: str
+
+
+class FestivalRef(BaseModel):
+    name: str
+    date: str
+
+
+class ForecastReply(BaseModel):
+    generated_at: str
+    weeks: list[str]
+    festivals: list[FestivalRef]
+    items: list[ForecastItem]
+
+
+class SummaryReply(BaseModel):
+    date: str
+    sales_total: int
+    entries: int
+    low_stock: list[StockItem]
+    udhaar_given: int
+    udhaar_received: int
+    total_outstanding: int
+    reply_text: str
+
+
+class ReorderLine(BaseModel):
+    name: str
+    qty: int
+    unit: Unit
+
+
+class ReorderReply(BaseModel):
+    order_id: str
+    lines: list[ReorderLine]
+    text: str
+    whatsapp_url: str
+
+
 class ErrorBody(BaseModel):
     code: Literal["not_found", "invalid", "gemini_failed", "undo_expired", "not_implemented"]
     message: str

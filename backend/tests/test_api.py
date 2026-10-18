@@ -164,9 +164,9 @@ def test_errors_follow_contract(client):
     assert client.get("/stock/shp_nope").json() == {
         "error": {"code": "not_found", "message": "shop shp_nope not found"}}
     assert client.post("/chat", json={"shop_id": "x"}).status_code == 400
-    assert client.get("/forecast/shp_nope").status_code == 501
-    assert client.post("/reorder/shp_nope").status_code == 501
-    assert client.get("/summary/shp_nope?date=2026-10-18").status_code == 501
+    assert client.get("/forecast/shp_nope").status_code == 404
+    assert client.post("/reorder/shp_nope").status_code == 404
+    assert client.get("/summary/shp_nope?date=2026-10-18").status_code == 404
 
 
 def test_mock_extractor_handles_the_demo_sentence(mock_client):

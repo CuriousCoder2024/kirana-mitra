@@ -49,6 +49,16 @@ class ScriptedExtractor:
         self.calls.append((None, image[0]))
         return self.queue.pop(0)
 
+    summary_text: str | None = None  # None -> raise, so the template fallback is exercised
+
+    def summarize(self, facts, shop_language):
+        from app.gemini import GeminiFailed
+
+        self.calls.append(("summary", facts))
+        if self.summary_text is None:
+            raise GeminiFailed("scripted failure")
+        return self.summary_text
+
 
 @pytest.fixture
 def repo():
@@ -62,7 +72,11 @@ def scripted():
 
 @pytest.fixture
 def client(repo, scripted):
-    app = create_app(Settings(mock_gemini=True), repo=repo, extractor=scripted)
+    from app.forecast import LocalForecastSource
+
+    settings = Settings(mock_gemini=True, forecast_source="local")
+    app = create_app(settings, repo=repo, extractor=scripted,
+                     forecast_source=LocalForecastSource(settings.data_dir))
     return TestClient(app)
 
 

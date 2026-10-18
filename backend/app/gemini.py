@@ -135,6 +135,10 @@ class Extractor(Protocol):
         self, image: tuple[bytes, str], catalogue: list[ItemRecord], shop_language: str
     ) -> ShelfScan: ...
 
+    def summarize(self, facts: dict, shop_language: str) -> str:
+        """One-paragraph evening 'hisaab' from the day's numbers. May raise GeminiFailed."""
+        ...
+
     def extract(
         self,
         text: str | None,
@@ -237,6 +241,33 @@ class GeminiExtractor:
         # chat deadline produced 504 DEADLINE_EXCEEDED on busier images.
         return self._generate(parts, build_shelf_prompt(catalogue, shop_language), ShelfScan,
                               timeout_ms=90_000)
+
+    def summarize(self, facts: dict, shop_language: str) -> str:
+        from google.genai import types
+
+        lang = {"hi": "Hindi in Devanagari script", "en": "English",
+                "hi-Latn": "Hinglish (Hindi in Roman script)"}.get(shop_language, "Hinglish")
+        prompt = (
+            "Write the evening 'hisaab' (day summary) for a kirana shopkeeper in "
+            f"{lang}: 2 to 3 short sentences, warm and plain, no bullet points, no emojis. "
+            "Mention today's sales total, how many entries were recorded, udhaar given and "
+            "received, total outstanding udhaar, and name the low-stock items (say 'none' if "
+            "empty). Use ₹ with Indian digit grouping. Facts (JSON):\n" + json.dumps(facts, ensure_ascii=False)
+        )
+        config = types.GenerateContentConfig(
+            temperature=0.4,
+            thinking_config=types.ThinkingConfig(thinking_level=types.ThinkingLevel.LOW),
+            http_options=types.HttpOptions(timeout=20_000),
+        )
+        try:
+            response = self._client.models.generate_content(
+                model=self.model, contents=prompt, config=config)
+        except Exception as exc:
+            raise GeminiFailed(f"{type(exc).__name__}: {exc}") from exc
+        text = (response.text or "").strip()
+        if not text:
+            raise GeminiFailed("empty summary")
+        return text
 
     def _generate(self, parts, system_instruction: str, schema, timeout_ms: int | None = None):
         """One structured-output call with the shared timeout / retry / thinking settings."""
@@ -407,6 +438,11 @@ class MockExtractor:
             shop_language, "Shelf pe dikha:")
         return ShelfScan(items=items,
                          reply_text=f"{head} " + ", ".join(f"{i.name} {i.count}" for i in items) + ".")
+
+    def summarize(self, facts: dict, shop_language: str) -> str:
+        from app.service import summary_template
+
+        return summary_template(facts, shop_language)
 
     @staticmethod
     def _reply(intent, language, items, customer, amount, catalogue) -> str:

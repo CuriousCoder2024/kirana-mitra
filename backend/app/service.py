@@ -13,7 +13,7 @@ from __future__ import annotations
 from app.matching import match_customer, match_item
 from app.models import (Entities, ExtractedItem, Extraction, ExtractionReply, QuickAction,
                         ShelfItem, ShelfLowStock, ShelfScan, ShelfScanReply)
-from app.store import AppliedMessage, Repository, ShopRecord, StockMove, new_id
+from app.store import IST, AppliedMessage, Repository, ShopRecord, StockMove, new_id
 
 WRITE_INTENTS = {"stock_in", "sale", "udhaar_given", "udhaar_paid"}
 
@@ -92,6 +92,8 @@ def apply_extraction(
             conv = (f" ({_fmt_qty(qty)} {it.unit} = {_fmt_qty(base_qty)} {rec.unit})"
                     if base_qty != qty else "")
             totals.append(f"{rec.name} {_fmt_qty(rec.quantity)} {rec.unit}{conv}")
+        if extraction.intent == "sale" and ent.amount:
+            applied.sale_amount = int(ent.amount)
         label = _localized(lang, "अब स्टॉक", "Now in stock", "Ab total")
         suffix = f"{label}: {', '.join(totals)}." if totals else ""
         actions.append(
@@ -322,3 +324,83 @@ def undo(repo: Repository, shop: ShopRecord, message_id: str) -> str:
     head = _localized(lang, "ठीक है, हटा दिया.", "Okay, removed.", "Theek hai, hata diya.")
     detail = "; ".join(parts + customer_totals)
     return f"{head} {detail}.".strip() if detail else head
+
+
+# ---- evening summary (Phase 5) -----------------------------------------------------
+
+
+def summary_facts(repo: Repository, shop: ShopRecord, day: str) -> dict:
+    """The day's numbers from the repository: what /summary reports and Gemini narrates."""
+    items = {i.item_id: i for i in repo.list_items(shop.shop_id)}
+    applied = repo.list_applied_on(shop.shop_id, day)
+    sales_total = 0
+    for m in applied:
+        if m.intent != "sale":
+            continue
+        if m.sale_amount:
+            sales_total += m.sale_amount
+        else:
+            sales_total += int(round(sum(
+                abs(mv.delta) * items[mv.item_id].price
+                for mv in m.stock_moves if mv.item_id in items)))
+    udhaar_given = sum(e.delta for e in repo.list_ledger(shop.shop_id)
+                       if e.at[:10] == day and e.delta > 0)
+    udhaar_received = -sum(e.delta for e in repo.list_ledger(shop.shop_id)
+                           if e.at[:10] == day and e.delta < 0)
+    balances: dict[str, int] = {}
+    for e in repo.list_ledger(shop.shop_id):
+        key = e.customer_name.strip().lower()
+        balances[key] = balances.get(key, 0) + e.delta
+    low = [i for i in items.values() if i.low_stock]
+    return {
+        "date": day,
+        "shop_name": shop.shop_name,
+        "sales_total": sales_total,
+        "entries": len(applied),
+        "udhaar_given": udhaar_given,
+        "udhaar_received": udhaar_received,
+        "total_outstanding": sum(b for b in balances.values() if b > 0),
+        "low_stock": [{"name": i.name, "quantity": _fmt_qty(i.quantity), "unit": i.unit,
+                       "reorder_level": _fmt_qty(i.reorder_level)} for i in low],
+    }
+
+
+def summary_template(facts: dict, language: str) -> str:
+    """Fixed-wording fallback when Gemini is unavailable; never fails."""
+    low = facts.get("low_stock") or []
+    low_names = ", ".join(f"{x['name']} ({x['quantity']} {x['unit']})" for x in low)
+    s, e = _rupees(facts["sales_total"]), facts["entries"]
+    g, r, o = _rupees(facts["udhaar_given"]), _rupees(facts["udhaar_received"]), _rupees(facts["total_outstanding"])
+    if language == "hi":
+        low_txt = f"कम स्टॉक: {low_names}।" if low else "कोई सामान कम नहीं है।"
+        return (f"आज का हिसाब: बिक्री {s}, {e} एंट्री। उधार दिया {g}, वापस आया {r}; "
+                f"कुल बकाया {o}। {low_txt}")
+    if language == "en":
+        low_txt = f"Low stock: {low_names}." if low else "No items are low on stock."
+        return (f"Today's summary: sales {s} across {e} entries. Udhaar given {g}, received {r}; "
+                f"total outstanding {o}. {low_txt}")
+    low_txt = f"Kam stock: {low_names}." if low else "Koi item kam nahi hai."
+    return (f"Aaj ka hisaab: bikri {s}, {e} entries. Udhaar diya {g}, wapas aaya {r}; "
+            f"total baaki {o}. {low_txt}")
+
+
+def today_ist() -> str:
+    from datetime import datetime
+
+    return datetime.now(IST).date().isoformat()
+
+
+# ---- reorder (Phase 5) ---------------------------------------------------------------
+
+
+def reorder_text(shop: ShopRecord, lines: list[tuple[str, int, str]]) -> str:
+    lang = shop.language
+    head = _localized(lang, f"{shop.shop_name} के लिए ऑर्डर:", f"Order for {shop.shop_name}:",
+                      f"{shop.shop_name} ke liye order:")
+    if not lines:
+        return head + " " + _localized(lang, "अभी कुछ नहीं चाहिए।", "nothing needed right now.",
+                                       "abhi kuch nahi chahiye.")
+    body = "\n".join(f"- {name}: {qty} {unit}" for name, qty, unit in lines)
+    tail = _localized(lang, "कृपया कल तक भेज दें। धन्यवाद!", "Please deliver by tomorrow. Thanks!",
+                      "Please kal tak bhej dein. Dhanyavaad!")
+    return f"{head}\n{body}\n{tail}"

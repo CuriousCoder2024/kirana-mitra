@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from fastapi import FastAPI, File, Form, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,9 +12,14 @@ from starlette.concurrency import run_in_threadpool
 
 from app.config import Settings, get_settings
 from app.gemini import Extractor, GeminiFailed, make_extractor
+from app.forecast import ForecastSource, make_forecast_source, shape_forecast
 from app.models import (
     ChatRequest,
     ExtractionReply,
+    ForecastReply,
+    ReorderLine,
+    ReorderReply,
+    SummaryReply,
     LedgerCustomer,
     LedgerReply,
     MessageRef,
@@ -23,8 +30,9 @@ from app.models import (
     StockReply,
     UndoReply,
 )
-from app.service import NotFound, UndoExpired, build_reply, build_shelf_reply, confirm, undo
-from app.store import InMemoryRepository, Repository
+from app.service import (NotFound, UndoExpired, build_reply, build_shelf_reply, confirm,
+                         reorder_text, summary_facts, summary_template, today_ist, undo)
+from app.store import InMemoryRepository, Repository, new_id, now_iso
 
 ALLOWED_AUDIO = {"audio/m4a", "audio/mp4", "audio/x-m4a", "audio/wav", "audio/x-wav",
                  "audio/webm", "audio/ogg", "audio/mpeg", "audio/aac"}
@@ -39,7 +47,8 @@ class ApiError(Exception):
 
 
 def create_app(settings: Settings | None = None, repo: Repository | None = None,
-               extractor: Extractor | None = None) -> FastAPI:
+               extractor: Extractor | None = None,
+               forecast_source: ForecastSource | None = None) -> FastAPI:
     settings = settings or get_settings()
     repo = repo or InMemoryRepository(undo_window=settings.undo_window)
     app = FastAPI(title="Kirana Mitra API", version="1.0.0")
@@ -50,6 +59,12 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
     app.state.settings = settings
     app.state.repo = repo
     app.state.extractor = extractor  # built lazily so /healthz works without creds
+    app.state.forecast_source = forecast_source
+
+    def get_forecast_source() -> ForecastSource:
+        if app.state.forecast_source is None:
+            app.state.forecast_source = make_forecast_source(settings)
+        return app.state.forecast_source
 
     def get_extractor() -> Extractor:
         if app.state.extractor is None:
@@ -176,9 +191,6 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
 
     # ---- Phase 3/5 stubs (shapes frozen in docs/api-contract.md) --------------------
 
-    def _not_implemented(phase: str):
-        raise ApiError(501, "not_implemented", f"{phase}; see docs/api-contract.md for the shape")
-
     @app.post("/shelf-scan", response_model=ShelfScanReply)
     async def shelf_scan(shop_id: str = Form(...), image: UploadFile = File(...)):
         """Phase 3. multipart: shop_id, image (jpeg/png ≤ 8 MB). Image bytes go to Gemini
@@ -202,34 +214,78 @@ def create_app(settings: Settings | None = None, repo: Repository | None = None,
             raise ApiError(502, "gemini_failed", str(exc))
         return build_shelf_reply(repo, shop, scan)
 
-    @app.get("/forecast/{shop_id}", status_code=501)
-    def forecast(shop_id: str):
-        """Phase 5. 200 →
-        { "generated_at": "...", "weeks": ["2026-10-19", ...4 ISO dates],
-          "festivals": [ { "name": "Diwali", "date": "2026-11-08" } ],
-          "items": [ { "item_id": "itm_...", "name": "Parle-G", "unit": "packet",
-                       "history_weekly": [40, 38, 45, 41], "forecast_weekly": [44, 52, 90, 48],
-                       "lower": [38, 44, 70, 40], "upper": [50, 60, 110, 56],
-                       "on_hand": 42, "reorder_qty": 120, "reorder_reason": "Diwali week demand ~2x" } ] }
-        """
-        _not_implemented("forecast lands in Phase 5")
+    # ---- Phase 5: forecast / summary / reorder ----------------------------------------
 
-    @app.get("/summary/{shop_id}", status_code=501)
-    def summary(shop_id: str, date: str | None = None):
-        """Phase 5. ?date=YYYY-MM-DD. 200 →
-        { "date": "...", "sales_total": 8450, "entries": 23, "low_stock": [ ...as in /stock... ],
-          "udhaar_given": 350, "udhaar_received": 500, "total_outstanding": 4350,
-          "reply_text": "Aaj ka hisaab: ..." }
-        """
-        _not_implemented("summary lands in Phase 5")
+    async def _forecast(shop):
+        raw = await run_in_threadpool(get_forecast_source().load, shop.shop_id)
+        weeks, festivals, items = shape_forecast(raw, repo.list_items(shop.shop_id), shop.language)
+        return weeks, festivals, items
 
-    @app.post("/reorder/{shop_id}", status_code=501)
-    def reorder(shop_id: str):
-        """Phase 5. 200 →
-        { "order_id": "ord_...", "lines": [ { "name": "Parle-G 70g", "qty": 120, "unit": "packet" } ],
-          "text": "Order for Gupta General Store ...", "whatsapp_url": "https://wa.me/?text=..." }
-        """
-        _not_implemented("reorder lands in Phase 5")
+    @app.get("/forecast/{shop_id}", response_model=ForecastReply)
+    async def forecast(shop_id: str):
+        """4 Monday-start weeks of history + forecast per stocked item, with reorder_qty.
+        Source: BigQuery ML ARIMA_PLUS (FORECAST_SOURCE=bigquery) or the local CSV
+        seasonal-naive fallback (FORECAST_SOURCE=local / MOCK_GEMINI=1)."""
+        shop = get_shop(shop_id)
+        try:
+            weeks, festivals, items = await _forecast(shop)
+        except Exception as exc:
+            raise ApiError(502, "gemini_failed", f"forecast source failed: {exc}")
+        return ForecastReply(generated_at=now_iso(), weeks=[w.isoformat() for w in weeks],
+                             festivals=festivals, items=items)
+
+    @app.get("/summary/{shop_id}", response_model=SummaryReply)
+    async def summary(shop_id: str, date: str | None = None):
+        """Evening hisaab for ?date=YYYY-MM-DD (default today, Asia/Kolkata). The numbers
+        come from the repository; reply_text is Gemini's narration with a fixed template
+        fallback, so this endpoint never fails on Gemini."""
+        shop = get_shop(shop_id)
+        day = date or today_ist()
+        try:
+            from datetime import date as _d
+            _d.fromisoformat(day)
+        except ValueError:
+            raise ApiError(400, "invalid", "date must be YYYY-MM-DD")
+        facts = summary_facts(repo, shop, day)
+        try:
+            reply_text = await run_in_threadpool(get_extractor().summarize, facts, shop.language)
+        except Exception as exc:  # GeminiFailed or missing credentials: fall back
+            logging.getLogger("kirana.summary").warning("narration failed, using template: %s", exc)
+            reply_text = summary_template(facts, shop.language)
+        low = [StockItem(item_id=i.item_id, name=i.name, pack_size=i.pack_size, quantity=i.quantity,
+                         unit=i.unit, reorder_level=i.reorder_level, low_stock=True,
+                         updated_at=i.updated_at)
+               for i in repo.list_items(shop.shop_id) if i.low_stock]
+        return SummaryReply(date=day, sales_total=facts["sales_total"], entries=facts["entries"],
+                            low_stock=low, udhaar_given=facts["udhaar_given"],
+                            udhaar_received=facts["udhaar_received"],
+                            total_outstanding=facts["total_outstanding"], reply_text=reply_text)
+
+    @app.post("/reorder/{shop_id}", response_model=ReorderReply)
+    async def reorder(shop_id: str):
+        """Reorder list from the forecast (items with reorder_qty > 0), as text and a
+        wa.me share link. Nothing is sent."""
+        from urllib.parse import quote
+
+        shop = get_shop(shop_id)
+        try:
+            _, _, items = await _forecast(shop)
+        except Exception as exc:
+            raise ApiError(502, "gemini_failed", f"forecast source failed: {exc}")
+        catalogue = {i.item_id: i for i in repo.list_items(shop.shop_id)}
+        lines = []
+        for it in items:
+            if it.reorder_qty <= 0:
+                continue
+            pack = catalogue[it.item_id].pack_size if it.item_id in catalogue else None
+            lines.append((f"{it.name} {pack}".strip() if pack else it.name, it.reorder_qty, it.unit))
+        text = reorder_text(shop, lines)
+        return ReorderReply(
+            order_id=new_id("ord"),
+            lines=[ReorderLine(name=n, qty=q, unit=u) for n, q, u in lines],
+            text=text,
+            whatsapp_url="https://wa.me/?text=" + quote(text, safe=""),
+        )
 
     return app
 
