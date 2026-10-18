@@ -1,0 +1,42 @@
+# Secrets and environment
+.env
+.env.*
+!.env.example
+*.json.key
+service-account*.json
+credentials*.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Flutter / Dart
+app/.dart_tool/
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/.packages
+app/build/
+app/.idea/
+app/*.iml
+app/android/.gradle/
+app/android/local.properties
+app/android/key.properties
+app/ios/Pods/
+app/ios/.symlinks/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+*.log
+
+# Local media and scratch
+uploads/
+*.wav
+*.m4a
+*.webm
